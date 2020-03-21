@@ -5,17 +5,29 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    var isFirst = wx.getStorageSync('isFirst')
+    console.log(isFirst)
+    if (isFirst) {
+      wx.navigateTo({
+        url: 'pages/map/map',
+      })
+    } else {
+      wx.navigateTo({
+        url: 'pages/index/login',
+      })
+    }
   },
-  getUserInfo:function(cb){
+  getUserInfo: function (cb) {
     var that = this
-    if(this.globalData.userInfo){
+    if (this.globalData.userInfo) {
       typeof cb == "function" && cb(this.globalData.userInfo)
-    }else{
+    } else {
       //调用登录接口
       wx.login({
         success: function () {
           wx.getUserInfo({
             success: function (res) {
+              wx.setStorageSync('isFirst', res.userInfo)
               that.globalData.userInfo = res.userInfo
               typeof cb == "function" && cb(that.globalData.userInfo)
             }
@@ -24,7 +36,7 @@ App({
       })
     }
   },
-  globalData:{
-    userInfo:null,
+  globalData: {
+    userInfo: null,
   }
 })

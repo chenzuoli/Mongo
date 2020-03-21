@@ -1,0 +1,5 @@
+<!--pages/userInfo/userInfo.wxml-->
+
+<button bindtap='getOpenIdTap'>获取用户唯一标识openid</button>
+<text>openid:{{openid}}\n </text>
+<text>session_key:{{session_key}}</text>
