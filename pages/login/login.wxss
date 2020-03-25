@@ -1,5 +1,12 @@
 /* pages/login/login.wxss */
 /** 修改button默认的点击态样式类**/
+page{
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(#66CCFF, #008800);
+  display: flex;
+  flex-direction: column;
+}
 .button-hover {
   background-color: red;
 }
@@ -7,4 +14,52 @@
 .other-button-hover {
   background-color: blue;
 }
-button {margin: 10px;}
+button {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.content{
+  margin-top: 40px;
+}
+.account{
+   display: flex;
+   flex-direction: row;
+   padding-left: 20px;
+   padding-top: 20px;
+   padding-bottom: 10px;
+   width: 90%;
+}
+.title{
+   margin-right: 30px;
+   font-weight: bold;
+}
+.hr{
+  border: 1px solid #cccccc;
+  opacity: 0.2;
+  width: 90%;
+  margin: 0 auto;
+}
+.btn{
+  position: absolute;
+  width: 80%;
+  margin-top:40px;
+  margin-left:30px;
+  color: #999999;
+}
+.link_register{
+  margin-top: 100px;
+  margin-left:180px;
+  color: #f07e7e;
+  font-size: 10px;
+  background-color: inherit
+}
+button::after{
+   border: none;
+}
+.link_wx{
+  margin-bottom:40px;
+  margin-left:30px;
+  margin-right:30px;
+  color: #070706;
+}

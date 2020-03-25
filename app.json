@@ -5,7 +5,9 @@
     "pages/redPacket/redPacket",
     "pages/wallet/wallet",
     "pages/myLab/myLab",
-    "pages/userInfo/userInfo"
+    "pages/userInfo/userInfo",
+    "pages/register/register",
+    "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",

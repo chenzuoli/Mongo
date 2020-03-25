@@ -1,36 +1,17 @@
 // pages/login/login.js
-var API_URL='http://www.wetech.top'
-var types = ['default', 'primary', 'warn']
+var API_URL = 'https://www.wetech.top'
 var pageObject = {
   data: {
-    defaultSize: 'default',
-    primarySize: 'default',
-    warnSize: 'default',
-    disabled: false,
-    plain: false,
-    loading: false
+    account: "",
+    password: "",
+    message: ""
   },
-  setDisabled: function (e) {
-    this.setData({
-      disabled: !this.data.disabled
-    })
-  },
-  setPlain: function (e) {
-    this.setData({
-      plain: !this.data.plain
-    })
-  },
-  setLoading: function (e) {
-    this.setData({
-      loading: !this.data.loading
-    })
-  },
-  onGotUserInfo: function (e) {
+  onGotUserInfo: function(e) {
     console.log(e.detail.errMsg)
     console.log(e.detail.userInfo)
     console.log(e.detail.rawData)
   },
-  onReady: function () {
+  onReady: function() {
     const _this = this;
     wx.getLocation({
       type: 'location',
@@ -42,144 +23,77 @@ var pageObject = {
     })
   },
 
-  Login: function (code, encryptedData, iv) {
-    console.log('code=' + code + '&encryptedData=' + encryptedData + '&iv=' + iv);
-    //创建一个dialog
-    wx.showToast({
-      title: '正在登录...',
-      icon: 'loading',
-      duration: 10000
-    });
-    //请求服务器
-    wx.request({
-      url: API_URL,
-      data: {
-        code: code,
-        encryptedData: encryptedData,
-        iv: iv
-      },
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
-      success: function (res) {
-        // success
-        wx.hideToast();
-        console.log('服务器返回' + res.data);
-
-      },
-      fail: function () {
-        // fail
-        // wx.hideToast();
-      },
-      complete: function () {
-        // complete
-      }
+  register: function() {
+    console.log("navigate to register.")
+    wx.navigateTo({
+      url: '../register/register',
     })
   },
-  navigatePage: function(e){
-    wx.navigateTo({
-      url: '../userInfo/userInfo',
+  //处理accountInput的触发事件
+  accountInput: function(e) {
+    var username = e.detail.value; //从页面获取到用户输入的用户名/邮箱/手机号
+    if (username != '') {
+      this.setData({
+        account: username
+      }); //把获取到的密码赋值给全局变量Date中的password
+    }
+  },
+  //处理pwdBlurt的触发事件
+  pwdBlur: function(e) {
+    var pwd = e.detail.value; //从页面获取到用户输入的密码
+    if (pwd != '') {
+      this.setData({
+        password: pwd
+      }); //把获取到的密码赋值给全局变量Date中的password
+    }
+  },
+  //处理login的触发事件
+  login: function(e) {
+    console.log(this.data)
+    wx.request({
+      url: 'https://wetech.top:7443/petcage/login?phone=' + this.data.account + '&pwd=' + this.data.password,
+      //定义传到后台的数据
+      data: {
+        //从全局变量data中获取数据
+        phone: this.data.account,
+        pwd: this.data.password
+      },
+      method: 'post', //定义传到后台接受的是post方法还是get方法
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function(res) {
+        console.log("调用API成功");
+        console.log(res)
+        console.log(res.data.message);
+        if (res.data == true) {
+          wx.showToast({
+            title: '登陆成功',
+            icon: 'success',
+            duration: 2000
+          })
+          wx.navigateTo({
+            url: '../map/map',
+          })
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: '用户名或者密码错误',
+            showCancel: false
+          })
+        }
+      },
+      fail: function(res) {
+        console.log("调用API失败");
+        console.log(res)
+        wx.showToast({
+          title: '登录失败',
+          icon: 'warn',
+          duration: 2000
+        })
+      }
     })
   }
 }
 
-for (var i = 0; i < types.length; ++i) {
-  (function (type) {
-    pageObject[type] = function (e) {
-      var key = type + 'Size'
-      var changedData = {}
-      changedData[key] =
-        this.data[key] === 'default' ? 'mini' : 'default'
-      this.setData(changedData)
-    }
-  })(types[i])
-}
 Page(pageObject)
-// Page({
-
-//   /**
-//    * Page initial data
-//    */
-//   data: {
-
-//   },
-
-//   /**
-//    * Lifecycle function--Called when page load
-//    */
-//   onLoad: function (options) {
-//     console.log("iv");
-//     wx.login({//login流程
-//       success: function (res) {//登录成功
-//         if (res.code) {
-//           console.log('获取用户登录态成功：' + res.code)
-//           var code = res.code;
-//           wx.getUserInfo({//getUserInfo流程
-//             success: function (res2) {//获取userinfo成功
-//               console.log(res2);
-//               var encryptedData = encodeURIComponent(res2.encryptedData);//一定要把加密串转成URI编码
-//               var iv = res2.iv;
-//               //请求自己的服务器
-//               pageObject.Login(code, encryptedData, iv);
-//             }
-//           })
-//         } else {
-//           console.log('获取用户登录态失败！' + res.errMsg)
-//         }
-//       }
-//     });
-//   },
-
-//   /**
-//    * Lifecycle function--Called when page is initially rendered
-//    */
-//   onReady: function () {
-
-//   },
-
-//   /**
-//    * Lifecycle function--Called when page show
-//    */
-//   onShow: function () {
-
-//   },
-
-//   /**
-//    * Lifecycle function--Called when page hide
-//    */
-//   onHide: function () {
-
-//   },
-
-//   /**
-//    * Lifecycle function--Called when page unload
-//    */
-//   onUnload: function () {
-
-//   },
-
-//   /**
-//    * Page event handler function--Called when user drop down
-//    */
-//   onPullDownRefresh: function () {
-
-//   },
-
-//   /**
-//    * Called when page reach bottom
-//    */
-//   onReachBottom: function () {
-
-//   },
-
-//   /**
-//    * Called when user click on the top right corner to share
-//    */
-//   onShareAppMessage: function () {
-
-//   },
-
-  
-
-// })

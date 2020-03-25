@@ -1,9 +1,11 @@
-var markers,controls ;
+var markers = [];
+var controls;
 var position1,position2,position3,position4,position5;
 var W=0;var H=0;
+var device_locations_url = 'https://wetech.top:7443/petcage/getDeviceLocations';
 
 // 位置信息
-var latitude, longitude;
+var lati, longi;
 Page({
   data: {
     scanResult:"",
@@ -11,19 +13,20 @@ Page({
     latitude: 39.915119,
     // markers:markers,
     markers:[{
-      iconPath: "../../images/022-house.eps",
+      iconPath: "../../images/022-house.png",
       id:0,
-      // longitude: 116.403963,
-      // latitude: 39.915119,
-      width:50,
-      height:50
+      longitude: 0,
+      latitude: 0,
+      width:25,
+      height:25,
+      title:''
     }],
     controls:controls,
   },
   onShareAppMessage: function () {
     return {
       title: '我的Mongo世界',
-      path: '/pages/map/map',
+      path: '../map/map',
       success: function (res) {
         console.log("转发成功")// 转发成功
       },
@@ -34,6 +37,22 @@ Page({
   },
   onReady:function(e){
     var that = this;
+    wx.getLocation({
+      type: 'location',
+      success(res) {
+        console.log(res)
+        lati = res.latitude
+        longi = res.longitude
+        console.log('用户经纬度：' + lati + ',' + longi)
+        that.setData({
+          longitude: longi,
+          latitude: lati
+        })
+      },
+      fail: function () {
+        console.log("获取位置失败");
+      }
+    })
     // 使用 wx.createMapContext 获取 map 上下文
     that.mapCtx = wx.createMapContext('myMap');
     // 初始化移动到目前定位地
@@ -116,22 +135,6 @@ Page({
         });
       }
     })
-    // 获取用户当前位置信息
-    wx.getLocation({
-      type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-      success: function(res) {
-        latitude = res.latitude;
-        longitude = res.longitude;
-        console.log("当前位置坐标："+latitude+"，"+longitude)
-        that.setData({
-          longitude:res.longitude,
-          latitude:res.longitude
-        })
-      },
-      fail:function(){
-        console.log("获取位置失败");
-      }
-    })
   },
   // 获取当前地图中心的经纬度，返回的是 gcj02 坐标系，可以用于 wx.openLocation
   getCenterLocation: function () {
@@ -161,17 +164,43 @@ Page({
     })
   },
   scanCode: function(){
-      var that = this;
-      wx.scanCode({
-        success: function(res){
-          that.setData({
-            scanResult:res.scanResult
+    var that = this;
+    wx.openBluetoothAdapter({
+      success: function(res) {
+        console.log("蓝牙开启成功！" + res)
+        wx.scanCode({
+          success: function (res) {
+            wx.showToast({
+              title: '扫码成功',
+              icon: 'success',
+              duration: 1000
+            })
+            console.log("扫码结果：" + res.scanResult)
+            that.setData({
+              scanResult: res.scanResult
+            })
+          },
+          fail: function (res) {
+            wx.showToast({
+              title: '扫码失败',
+              icon: 'warn',
+              duration: 1000
+            })
+          }
+        })
+      },
+      fail: function(err){
+        console.log("蓝牙开启失败！")
+        console.log(err)
+        if (err.errCode == 10001) {
+          wx.showToast({
+            title: '请检查手机蓝牙是否已打开',
+            icon: 'warn',
+            duration: 2000
           })
-        },
-        fail:function(res){
-
         }
-      })
+      }
+    })
   },
   regionchange(e) {
     console.log(e.type)
@@ -210,7 +239,67 @@ Page({
   warn: function () {
     console.log("跳转")
     wx.navigateTo({
-      url: '/pages/warn/index'
+      url: '../warn/index'
+    })
+  },
+  onLoad: function (options) {
+    var that = this;
+    wx.getLocation({
+      type: "wgs84",
+      success: function (res) {
+        // var latitude = res.latitude;
+        // var longitude = res.longitude;
+        // console.log(res.latitude);
+        that.setData({
+          latitude: res.latitude,
+          longitude: res.longitude,
+          markers: [{
+            latitude: res.latitude,
+            longitude: res.longitude
+          }]
+        })
+      }
+    })
+    wx.request({
+      url: device_locations_url,
+      data: {
+        //传入的参数
+        longitude: longi,
+        latitude: lati,
+      },
+      success: (res) => {
+        // console.log(res)
+        let boxMsg = res.data
+        console.log(boxMsg)
+        //这里是关键 ， 循环出来有多少接口数据，往data里的数组里追加
+        for (var i = 0; i < boxMsg.length; i++) {
+          let id = boxMsg[i].id
+          let device_id = boxMsg[i].device_id
+          let boxlatitude = boxMsg[i].latitude
+          let boxlongitude = boxMsg[i].longitude
+          var info = {
+            id: 0,
+            iconPath: "../../images/022-house.png",
+            latitude: '',
+            longitude: '',
+            width: 25,
+            height: 25,
+            title: "",
+          };
+          info.id = id
+          info.latitude = boxlatitude
+          info.longitude = boxlongitude
+          info.title = device_id
+          markers.push(info);
+          this.setData({
+            latitude: boxMsg[i].latitude,
+            longitude: boxMsg[i].longitude
+          })
+        }
+        this.setData({
+          markers: markers
+        })
+      }
     })
   }
 })
