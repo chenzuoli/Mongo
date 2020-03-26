@@ -1,11 +1,14 @@
 // pages/warn/index.js
 var repair_url = 'https://localhost:7443/petcage/getDamageType';
 var add_feedback_url = 'https://localhost:7443/petcage/addFeedback';
+var upload_file_url = 'https://localhost:7443/petcage/uploadFile';
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    longitude: "",
+    latitude: "",
     inputValue: {
       num: 0,
       desc: ""
@@ -77,7 +80,24 @@ Page({
     })
   },
   submit: function() {
-    console.log(this.data)
+    var that = this;
+    wx.getLocation({
+      type: 'location',
+      success(res) {
+        console.log(res)
+        var lati = res.latitude
+        var longi = res.longitude
+        console.log('用户经纬度：' + lati + ',' + longi)
+        that.setData({
+          longitude: longi,
+          latitude: lati
+        })
+      },
+      fail: function () {
+        console.log("获取位置失败");
+      }
+    })
+    console.log(that.data)
     // if (this.data.checkboxValues.length > 0 && this.data.picUrls.length > 0) {
     var feedback_codes = []
     var feedback_contents = this.data.checkboxValues
@@ -90,14 +110,14 @@ Page({
       }
     }
     console.log("反馈code：" + feedback_codes)
-    if (this.data.checkboxValues.length > 0) {
+    if (that.data.checkboxValues.length > 0) {
       wx.request({
-        url: add_feedback_url + "?user_id=test&feedback_type=1&feedback_content=" + feedback_codes.join(',') + "&pictures=" + this.data.picUrls.join(','),
+        url: add_feedback_url + "?phone=test&feedback_type=1&feedback_content=" + feedback_codes.join(',') + "&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&desc=" + that.data.inputValue.desc,
         data: {
           user_id: "test",
           feedback_type: "1",
           feedback_content: feedback_codes.join(','),
-          pictures: this.data.picUrls.join(',')
+          pictures: that.data.picUrls.join(',')
         },
         method: 'post', //定义传到后台接受的是post方法还是get方法
         header: {
@@ -109,19 +129,46 @@ Page({
             icon: 'success',
             duration: 1000
           })
-          setTimeout(() => {
-            wx.redirectTo({
-              url: '../map/map',
-            })
-          }, 1000)
         }
       })
+      var pics = that.data.picUrls
+      for (var i = 0; i < pics.length; i++){
+        wx.uploadFile({
+          url: upload_file_url,
+          filePath: pics[i],
+          name: 'file',
+          formData: {
+            'user': 'test'
+          },
+          header: {
+            "Content-Type": "multipart/form-data;charset=utf-8",
+            "accept": "application/json",
+            "Authorization": "petcage.."
+          },
+          success(res) {
+            console.log(res.data)
+            var data = JSON.parse(res.data)
+            that.setData({
+              uploadImg: data.url.filePath   //将图片转换之后的服务器地址data.url.filePath(打印结果显示我的是data.url.filePath)推到data里面定义的空容器updataImg。html界面的显示也是用的这个路径，值得注意的是html里面要加上url域名
+            })
+            console.log(that.data.uploadImg)
+          },
+          fail(res) {
+            console.log("上传失败")
+          }
+        })
+      }
+      setTimeout(() => {
+        wx.redirectTo({
+          url: '../map/map',
+        })
+      }, 1000)
     } else {
       wx.showModal({
-        title: '请填写完整的反馈信息',
-        content: '你瞅啥？赶紧填',
-        confirmText: '填、我填',
-        cancelText: '老子不填',
+        title: '请填写故障种类',
+        content: '',
+        confirmText: '继续填写',
+        cancelText: '返回',
         success: (res) => {
           if (res.confirm) {
             console.log(res);

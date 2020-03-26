@@ -1,87 +1,108 @@
 /* pages/wallet/wallet.wxss */
-page{
-  background:#eee;
+
+page {
+  /* background:#eee; */
+  background: linear-gradient(#6cf, #080);
 }
 
-.balance_box{
-  height:200rpx;
-  background:#fff;
-  padding:15rpx 30rpx 10rpx;
-}
-.balance_box image{
-  width:130rpx;
-  height:130rpx;
-  float:left;
-}
-.balance_box .content{
-  margin-left:160rpx;
+.container {
+  background: linear-gradient(#6cf, #080);
 }
 
-.balance{
-  font-size:40rpx;
-  color:#333;
-  height:70rpx;
-  line-height:70rpx;
+.balance_box {
+  margin-top: -50px;
+  height: 200rpx;
+  padding: 15rpx 30rpx 10rpx;
 }
-.cfye{
-   height:60rpx;
-   line-height:60rpx;
-   color:#999;
-   font-size:30rpx;
+
+.balance_box image {
+  width: 130rpx;
+  height: 130rpx;
+  float: left;
 }
-.freeEndDate{
-  height:75rpx;
-  line-height:75rpx;
-  border-top:1px solid #eee;
-  color:#090;
-  font-weight:bold;
-  font-size:30rpx;
+
+.balance_box .content {
+  margin-left: 160rpx;
 }
-.czje{
-  padding:50rpx 0 30rpx 30rpx;
-  font-size:30rpx;
-  color:#666;
+
+.balance {
+  font-size: 40rpx;
+  color: #333;
+  height: 70rpx;
+  line-height: 70rpx;
 }
-button{
-  border:1rpx solid  #3c3;
-  background:#fff;
+
+.cfye {
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #333;
+  font-size: 30rpx;
 }
-button.selected{
-  border:none;
-  background:#3c3;
-  color:#fff;
+
+.freeEndDate {
+  height: 75rpx;
+  line-height: 75rpx;
+  border-top: 1px solid #eee;
+  color: #090;
+  font-weight: bold;
+  font-size: 30rpx;
 }
-.amountList{
-  height:250rpx;
-  background:#fff;
-  padding:20rpx 0;
-  display:flex;
+
+.czje {
+  padding: 50rpx 0 30rpx 30rpx;
+  font-size: 30rpx;
+  /* color: #666; */
+}
+
+button {
+  border: 1rpx solid #3c3;
+  background: #fff;
+  font-size: 30rpx;
+}
+
+button.selected {
+  border: none;
+  background: #3c3;
+  color: #fff;
+}
+
+.amountList {
+  height: 250rpx;
+  /* background:#fff; */
+  padding: 20rpx 0;
+  display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-content: space-around;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
-.amountList button{
-  width:40%;
+
+.amountList button {
+  width: 40%;
 }
-.btn_topay{
-  width:90%;
-  margin:0 auto;
+
+.btn_topay {
+  width: 50%;
+  margin: 0 auto;
 }
-.intro{
-  padding:60rpx 80rpx 20rpx;
-  font-size:24rpx;
-  color:#999;
+
+.intro {
+  padding: 60rpx 80rpx 20rpx;
+  font-size: 24rpx;
+  color: rgb(221, 200, 200);
 }
-.czxy,.rhtyj{
-  color:#669;
+
+.czxy, .rhtyj {
+  color: #669;
 }
-.yj{
-  padding-top:20rpx;
-  text-align:center;
-  font-size:26rpx;
+
+.yj {
+  padding-top: 20rpx;
+  text-align: center;
+  font-size: 26rpx;
 }
-.intro_text{
-  text-align:center;
-  line-height:40rpx;
+
+.intro_text {
+  text-align: center;
+  line-height: 40rpx;
 }

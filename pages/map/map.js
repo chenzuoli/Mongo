@@ -217,7 +217,6 @@ Page({
      this.scanCode();
     }
     if (e.controlId == 3) {
-      // this.toRedPacket();
       this.warn();
     }
     if(e.controlId==4){
@@ -262,6 +261,10 @@ Page({
     })
     wx.request({
       url: device_locations_url,
+      method: 'post', //定义传到后台接受的是post方法还是get方法
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
       data: {
         //传入的参数
         longitude: longi,

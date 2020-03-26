@@ -1,16 +1,18 @@
 // pages/wallet/wallet.js
+var get_user_wallet_url = 'https://localhost:7443/petcage/getUserWallet'
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    balance:"3.50",
-    freeEndDate:"2017/06/08",
+    user_id: "",
+    balance: "0",
+    freeEndDate: "",
+    hidden: true,
     amountList:[
       100,50,20,10
     ],
-    curSelected:'0',
+    curSelected: '0',
   },
   selectAmount: function (e) {
     var dataId = e.target.dataset.id;
@@ -44,7 +46,34 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this
+    wx.request({
+      url: get_user_wallet_url + "?phone=15313621879",
+      data: {
+        phone: "15313621879"
+      },
+      method: 'post', //定义传到后台接受的是post方法还是get方法
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function(res){
+        console.log("获取用户钱包成功：")
+        console.log(res.data)
+        that.setData({
+          balance: res.data.balance,
+          freeEndDate: res.data.valid_end_date.substring(0,10),
+          user_id: res.data.user_id
+        })
+        if(res.data.user_type != '1'){
+          that.setData({
+            hidden: false
+          })
+        }
+      },
+      fail: function(res){
+        console.log("获取用户钱包失败")
+      }
+    })
   },
 
   /**

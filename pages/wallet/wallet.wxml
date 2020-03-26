@@ -1,11 +1,12 @@
 <!--pages/wallet/wallet.wxml-->
 <!--余额-->
+<view class="container">
 <view class="balance_box">
   <image src="../../images/balance.svg"></image>
   <view class="content">
-    <view class="balance">￥{{balance}}</view>
-    <view class="cfye">余额</view>
-    <view class="freeEndDate">您累计可免费使用至{{freeEndDate}}</view>
+    <view class="balance">{{user_id}}</view>
+    <view class="cfye">余额: {{balance}}</view>
+    <view class="freeEndDate" hidden='{{hidden}}'>您累计可免费使用至{{freeEndDate}}</view>
   </view>
 </view>
 <view class="czje">充值金额</view>
@@ -17,4 +18,6 @@
 <view class="intro_text">Mongo世界不会以任何形式要求您输入银行账户和密码</view>
 </view>
 <button class="btn_topay selected" bindtap="toPay">去充值</button>
-<view class="yj">押金299元 <text class="rhtyj" bindtap="toMyLab">如何退押金？</text></view>
+<!-- <view class="yj">押金299元 <text class="rhtyj" bindtap="toMyLab">如何退押金？</text></view> -->
+
+</view>
