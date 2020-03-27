@@ -21,6 +21,8 @@ button {
 
 .content{
   margin-top: 40px;
+  /* border: 1px solid blue; */
+  margin-bottom: 40px;
 }
 .account{
    display: flex;
@@ -29,10 +31,12 @@ button {
    padding-top: 20px;
    padding-bottom: 10px;
    width: 90%;
+   font-size: 35rpx;
 }
 .title{
    margin-right: 30px;
-   font-weight: bold;
+   /* font-weight: bold; */
+   font-size: 35rpx;
 }
 .hr{
   border: 1px solid #cccccc;
@@ -46,20 +50,24 @@ button {
   margin-top:40px;
   margin-left:30px;
   color: #999999;
+  font-size: 35rpx;
 }
 .link_register{
   margin-top: 100px;
   margin-left:180px;
   color: #f07e7e;
-  font-size: 10px;
+  font-size: 25rpx;
   background-color: inherit
 }
 button::after{
    border: none;
 }
 .link_wx{
-  margin-bottom:40px;
-  margin-left:30px;
-  margin-right:30px;
-  color: #070706;
+  margin-left:105px;
+  margin-right:105px;
+  margin-top: 150px;
+  color: #b8f3b6;
+  border: 1px solid #cccccc;
+  background-color: inherit;
+  font-size: 30rpx;
 }

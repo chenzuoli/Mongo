@@ -10,7 +10,7 @@ page{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 90%;
+  width: 80%;
   margin: 50rpx auto;
 }
 
@@ -20,10 +20,12 @@ page{
   width: 100%;
   border-radius: 10rpx;
   background: #fff;
+  margin-top: 10px;
   margin-bottom: 20rpx;
   padding-left: 20rpx;
   padding-right: 20rpx;
   box-sizing: border-box;
+  font-size: 35rpx;
 }
 .row input{
   width: 100%;
@@ -45,4 +47,16 @@ page{
   width: 100px;
   height: 80rpx;
   line-height: 80rpx;
+  margin-top: 30px;
+  font-size: 35rpx;
+}
+
+.link_wx{
+  margin-left:70px;
+  margin-right:70px;
+  margin-top: 80px;
+  color: #b8f3b6;
+  border: 1px solid #cccccc;
+  background-color: inherit;
+  font-size: 30rpx;
 }

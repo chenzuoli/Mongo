@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    user_id: "",
+    nick_name: "",
     balance: "0",
     freeEndDate: "",
     hidden: true,
@@ -62,7 +62,7 @@ Page({
         that.setData({
           balance: res.data.balance,
           freeEndDate: res.data.valid_end_date.substring(0,10),
-          user_id: res.data.user_id
+          nick_name: res.data.nick_name
         })
         if(res.data.user_type != '1'){
           that.setData({

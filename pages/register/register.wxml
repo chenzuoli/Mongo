@@ -1,19 +1,22 @@
 <!--index.wxml-->
 <view class="container">
   <view class='row'>
-     <input placeholder='  请输入用户名' bindinput='bindNameInput'/> 
+    <input placeholder='  请输入用户名' bindinput='bindNameInput' />
   </view>
-  
+
   <view class='row'>
-     <input placeholder='  请输入手机号' bindinput='bindPhoneInput'/> 
+    <input placeholder='  请输入手机号' bindinput='bindPhoneInput' />
   </view>
   <view class='row'>
-     <input placeholder='  请输验证码' bindinput='bindCodeInput' style='width:70%;'/> 
-     <!-- <input placeholder='  请输验证码' bindinput='bindCodeInput'/>  -->
-     <button class='codeBtn' bindtap='getCode' hidden='{{hidden}}' disabled='{{btnDisabled}}'>{{btnValue}}</button>
+    <input placeholder='  请输入密码' bindinput='bindPhoneInput' />
+  </view>
+  <view class='row'>
+    <input placeholder='  请输验证码' bindinput='bindCodeInput' style='width:70%;' />
+    <!-- <input placeholder='  请输验证码' bindinput='bindCodeInput'/>  -->
+    <button class='codeBtn' bindtap='getCode' hidden='{{hidden}}' disabled='{{btnDisabled}}'>{{btnValue}}</button>
   </view>
   <view>
-     <button class='save' bindtap='save' >注  册</button>
+    <button class='save' bindtap='save'>注 册</button>
+    <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">微信账号注册</button>
   </view>
-  
 </view>

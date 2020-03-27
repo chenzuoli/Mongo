@@ -1,18 +1,49 @@
 //app.js
+var login_url = 'https://localhost:7443/petcage/accessToken'
 App({
+  globalData: {
+    userInfo: {
+      phone: "",
+      open_id: "",
+      union_id: "",
+      token: "",
+    },
+  },
   onLaunch: function () {
     //调用API从本地缓存中获取数据
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-
     // 登录
-    wx.login({
+    wx.login({ // 登录
+      // 发送 res.code 到后台换取 openId, sessionKey, unionId
       success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log("js_code: " + res.code)
+        wx.request({
+          url: login_url + "?js_code=" + res.code,
+          method: 'POST',
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          data: {
+            js_code: res.code
+          },
+          success(res) {
+            console.log("login success.")
+            console.log(res.data)
+            //必须先清除，否则res.header['Set-Cookie']会报错
+            wx.removeStorageSync('sessionid');
+            //储存res.header['Set-Cookie']
+            wx.setStorageSync("sessionid", res.header["Set-Cookie"]);
+          },
+          fail(err){
+            console.log("login failed.")
+          }
+        });
       }
-    })
+    });
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -41,8 +72,9 @@ App({
       })
     } else {
       wx.navigateTo({
-        // url: '/pages/login/login',
-        url: '/pages/map/map'
+        url: '/pages/login/login',
+        // url: '/pages/map/map'
+        // url: '/pages/userInfo/userInfo'
       })
     }
   },
@@ -64,8 +96,5 @@ App({
         }
       })
     }
-  },
-  globalData: {
-    userInfo: null,
   }
 })

@@ -1,5 +1,9 @@
 <!--pages/userInfo/userInfo.wxml-->
 
 <button bindtap='getOpenIdTap'>获取用户唯一标识openid</button>
-<text>openid:{{openid}}\n </text>
-<text>session_key:{{session_key}}</text>
+<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button>
+<button open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">获取用户基本信息</button>
+<view>open_id:{{open_id}}\n </view>
+<view>session_key:{{session_key}}\n</view>
+<view>phone_number:{{phone_number}}\n </view>
+<view>nickName:{{nickName}}\n </view>

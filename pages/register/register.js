@@ -2,6 +2,8 @@
 var zhenzisms = require('../../utils/zhenzisms.js');
 var get_code_url = 'https://wetech.top:7443/smsCode'
 var register_url = 'https://wetech.top:7443/register'
+var wx_login_url = "https://localhost:7443/petcage/wx_login"
+
 //获取应用实例
 const app = getApp();
 
@@ -13,7 +15,9 @@ Page({
     name: '',
     phone: '',
     code: '',
-    second: 60
+    second: 60,
+    rawData: "",
+    userInfo: ""
   },
   onLoad: function () {
 
@@ -148,6 +152,56 @@ Page({
           duration: 1000
         })
       },
+    })
+  },
+  onGotUserInfo: function (e) {
+    var that = this;
+    console.log(e.detail.errMsg)
+    console.log(e.detail.userInfo)
+    console.log(e.detail.rawData)
+    that.setData({
+      rawData: e.detail.rawData,
+      userInfo: e.detail.userInfo
+    })
+    wx.login({
+      success(res) {
+        console.log(that.data.rawData)
+        console.log(that.data.userInfo)
+        wx.request({
+          url: wx_login_url,
+          data: {
+            js_code: res.code,
+            rawData: that.data.rawData
+          },
+          success(res) {
+            console.log("注册成功")
+            wx.showToast({
+              title: '注册成功',
+              icon: "success",
+              duration: 1000
+            })
+            wx.navigateTo({
+              url: '../login/login',
+            })
+          },
+          fail(err) {
+            console.log("注册失败")
+            wx.showToast({
+              title: '注册失败',
+              icon: "warn",
+              duration: 1000
+            })
+          }
+        })
+      },
+      fail(err) {
+        console.log("注册失败")
+        wx.showToast({
+          title: '注册失败',
+          icon: "warn",
+          duration: 1000
+        })
+      }
     })
   }
 })

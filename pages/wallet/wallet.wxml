@@ -4,7 +4,7 @@
 <view class="balance_box">
   <image src="../../images/balance.svg"></image>
   <view class="content">
-    <view class="balance">{{user_id}}</view>
+    <view class="balance">{{nick_name}}</view>
     <view class="cfye">余额: {{balance}}</view>
     <view class="freeEndDate" hidden='{{hidden}}'>您累计可免费使用至{{freeEndDate}}</view>
   </view>

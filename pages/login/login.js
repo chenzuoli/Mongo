@@ -1,15 +1,64 @@
 // pages/login/login.js
 var API_URL = 'https://www.wetech.top'
-var pageObject = {
+var wx_login_url = "https://localhost:7443/petcage/wx_login"
+
+Page({
   data: {
     account: "",
     password: "",
-    message: ""
+    message: "",
+    rawData: "",
+    userInfo: ""
   },
   onGotUserInfo: function(e) {
+    var that = this;
     console.log(e.detail.errMsg)
     console.log(e.detail.userInfo)
     console.log(e.detail.rawData)
+    that.setData({
+      rawData: e.detail.rawData,
+      userInfo: e.detail.userInfo
+    })
+    wx.login({
+      success(res) {
+        console.log(that.data.rawData)
+        console.log(that.data.userInfo)
+        wx.request({
+          url: wx_login_url,
+          data: {
+            js_code: res.code,
+            rawData: that.data.rawData
+          },
+          success(res) {
+            console.log("登录成功")
+            wx.showToast({
+              title: '登录成功',
+              icon: "success",
+              duration: 1000
+            })
+            wx.navigateTo({
+              url: '../map/map',
+            })
+          },
+          fail(err) {
+            console.log("登录失败")
+            wx.showToast({
+              title: '登录失败',
+              icon: "warn",
+              duration: 1000
+            })
+          }
+        })
+      },
+      fail(err) {
+        console.log("登录失败")
+        wx.showToast({
+          title: '登录失败',
+          icon: "warn",
+          duration: 1000
+        })
+      }
+    })
   },
   onReady: function() {
     const _this = this;
@@ -94,6 +143,4 @@ var pageObject = {
       }
     })
   }
-}
-
-Page(pageObject)
+})
