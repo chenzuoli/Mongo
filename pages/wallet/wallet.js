@@ -1,5 +1,5 @@
 // pages/wallet/wallet.js
-var get_user_wallet_url = 'https://localhost:7443/petcage/getUserWallet'
+var get_user_wallet_url = 'https://wetech.top:7443/petcage/getUserWallet'
 Page({
   /**
    * 页面的初始数据

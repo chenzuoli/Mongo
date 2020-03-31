@@ -1,7 +1,7 @@
 // pages/warn/index.js
-var repair_url = 'https://localhost:7443/petcage/getDamageType';
-var add_feedback_url = 'https://localhost:7443/petcage/addFeedback';
-var upload_file_url = 'https://localhost:7443/petcage/uploadFile';
+var repair_url = 'https://wetech.top:7443/petcage/getDamageType';
+var add_feedback_url = 'https://wetech.top:7443/petcage/addFeedback';
+var upload_file_url = 'https://wetech.top:7443/petcage/uploadFile';
 Page({
   /**
    * 页面的初始数据

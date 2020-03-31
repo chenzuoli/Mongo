@@ -1,5 +1,5 @@
 // pages/test/test.js
-var get_access_token_url = 'https://localhost:7443/petcage/accessToken';
+var get_access_token_url = 'https://wetech.top:7443/petcage/accessToken';
 Page({
 
   /**

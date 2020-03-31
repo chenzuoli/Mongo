@@ -2,7 +2,7 @@
 var zhenzisms = require('../../utils/zhenzisms.js');
 var get_code_url = 'https://wetech.top:7443/smsCode'
 var register_url = 'https://wetech.top:7443/register'
-var wx_login_url = "https://localhost:7443/petcage/wx_login"
+var wx_login_url = "https://wetech.top:7443/petcage/wx_login"
 
 //获取应用实例
 const app = getApp();

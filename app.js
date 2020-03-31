@@ -1,5 +1,5 @@
 //app.js
-var login_url = 'https://localhost:7443/petcage/accessToken'
+var login_url = 'https://wetech.top:7443/petcage/accessToken'
 App({
   globalData: {
     userInfo: {
@@ -72,9 +72,10 @@ App({
       })
     } else {
       wx.navigateTo({
-        url: '/pages/login/login',
+        // url: '/pages/login/login',
         // url: '/pages/map/map'
         // url: '/pages/userInfo/userInfo'
+        url: '/pages/bluetooth_v2/bluetooth_v2'
       })
     }
   },

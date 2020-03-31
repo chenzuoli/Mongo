@@ -1,6 +1,6 @@
 // pages/login/login.js
 var API_URL = 'https://www.wetech.top'
-var wx_login_url = "https://localhost:7443/petcage/wx_login"
+var wx_login_url = "https://wetech.top:7443/petcage/wx_login"
 
 Page({
   data: {
