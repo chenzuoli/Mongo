@@ -1,5 +1,5 @@
 // pages/test/test.js
-var get_access_token_url = 'https://wetech.top:7443/petcage/accessToken';
+var get_access_token_url = 'https://wetech.top:7443/petcage/access_token';
 Page({
 
   /**
@@ -17,9 +17,6 @@ Page({
       success: function(res){
         wx.request({
           url: get_access_token_url,
-          data: {
-            js_code: ""
-          },
           method: 'post', //定义传到后台接受的是post方法还是get方法
           header: {
             'content-type': 'application/json' // 默认值

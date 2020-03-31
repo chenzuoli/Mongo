@@ -1,7 +1,7 @@
 var OPEN_ID = '' //储存获取到openid 
 var SESSION_KEY = '' //储存获取到session_key
 var UNION_Id = ''
-var get_open_id_url = 'https://localhost:7443/petcage/accessToken'
+var get_open_id_url = 'https://localhost:7443/petcage/open_id'
 Page({
   data: {
     open_id: "",
@@ -25,8 +25,8 @@ Page({
             if (res.statusCode == 200) {
               console.log(res)
               that.setData({
-                open_id: res.data.openid,
-                session_key: res.data.session_key
+                open_id: res.data.data.openid,
+                session_key: res.data.data.session_key
               })
             } else {
               console.log(res.errMsg)

@@ -1,27 +1,27 @@
 var markers = [];
 var controls;
-var position1,position2,position3,position4,position5;
-var W=0;var H=0;
+var position1, position2, position3, position4, position5;
+var W = 0; var H = 0;
 var device_locations_url = 'https://wetech.top:7443/petcage/getDeviceLocations';
 
 // 位置信息
 var lati, longi;
 Page({
   data: {
-    scanResult:"",
+    scanResult: "",
     longitude: 116.403963,
     latitude: 39.915119,
     // markers:markers,
-    markers:[{
+    markers: [{
       iconPath: "../../images/022-house.png",
-      id:0,
+      id: 0,
       longitude: 0,
       latitude: 0,
-      width:25,
-      height:25,
-      title:''
+      width: 25,
+      height: 25,
+      title: ''
     }],
-    controls:controls,
+    controls: controls,
   },
   onShareAppMessage: function () {
     return {
@@ -35,7 +35,7 @@ Page({
       }
     }
   },
-  onReady:function(e){
+  onReady: function (e) {
     var that = this;
     wx.getLocation({
       type: 'location',
@@ -65,73 +65,73 @@ Page({
         // 根据屏幕宽高动态设置control 位置
         // 定位当前位置
         position1 = {
-         left:W*.05,
-         top:H-85,
-         width:60,
-         height:60
+          left: W * .05,
+          top: H - 85,
+          width: 60,
+          height: 60
         }
         // 扫码开锁
         position2 = {
-          left: W*.5-75,
-          top: H-85,
+          left: W * .5 - 75,
+          top: H - 85,
           width: 150,
           height: 55
         }
         // 我的红包
         position3 = {
-          left: W*.95-60,
-          top: H-160,
+          left: W * .95 - 60,
+          top: H - 160,
           width: 60,
           height: 60
         }
         // 我的钱包
         position4 = {
           left: W * .95 - 60,
-          top: H-85,
+          top: H - 85,
           width: 60,
           height: 60
         }
         // 窗口中心
         position5 = {
           left: W * .5 - 25,
-          top: H*.5 - 25,
+          top: H * .5 - 25,
           width: 50,
           height: 50
         }
         controls = [
-            {
-              id: 1,
-              iconPath: '../../images/location.png',
-              position:position1,
-              clickable: true
-            },
-            {
-              id: 2,
-              iconPath: '../../images/scantoopen.png',
-              position: position2,
-              clickable: true
-            },
-            {
-              id: 3,
-              iconPath: '../../images/warn.png',
-              position: position3,
-              clickable: true
-            },
-            {
-              id: 4,
-              iconPath: '../../images/avatar.png',
-              position: position4,
-              clickable: true
-            },
-            {
-              id: 5,
-              iconPath: '../../images/icon_center.png',
-              position: position5,
-              clickable: true
-            }
+          {
+            id: 1,
+            iconPath: '../../images/location.png',
+            position: position1,
+            clickable: true
+          },
+          {
+            id: 2,
+            iconPath: '../../images/scantoopen.png',
+            position: position2,
+            clickable: true
+          },
+          {
+            id: 3,
+            iconPath: '../../images/warn.png',
+            position: position3,
+            clickable: true
+          },
+          {
+            id: 4,
+            iconPath: '../../images/avatar.png',
+            position: position4,
+            clickable: true
+          },
+          {
+            id: 5,
+            iconPath: '../../images/icon_center.png',
+            position: position5,
+            clickable: true
+          }
         ]
         that.setData({
-            controls:controls
+          controls: controls
         });
       }
     })
@@ -141,8 +141,8 @@ Page({
     var that = this;
     that.mapCtx.getCenterLocation({
       success: function (res) {
-       //获取中心位置坐标后向后台请求改坐标100米内的单车坐标
-      //  向controls数组push数据
+        //获取中心位置坐标后向后台请求改坐标100米内的单车坐标
+        //  向controls数组push数据
       }
     })
   },
@@ -150,23 +150,23 @@ Page({
   moveToLocation: function () {
     this.mapCtx.moveToLocation()
   },
-  getLocation:function(){
+  getLocation: function () {
     wx.getLocation({
       type: 'gcj02',
-      success: function (res) { 
+      success: function (res) {
         console.log(res.longitude)
         console.log(res.latitude)
       },
-      fail: function (res) { 
+      fail: function (res) {
         console.log("获取位置失败")
       },
       complete: function (res) { },
     })
   },
-  scanCode: function(){
+  scanCode: function () {
     var that = this;
     wx.openBluetoothAdapter({
-      success: function(res) {
+      success: function (res) {
         console.log("蓝牙开启成功！" + res)
         wx.scanCode({
           success: function (res) {
@@ -189,7 +189,7 @@ Page({
           }
         })
       },
-      fail: function(err){
+      fail: function (err) {
         console.log("蓝牙开启失败！")
         console.log(err)
         if (err.errCode == 10001) {
@@ -210,16 +210,16 @@ Page({
   },
   controltap(e) {
     console.log(e.controlId)
-    if(e.controlId==1){
+    if (e.controlId == 1) {
       this.moveToLocation();
     }
-    if(e.controlId==2){
-     this.scanCode();
+    if (e.controlId == 2) {
+      this.scanCode();
     }
     if (e.controlId == 3) {
       this.warn();
     }
-    if(e.controlId==4){
+    if (e.controlId == 4) {
       this.toWallet();
     }
   },
@@ -229,7 +229,7 @@ Page({
       url: '/pages/redPacket/redPacket'
     })
   },
-  toWallet:function(){
+  toWallet: function () {
     console.log("跳转")
     wx.navigateTo({
       url: '/pages/wallet/wallet'

@@ -1,5 +1,5 @@
 //app.js
-var login_url = 'https://wetech.top:7443/petcage/accessToken'
+var login_url = 'https://wetech.top:7443/petcage/open_id'
 App({
   globalData: {
     userInfo: {
@@ -37,13 +37,13 @@ App({
             //储存res.header['Set-Cookie']
             wx.setStorageSync("sessionid", res.header["Set-Cookie"]);
           },
-          fail(err){
+          fail(err) {
             console.log("login failed.")
           }
         });
       }
     });
-    
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -73,11 +73,18 @@ App({
     } else {
       wx.navigateTo({
         // url: '/pages/login/login',
-        // url: '/pages/map/map'
+        url: '/pages/map/map',
         // url: '/pages/userInfo/userInfo'
-        url: '/pages/bluetooth_v2/bluetooth_v2'
+        // url: '/pages/bluetooth_v2/bluetooth_v2'
       })
     }
+  },
+  onShow: function (options) {
+    let option = JSON.stringify(options);
+    console.log('app.js option-----' + option)
+    console.log('app.js>>options.scene--------------------' + options.scene);
+    var resultScene = this.sceneInfo(options.scene);
+    console.log(resultScene);
   },
   getUserInfo: function (cb) {
     var that = this
