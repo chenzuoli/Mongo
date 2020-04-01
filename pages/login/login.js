@@ -36,6 +36,7 @@ Page({
               icon: "success",
               duration: 1000
             })
+            wx.setStorageSync("token", res.data.data.token)
             wx.navigateTo({
               url: '../map/map',
             })

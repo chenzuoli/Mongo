@@ -9,7 +9,7 @@ App({
       token: "",
     },
   },
-  onLaunch: function () {
+  onLaunch: function() {
     //调用API从本地缓存中获取数据
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -36,6 +36,7 @@ App({
             wx.removeStorageSync('sessionid');
             //储存res.header['Set-Cookie']
             wx.setStorageSync("sessionid", res.header["Set-Cookie"]);
+            wx.setStorageSync('open_id', res.data.data.open_id)
           },
           fail(err) {
             console.log("login failed.")
@@ -72,30 +73,31 @@ App({
       })
     } else {
       wx.navigateTo({
-        // url: '/pages/login/login',
-        url: '/pages/map/map',
+        // url: '/pages/login/login'
+        // url: '/pages/map/map'
         // url: '/pages/userInfo/userInfo'
-        // url: '/pages/bluetooth_v2/bluetooth_v2'
+        // url: '/pages/bluetooth_v3/bluetooth_v3'
+        // url: '/pages/verify_phone_number/verify_phone_number'
+        // url: '/pages/test/test'
+        url: '/pages/order_add/order_add'
       })
     }
   },
-  onShow: function (options) {
+  onShow: function(options) {
     let option = JSON.stringify(options);
     console.log('app.js option-----' + option)
-    console.log('app.js>>options.scene--------------------' + options.scene);
-    var resultScene = this.sceneInfo(options.scene);
-    console.log(resultScene);
+    console.log('app.js>>options.scene------' + options.scene);
   },
-  getUserInfo: function (cb) {
+  getUserInfo: function(cb) {
     var that = this
     if (this.globalData.userInfo) {
       typeof cb == "function" && cb(this.globalData.userInfo)
     } else {
       //调用登录接口
       wx.login({
-        success: function () {
+        success: function() {
           wx.getUserInfo({
-            success: function (res) {
+            success: function(res) {
               wx.setStorageSync('isFirst', res.userInfo)
               that.globalData.userInfo = res.userInfo
               typeof cb == "function" && cb(that.globalData.userInfo)

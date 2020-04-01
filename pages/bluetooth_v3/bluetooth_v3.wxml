@@ -1,0 +1,7 @@
+<!--pages/bluetooth/bluetooth.wxml-->
+<view class="content">
+  <text class="status">设备名称：{{ sceneDeviceName }}</text>
+  <button type="primary" class="button" bindtap="send_receive" data-command='open'>发送开锁消息</button>
+  <button type="primary" class="button" bindtap="send_receive" data-command='close'>发送关锁消息</button>
+  <button type="primary" class="button" bindtap="send_receive" data-command='close'>结账</button>
+</view>

@@ -11,7 +11,10 @@
     "pages/test/test",
     "pages/bluetooth/bluetooth",
     "pages/bluetooth-demo/bluetooth",
-    "pages/bluetooth_v2/bluetooth_v2"
+    "pages/bluetooth_v2/bluetooth_v2",
+    "pages/bluetooth_v3/bluetooth_v3",
+    "pages/verify_phone_number/verify_phone_number",
+    "pages/order_add/order_add"
   ],
   "window": {
     "backgroundTextStyle": "light",

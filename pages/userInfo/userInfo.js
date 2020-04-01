@@ -1,7 +1,8 @@
-var OPEN_ID = '' //储存获取到openid 
+var OPEN_ID = '' //储存获取到open_id 
 var SESSION_KEY = '' //储存获取到session_key
 var UNION_Id = ''
-var get_open_id_url = 'https://localhost:7443/petcage/open_id'
+var get_open_id_url = 'https://wetech.top:7443/petcage/open_id'
+var get_phone_number = 'http://wetech.top:7443/petcage/index/users/decodePhone'
 Page({
   data: {
     open_id: "",
@@ -25,7 +26,7 @@ Page({
             if (res.statusCode == 200) {
               console.log(res)
               that.setData({
-                open_id: res.data.data.openid,
+                open_id: res.data.data.open_id,
                 session_key: res.data.data.session_key
               })
             } else {
@@ -42,7 +43,7 @@ Page({
     console.log(e.detail.errMsg == "getPhoneNumber:ok");
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       wx.request({
-        url: 'http://localhost:7443/petcage/index/users/decodePhone',
+        url: get_phone_number,
         data: {
           encryptedData: e.detail.encryptedData,
           iv: e.detail.iv,
