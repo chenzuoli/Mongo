@@ -56,10 +56,22 @@ page {
   font-size: 35rpx;
 }
 
+.link_login {
+  margin-top: 10px;
+  margin-left: 100px;
+  color: #f07e7e;
+  font-size: 25rpx;
+  background-color: inherit;
+}
+
+button::after {
+  border: none;
+}
+
 .link_wx {
   margin-left: 70px;
   margin-right: 70px;
-  margin-top: 80px;
+  margin-top: 40px;
   color: #b8f3b6;
   border: 1px solid #ccc;
   background-color: inherit;

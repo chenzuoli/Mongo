@@ -7,7 +7,7 @@
     <input placeholder='  请输入手机号' bindinput='bindPhoneInput' />
   </view>
   <view class='row'>
-    <input placeholder='  请输入密码' bindinput='bindPhoneInput' />
+    <input placeholder='  请输入密码' password="true" bindinput='bindPhoneInput' />
   </view>
   <view class='row'>
     <input placeholder='  请输验证码' bindinput='bindCodeInput' style='width:70%;' />
@@ -15,6 +15,7 @@
   </view>
   <view>
     <button class='save' bindtap='save'>注 册</button>
+    <button class='link_login' bindtap='login'>已有账号？点击登录</button>
     <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">微信账号注册</button>
   </view>
 </view>

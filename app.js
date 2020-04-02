@@ -81,7 +81,8 @@ App({
         // url: '/pages/test/test'
         // url: '/pages/order_add/order_add'
         // url: '/pages/warn/index'
-        url: '/pages/feedback/feedback'
+        // url: '/pages/feedback/feedback'
+        url: '/pages/register/register'
       })
     }
   },

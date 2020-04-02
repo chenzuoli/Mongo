@@ -202,5 +202,11 @@ Page({
         })
       }
     })
-  }
+  },
+  login: function () {
+    console.log("navigate to login.")
+    wx.navigateTo({
+      url: '../login/login',
+    })
+  },
 })
