@@ -14,7 +14,9 @@
     "pages/bluetooth_v2/bluetooth_v2",
     "pages/bluetooth_v3/bluetooth_v3",
     "pages/verify_phone_number/verify_phone_number",
-    "pages/order_add/order_add"
+    "pages/order_add/order_add",
+    "pages/feedback/feedback",
+    "pages/warn/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

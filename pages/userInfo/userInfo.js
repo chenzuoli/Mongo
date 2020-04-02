@@ -15,14 +15,18 @@ Page({
   getOpenIdTap: function() {
     var that = this;
     wx.login({
-      success: function (res) {
+      success: function(res) {
         console.log(res)
         wx.request({
           url: get_open_id_url + '?js_code=' + res.code,
-          data: { js_code: res.code },
+          data: {
+            js_code: res.code
+          },
           method: 'POST',
-          header: { 'content-type': 'application/json' },
-          success: function (res) {
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function(res) {
             if (res.statusCode == 200) {
               console.log(res)
               that.setData({
@@ -38,7 +42,7 @@ Page({
     })
   },
   // 需要企业微信认证才能有权限获取用户手机号
-  getPhoneNumber: function(e){
+  getPhoneNumber: function(e) {
     var that = this;
     console.log(e.detail.errMsg == "getPhoneNumber:ok");
     if (e.detail.errMsg == "getPhoneNumber:ok") {
@@ -51,13 +55,13 @@ Page({
           uid: "",
         },
         method: "post",
-        success: function (res) {
+        success: function(res) {
           console.log(res);
         }
       })
     }
   },
-  onGotUserInfo: function (e) {
+  onGotUserInfo: function(e) {
     console.log(e.detail.errMsg)
     console.log(e.detail.userInfo)
     console.log(e.detail.rawData)

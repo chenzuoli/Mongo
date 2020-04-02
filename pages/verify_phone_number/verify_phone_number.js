@@ -19,7 +19,7 @@ Page({
     rawData: "",
     userInfo: ""
   },
-  onLoad: function () {
+  onLoad: function() {
 
   },
   //手机号输入
@@ -59,7 +59,7 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function (res) {
+      success: function(res) {
         // success
         wx.showToast({
           title: '发送成功',
@@ -72,7 +72,7 @@ Page({
           return;
         }
       },
-      fail: function () {
+      fail: function() {
         // fail
         wx.showToast({
           title: '发送失败',
@@ -80,12 +80,12 @@ Page({
           duration: 1000
         })
       },
-      complete: function () {
+      complete: function() {
         // complete
       }
     })
   },
-  timer: function () {
+  timer: function() {
     let promise = new Promise((resolve, reject) => {
       let setTimer = setInterval(
         () => {
@@ -103,8 +103,7 @@ Page({
             })
             resolve(setTimer)
           }
-        }
-        , 1000)
+        }, 1000)
     })
     promise.then((setTimer) => {
       clearInterval(setTimer)
@@ -125,7 +124,7 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function (res) {
+      success: function(res) {
         // success
         wx.showToast({
           title: '验证成功',
@@ -137,7 +136,7 @@ Page({
           url: '../login/login',
         })
       },
-      fail: function () {
+      fail: function() {
         // fail
         wx.showToast({
           title: '验证失败',
@@ -148,7 +147,7 @@ Page({
     })
   },
   // 需要企业微信认证才能有权限获取用户手机号
-  getPhoneNumber: function (e) {
+  getPhoneNumber: function(e) {
     var that = this;
     console.log(e.detail.errMsg);
     if (e.detail.errMsg == "getPhoneNumber:ok") {
@@ -161,7 +160,7 @@ Page({
           uid: "",
         },
         method: "post",
-        success: function (res) {
+        success: function(res) {
           console.log(res);
           wx.showToast({
             title: '验证成功',

@@ -1,4 +1,5 @@
 /* pages/index/guide.wxss */
+
 swiper {
   /*这个是绝对布局*/
   position: absolute;

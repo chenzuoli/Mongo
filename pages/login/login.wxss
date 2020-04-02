@@ -1,73 +1,86 @@
 /* pages/login/login.wxss */
+
 /** 修改button默认的点击态样式类**/
-page{
+
+page {
   height: 100%;
   width: 100%;
-  background: linear-gradient(#66CCFF, #008800);
+  background: linear-gradient(#6cf, #080);
   display: flex;
   flex-direction: column;
 }
+
 .button-hover {
   background-color: red;
 }
+
 /** 添加自定义button点击态样式类**/
+
 .other-button-hover {
   background-color: blue;
 }
+
 button {
   margin-left: 20px;
   margin-right: 20px;
 }
 
-.content{
+.content {
   margin-top: 40px;
   /* border: 1px solid blue; */
   margin-bottom: 40px;
 }
-.account{
-   display: flex;
-   flex-direction: row;
-   padding-left: 20px;
-   padding-top: 20px;
-   padding-bottom: 10px;
-   width: 90%;
-   font-size: 35rpx;
+
+.account {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  width: 90%;
+  font-size: 35rpx;
 }
-.title{
-   margin-right: 30px;
-   /* font-weight: bold; */
-   font-size: 35rpx;
+
+.title {
+  margin-right: 30px;
+  /* font-weight: bold; */
+  font-size: 35rpx;
 }
-.hr{
-  border: 1px solid #cccccc;
+
+.hr {
+  border: 1px solid #ccc;
   opacity: 0.2;
   width: 90%;
   margin: 0 auto;
 }
-.btn{
+
+.btn {
   position: absolute;
   width: 80%;
-  margin-top:40px;
-  margin-left:30px;
-  color: #999999;
+  margin-top: 40px;
+  margin-left: 30px;
+  color: #999;
   font-size: 35rpx;
 }
-.link_register{
+
+.link_register {
   margin-top: 100px;
-  margin-left:180px;
+  margin-left: 180px;
   color: #f07e7e;
   font-size: 25rpx;
-  background-color: inherit
+  background-color: inherit;
 }
-button::after{
-   border: none;
+
+button::after {
+  border: none;
 }
-.link_wx{
-  margin-left:105px;
-  margin-right:105px;
+
+.link_wx {
+  margin-left: 105px;
+  margin-right: 105px;
   margin-top: 150px;
   color: #b8f3b6;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   background-color: inherit;
   font-size: 30rpx;
 }

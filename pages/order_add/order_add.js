@@ -1,6 +1,8 @@
 // pages/order_add/order_add.js
 
 var add_pet = 'https://localhost:7443/petcage/add_pet'
+var add_order = 'https://localhost:7443/petcage/add_order'
+
 //获取应用实例
 const app = getApp();
 
@@ -11,13 +13,19 @@ Page({
     pet_variety: '',
     pet_nick_name: '',
     pet_gender: "",
-    pet_age: ""
+    pet_age: "",
+    device_id: ""
+  },
+  onLoad: function(options) {
+    this.setData({
+      device_id: options.device_id
+    });
   },
   //用于生成uuid
-  s4: function () {
+  s4: function() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   },
-  guid: function () {
+  guid: function() {
     return (this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4());
   },
   //联系人手机号输入
@@ -65,7 +73,7 @@ Page({
     console.log('宠物昵称: ' + that.data.pet_nick_name);
     console.log('宠物性别: ' + that.data.pet_gender);
     console.log('宠物年龄: ' + that.data.pet_age);
-    if(!that.data.pet_type || !that.data.pet_contact) {
+    if (!that.data.pet_type || !that.data.pet_contact) {
       wx.showModal({
         title: '请填写宠物类型和宠物联系人',
         content: '',
@@ -83,9 +91,14 @@ Page({
       })
       return
     }
-    //注册，请求后台
+
+    let phone = wx.getStorageSync("open_id")
+    console.log("open_id: " + open_id)
+
+    //添加宠物，请求后台
+    var order_id = that.guid()
     wx.request({
-      url: add_pet + "?order_id=" + that.guid() + "&contact=" + that.data.pet_contact + "&pet_type=" + that.data.pet_type + "&variety=" + that.data.pet_variety + "&nick_name=" + that.data.pet_nick_name + "&gender=" + that.data.pet_gender + "&age=" + that.data.pet_age,
+      url: add_pet + "?order_id=" + order_id + "&contact=" + that.data.pet_contact + "&pet_type=" + that.data.pet_type + "&variety=" + that.data.pet_variety + "&nick_name=" + that.data.pet_nick_name + "&gender=" + that.data.pet_gender + "&age=" + that.data.pet_age,
       data: {
         order_id: this.guid(),
         pet_type: this.data.pet_type,
@@ -98,16 +111,13 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function (res) {
+      success: function(res) {
         if (res.data > 0) {
           // success
           wx.showToast({
             title: '添加成功',
             icon: 'success',
             duration: 1000
-          })
-          wx.navigateTo({
-            url: '../map/map',
           })
         } else {
           wx.showModal({
@@ -129,13 +139,45 @@ Page({
         console.log('服务器返回');
         console.log(res.data)
       },
-      fail: function () {
+      fail: function() {
         // fail
         wx.showToast({
           title: '添加失败',
           icon: 'warn',
           duration: 1000
         })
+      }
+    })
+
+    // 添加订单
+    wx.request({
+      url: add_order + "?order_id=" + order_id + "&phone=" + that.data.pet_contact + "&open_id=" + open_id + "&device_id=" + that.data.device_id,
+      method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+      header: {
+        'content-type': 'application/json'
+      }, // 设置请求的 header
+      success(res) {
+        if (res.data > 0) {
+          console.log("创建订单成功")
+          // 把订单id带回上一页
+          var pages = getCurrentPages();
+          var currPage = pages[pages.length - 1]; //当前页面
+          var prevPage = pages[pages.length - 2]; //上一个页面
+          //直接调用上一个页面对象的setData()方法，把数据存到上一个页面中去
+          prevPage.setData({
+            order_id: order_id
+          })
+          wx.navigateBack({
+            delta: 1
+          })
+        } else {
+          console.log("创建订单失败")
+          wx.showToast({
+            title: '服务器错误，请重试！',
+            icon: 'warn',
+            duration: 2000
+          })
+        }
       }
     })
   }

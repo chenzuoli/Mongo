@@ -20,7 +20,7 @@ Page({
     inputValue: "",
     characteristics1: "", // 连接设备的状态值  
   },
-  onLoad: function () {
+  onLoad: function() {
     if (wx.openBluetoothAdapter) {
       wx.openBluetoothAdapter()
     } else {
@@ -56,7 +56,7 @@ Page({
   ab2hex: function(buffer) {
     var hexArr = Array.prototype.map.call(
       new Uint8Array(buffer),
-      function (bit) {
+      function(bit) {
         return ('00' + bit.toString(16)).slice(-2)
       }
     )
@@ -64,15 +64,15 @@ Page({
   },
 
   // 初始化蓝牙适配器  
-  openBluetoothAdapter: function () {
+  openBluetoothAdapter: function() {
     var that = this
     wx.openBluetoothAdapter({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           msg: "初始化蓝牙适配器成功！" + JSON.stringify(res),
         })
         //监听蓝牙适配器状态  
-        wx.onBluetoothAdapterStateChange(function (res) {
+        wx.onBluetoothAdapterStateChange(function(res) {
           that.setData({
             search: res.discovering ? "在搜索。" : "未搜索。",
             status: res.available ? "可用。" : "不可用。",
@@ -81,24 +81,24 @@ Page({
         console.log(that.data)
         that.getBluetoothAdapterState()
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('初始化蓝牙适配器失败。')
         console.log(err)
       }
     })
   },
   // 本机蓝牙适配器状态  
-  getBluetoothAdapterState: function () {
+  getBluetoothAdapterState: function() {
     var that = this
     wx.getBluetoothAdapterState({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           msg: "本机蓝牙适配器状态" + "/" + JSON.stringify(res.errMsg),
           search: res.discovering ? "在搜索。" : "未搜索。",
           status: res.available ? "可用。" : "不可用。",
         })
         //监听蓝牙适配器状态  
-        wx.onBluetoothAdapterStateChange(function (res) {
+        wx.onBluetoothAdapterStateChange(function(res) {
           that.setData({
             search: res.discovering ? "在搜索。" : "未搜索。",
             status: res.available ? "可用。" : "不可用。",
@@ -107,22 +107,22 @@ Page({
         console.log(that.data)
         that.startBluetoothDevicesDiscovery()
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('本机蓝牙适配器状态：')
         console.log(err)
       }
     })
   },
   //搜索设备  
-  startBluetoothDevicesDiscovery: function () {
+  startBluetoothDevicesDiscovery: function() {
     var that = this
     wx.startBluetoothDevicesDiscovery({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           msg: "搜索设备" + JSON.stringify(res),
         })
         //监听蓝牙适配器状态  
-        wx.onBluetoothAdapterStateChange(function (res) {
+        wx.onBluetoothAdapterStateChange(function(res) {
           that.setData({
             search: res.discovering ? "在搜索。" : "未搜索。",
             status: res.available ? "可用。" : "不可用。",
@@ -131,20 +131,20 @@ Page({
         console.log(that.data)
         that.getConnectedBluetoothDevices()
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('搜索设备')
         console.log(err)
       }
     })
   },
   // 获取所有已发现的设备  
-  getConnectedBluetoothDevices: function () {
+  getConnectedBluetoothDevices: function() {
     var that = this
     wx.getBluetoothDevices({
-      success: function (res) {
+      success: function(res) {
         //是否有已连接设备  
         wx.getConnectedBluetoothDevices({
-          success: function (res) {
+          success: function(res) {
             console.log(res)
             console.log(JSON.stringify(res.devices));
             if (res.devices.length != 0) {
@@ -159,7 +159,7 @@ Page({
           devices: res.devices,
         })
         //监听蓝牙适配器状态  
-        wx.onBluetoothAdapterStateChange(function (res) {
+        wx.onBluetoothAdapterStateChange(function(res) {
           that.setData({
             search: res.discovering ? "在搜索。" : "未搜索。",
             status: res.available ? "可用。" : "不可用。",
@@ -167,17 +167,17 @@ Page({
         })
         console.log(that.data)
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('获取设备')
         console.log(err)
       }
     })
   },
   //停止搜索周边设备  
-  stopBluetoothDevicesDiscovery: function () {
+  stopBluetoothDevicesDiscovery: function() {
     var that = this
     wx.stopBluetoothDevicesDiscovery({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           msg: "停止搜索周边设备" + "/" + JSON.stringify(res.errMsg),
           search: res.discovering ? "在搜索。" : "未搜索。",
@@ -185,18 +185,18 @@ Page({
         })
         console.log(that.data)
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('停止搜索设备')
         console.log(err)
       }
     })
   },
   //连接设备  
-  connectTO: function (e) {
+  connectTO: function(e) {
     var that = this
     wx.createBLEConnection({
       deviceId: e.currentTarget.id,
-      success: function (res) {
+      success: function(res) {
         console.log(res);
         that.setData({
           connectedDeviceId: e.currentTarget.id,
@@ -205,10 +205,10 @@ Page({
         })
         that.getBLEDeviceServices()
       },
-      fail: function () {
+      fail: function() {
         console.log("连接失败");
       },
-      complete: function () {
+      complete: function() {
         console.log(that.data)
         console.log("连接结束");
       }
@@ -216,12 +216,12 @@ Page({
     console.log(that.data.connectedDeviceId);
   },
   // 获取连接设备的service服务  
-  getBLEDeviceServices: function () {
+  getBLEDeviceServices: function() {
     var that = this
     wx.getBLEDeviceServices({
       // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取  
       deviceId: that.data.connectedDeviceId,
-      success: function (res) {
+      success: function(res) {
         console.log('device services:', JSON.stringify(res.services));
         that.setData({
           services: res.services,
@@ -230,21 +230,21 @@ Page({
         console.log(that.data)
         that.getBLEDeviceCharacteristics()
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('获取连接设备的service服务失败')
         console.log(err)
       }
     })
   },
   //获取连接设备的所有特征值  for循环获取不到值  
-  getBLEDeviceCharacteristics: function () {
+  getBLEDeviceCharacteristics: function() {
     var that = this
     wx.getBLEDeviceCharacteristics({
       // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取  
       deviceId: that.data.connectedDeviceId,
       // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取  
       serviceId: that.data.services[1].uuid,
-      success: function (res) {
+      success: function(res) {
         for (var i = 0; i < res.characteristics.length; i++) {
           if (res.characteristics[i].properties.notify) {
             that.setData({
@@ -276,20 +276,20 @@ Page({
         console.log(that.data)
 
       },
-      fail: function () {
+      fail: function() {
         console.log("fail1");
       },
-      complete: function () {
+      complete: function() {
         console.log("complete1");
       }
     })
   },
   //断开设备连接  
-  closeBLEConnection: function () {
+  closeBLEConnection: function() {
     var that = this
     wx.closeBLEConnection({
       deviceId: that.data.connectedDeviceId,
-      success: function (res) {
+      success: function(res) {
         that.setData({
           connectedDeviceId: "",
         })
@@ -298,20 +298,20 @@ Page({
     })
   },
   //监听input表单  
-  inputTextchange: function (e) {
+  inputTextchange: function(e) {
     that.setData({
       inputValue: e.detail.value
     })
   },
   //发送命令  
-  writeBLECharacteristicValue: function (e) {
+  writeBLECharacteristicValue: function(e) {
     var that = this
     var command = e.currentTarget.dataset.command
     console.log("-------------" + that.ab2str(that.str2ab("open")) + "-----调用notify开始")
     that.notifyBLECharacteristicValueChange()
     console.log("-----调用notify结束-----")
     // 这里的回调可以获取到 write 导致的特征值改变  
-    wx.onBLECharacteristicValueChange(function (res) {
+    wx.onBLECharacteristicValueChange(function(res) {
       console.log('characteristic value comed:', that.ab2str(res.value))
     })
     wx.request({
@@ -323,7 +323,7 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data)
         var arr = res.data.data.msg[command];
         var buf = that.stringToBytes(arr)
@@ -340,17 +340,17 @@ Page({
           characteristicId: that.data.writeCharacteristicsId,
           // 这里的value是ArrayBuffer类型  
           value: buf,
-          success: function (res) {
+          success: function(res) {
             console.log('writeBLECharacteristicValue success', res.errMsg)
             console.log(res)
           },
-          fail: function (err) {
+          fail: function(err) {
             console.log("发送失败")
             console.log(err)
           }
         })
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('发送指令失败')
         console.log(err)
         console.log("请求失败url：" + get_device_bluetooth_command + "?dvname=" + that.data.devices[0].name)
@@ -358,7 +358,7 @@ Page({
     })
   },
   //发送接收  
-  send_receive: function (e) {
+  send_receive: function(e) {
     var that = this
     var command = e.currentTarget.dataset.command
     console.log("-------------" + that.ab2str(that.str2ab("open")) + "-----调用notify开始")
@@ -366,7 +366,7 @@ Page({
     that.notifyBLECharacteristicValueChange()
     console.log("-----调用notify结束-----")
     // 这里的回调可以获取到 write 导致的特征值改变  
-    wx.onBLECharacteristicValueChange(function (res) {
+    wx.onBLECharacteristicValueChange(function(res) {
       console.log('characteristic value comed:', that.ab2str(res.value))
     })
     wx.request({
@@ -378,7 +378,7 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data)
         var arr = res.data.data.msg[command];
         var buf = that.stringToBytes(arr)
@@ -394,21 +394,21 @@ Page({
           characteristicId: that.data.writeCharacteristicsId,
           // 这里的value是ArrayBuffer类型  
           value: buf,
-          success: function (res) {
+          success: function(res) {
             console.log('writeBLECharacteristicValue success', res.errMsg)
             console.log(res)
             // 这里的回调可以获取到 write 导致的特征值改变  
-            wx.onBLECharacteristicValueChange(function (res) {
+            wx.onBLECharacteristicValueChange(function(res) {
               console.log('characteristic value comed:', that.ab2str(res.value))
             })
           },
-          fail: function (err) {
+          fail: function(err) {
             console.log("发送失败")
             console.log(err)
           }
         })
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log('发送指令失败')
         console.log(err)
         console.log("请求失败url：" + get_device_bluetooth_command + "?dvname=" + that.data.devices[0].name)
@@ -416,7 +416,7 @@ Page({
     })
   },
   //启用低功耗蓝牙设备特征值变化时的 notify 功能  
-  notifyBLECharacteristicValueChange: function () {
+  notifyBLECharacteristicValueChange: function() {
     var that = this
     wx.notifyBLECharacteristicValueChange({
       state: true, // 启用 notify 功能  
@@ -426,11 +426,11 @@ Page({
       serviceId: that.data.notifyServiceId,
       // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取  
       characteristicId: that.data.notifyCharacteristicsId,
-      success: function (res) {
+      success: function(res) {
         console.log('notifyBLECharacteristicValueChange success', res.errMsg)
         console.log(that.data)
       },
-      fail: function () {
+      fail: function() {
         console.log('失败');
         console.log(that.data.notifyServiceId);
         console.log(that.data.notifyCharacteristicsId);
@@ -438,10 +438,10 @@ Page({
     })
   },
   //接收消息  
-  readBLECharacteristicValue: function () {
+  readBLECharacteristicValue: function() {
     var that = this
     // 必须在这里的回调才能获取
-    wx.onBLECharacteristicValueChange(function (characteristic) {
+    wx.onBLECharacteristicValueChange(function(characteristic) {
       console.log('characteristic value comed:', characteristic)
     })
     console.log(that.data.readServiceId);
@@ -454,12 +454,12 @@ Page({
       serviceId: that.data.readServiceId,
       // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取  
       characteristicId: that.data.readCharacteristicsId,
-      success: function (res) {
+      success: function(res) {
         console.log('readBLECharacteristicValue:', res.errMsg);
         console.log(res)
         console.log(that.ab2hex(res.value))
       },
-      fail: function (err) {
+      fail: function(err) {
         console.log(err)
       }
     })

@@ -25,7 +25,7 @@
       <input name="desc" placeholder-class="placeholder-input" placeholder="备注" bindinput="changeDesc" />
     </view>
     <view class="action-submit">
-      <button name="submit" style="background-color:{{btnColor}}" bindtap="submit">提  交</button>
+      <button name="submit" style="background-color:{{btnColor}}" bindtap="submit">提 交</button>
     </view>
   </view>
 </view>

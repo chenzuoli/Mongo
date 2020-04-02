@@ -16,6 +16,7 @@
   font-size: 28rpx;
   margin-left: 30px;
 }
+
 .title2 {
   margin-top: 20px;
   background-color: inherit;
@@ -98,7 +99,7 @@
   padding-top: 40rpx;
   padding-bottom: -100rpx;
   width: 100%;
-  color: rgba(10, 10, 10, 0.76)
+  color: rgba(10, 10, 10, 0.76);
 }
 
 .action .action-input input:first-child {
@@ -109,8 +110,8 @@
   border-bottom: 1px solid #ccc;
 }
 
-.action-input .placeholder-input{
-  color: rgba(10, 10, 10, 0.308)
+.action-input .placeholder-input {
+  color: rgba(10, 10, 10, 0.308);
 }
 
 .action .action-submit button {

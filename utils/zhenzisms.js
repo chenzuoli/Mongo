@@ -1,11 +1,11 @@
 var client = {};
-client.init = function (apiUrl, appId, appSecret) {
+client.init = function(apiUrl, appId, appSecret) {
   this.apiUrl = apiUrl;
   this.appId = appId;
   this.appSecret = appSecret;
 }
-client.send = function (callback, number_, message, messageId) {
-  if (typeof (messageId) == "undefined") {
+client.send = function(callback, number_, message, messageId) {
+  if (typeof(messageId) == "undefined") {
     messageId = '';
   }
   var that = this;
@@ -28,7 +28,7 @@ client.send = function (callback, number_, message, messageId) {
     }
   })
 }
-client.balance = function (callback) {
+client.balance = function(callback) {
   var that = this;
   wx.request({
     url: 'https://smsdeveloper.zhenzikj.com/sms/balance.html',
@@ -46,7 +46,7 @@ client.balance = function (callback) {
     }
   })
 }
-client.findSmsByMessageId = function (callback, messageId) {
+client.findSmsByMessageId = function(callback, messageId) {
   var that = this;
   wx.request({
     url: 'https://smsdeveloper.zhenzikj.com/sms/findSmsByMessageId.html',

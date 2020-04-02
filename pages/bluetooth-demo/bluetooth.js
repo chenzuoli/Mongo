@@ -13,7 +13,7 @@ function inArray(arr, key, val) {
 function ab2hex(buffer) {
   var hexArr = Array.prototype.map.call(
     new Uint8Array(buffer),
-    function (bit) {
+    function(bit) {
       return ('00' + bit.toString(16)).slice(-2)
     }
   )
@@ -34,7 +34,7 @@ Page({
       },
       fail: (res) => {
         if (res.errCode === 10001) {
-          wx.onBluetoothAdapterStateChange(function (res) {
+          wx.onBluetoothAdapterStateChange(function(res) {
             console.log('onBluetoothAdapterStateChange', res)
             if (res.available) {
               this.startBluetoothDevicesDiscovery()

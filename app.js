@@ -79,7 +79,9 @@ App({
         // url: '/pages/bluetooth_v3/bluetooth_v3'
         // url: '/pages/verify_phone_number/verify_phone_number'
         // url: '/pages/test/test'
-        url: '/pages/order_add/order_add'
+        // url: '/pages/order_add/order_add'
+        // url: '/pages/warn/index'
+        url: '/pages/feedback/feedback'
       })
     }
   },

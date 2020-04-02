@@ -1,20 +1,18 @@
 <!--pages/login/login.wxml-->
 <script type="text/javascript">
-
-<view class="content">
-  <view class="account">
-    <view class="title">账号</view>
-    <view class="num"><input bindinput="accountInput" placeholder="请输入手机号" placeholder-style="color:#999999;"/></view>
+  <view class="content">
+    <view class="account">
+      <view class="title">账号</view>
+      <view class="num"><input bindinput="accountInput" placeholder="请输入手机号" placeholder-style="color:#999999;"/></view>
+    </view>
+    <view class="hr"></view>
+    <view class="account">
+      <view class="title">密码</view>
+      <view class="num"><input bindblur="pwdBlur" placeholder="请输入密码" password placeholder-style="color:#999999;"/></view>
+    </view>
+    <view class="hr"></view>
+    <button class="btn" bindtap='login' type="primary">登  录</button>
+    <button class='link_register' bindtap='register'>没有账号？点击注册</button>
+    <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">微信账号登录</button>
   </view>
-  <view class="hr"></view>
-   <view class="account">
-    <view class="title">密码</view>
-    <view class="num"><input bindblur="pwdBlur" placeholder="请输入密码" password placeholder-style="color:#999999;"/></view>
-  </view>
-  <view class="hr"></view>
-  <button class="btn" bindtap='login' type="primary">登  录</button>
-  <button class='link_register' bindtap='register'>没有账号？点击注册</button>
-  <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">微信账号登录</button>
-</view>
-
 </script>

@@ -1,6 +1,6 @@
 // pages/warn/index.js
 var repair_url = 'https://wetech.top:7443/petcage/getDamageType';
-var add_feedback_url = 'https://wetech.top:7443/petcage/addFeedback';
+var add_feedback_url = 'https://wetech.top:7443/petcage/add_feedback';
 var upload_file_url = 'https://wetech.top:7443/petcage/uploadFile';
 Page({
   /**
@@ -93,7 +93,7 @@ Page({
           latitude: lati
         })
       },
-      fail: function () {
+      fail: function() {
         console.log("获取位置失败");
       }
     })
@@ -102,17 +102,19 @@ Page({
     var feedback_codes = []
     var feedback_contents = this.data.checkboxValues
     var feedback_all = this.data.itemsValue
-    for (var i = 0; i < feedback_contents.length; i++){
-      for(var j=0; j<feedback_all.length; j++){
-        if (feedback_contents[i] == feedback_all[j].value){
+    for (var i = 0; i < feedback_contents.length; i++) {
+      for (var j = 0; j < feedback_all.length; j++) {
+        if (feedback_contents[i] == feedback_all[j].value) {
           feedback_codes.push(feedback_all[j].code)
         }
       }
     }
     console.log("反馈code：" + feedback_codes)
+    let open_id = wx.getStorageSync("open_id")
+    console.log("open_id: " + open_id)
     if (that.data.checkboxValues.length > 0) {
       wx.request({
-        url: add_feedback_url + "?phone=test&feedback_type=1&feedback_content=" + feedback_codes.join(',') + "&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&desc=" + that.data.inputValue.desc,
+        url: add_feedback_url + "?open_id=" + open_id + "&feedback_type=2&feedback_content=" + feedback_codes.join(',') + "&satisfy_grade=none&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
         data: {
           user_id: "test",
           feedback_type: "1",
@@ -132,7 +134,7 @@ Page({
         }
       })
       var pics = that.data.picUrls
-      for (var i = 0; i < pics.length; i++){
+      for (var i = 0; i < pics.length; i++) {
         wx.uploadFile({
           url: upload_file_url,
           filePath: pics[i],
@@ -149,7 +151,7 @@ Page({
             console.log(res.data)
             var data = JSON.parse(res.data)
             that.setData({
-              uploadImg: data.url.filePath   //将图片转换之后的服务器地址data.url.filePath(打印结果显示我的是data.url.filePath)推到data里面定义的空容器updataImg。html界面的显示也是用的这个路径，值得注意的是html里面要加上url域名
+              uploadImg: data.url.filePath //将图片转换之后的服务器地址data.url.filePath(打印结果显示我的是data.url.filePath)推到data里面定义的空容器updataImg。html界面的显示也是用的这个路径，值得注意的是html里面要加上url域名
             })
             console.log(that.data.uploadImg)
           },

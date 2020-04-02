@@ -19,7 +19,7 @@ Page({
     rawData: "",
     userInfo: ""
   },
-  onLoad: function () {
+  onLoad: function() {
 
   },
   //姓名输入
@@ -65,7 +65,7 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function (res) {
+      success: function(res) {
         // success
         wx.showToast({
           title: '发送成功',
@@ -78,7 +78,7 @@ Page({
           return;
         }
       },
-      fail: function () {
+      fail: function() {
         // fail
         wx.showToast({
           title: '发送失败',
@@ -86,12 +86,12 @@ Page({
           duration: 1000
         })
       },
-      complete: function () {
+      complete: function() {
         // complete
       }
     })
   },
-  timer: function () {
+  timer: function() {
     let promise = new Promise((resolve, reject) => {
       let setTimer = setInterval(
         () => {
@@ -109,8 +109,7 @@ Page({
             })
             resolve(setTimer)
           }
-        }
-        , 1000)
+        }, 1000)
     })
     promise.then((setTimer) => {
       clearInterval(setTimer)
@@ -132,7 +131,7 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function (res) {
+      success: function(res) {
         // success
         wx.showToast({
           title: '注册成功',
@@ -144,7 +143,7 @@ Page({
           url: '../login/login',
         })
       },
-      fail: function () {
+      fail: function() {
         // fail
         wx.showToast({
           title: '注册失败',
@@ -154,7 +153,7 @@ Page({
       },
     })
   },
-  onGotUserInfo: function (e) {
+  onGotUserInfo: function(e) {
     var that = this;
     console.log(e.detail.errMsg)
     console.log(e.detail.userInfo)

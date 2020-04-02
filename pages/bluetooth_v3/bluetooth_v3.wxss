@@ -1,7 +1,7 @@
 /* pages/bluetooth/bluetooth.wxss */
 
 page {
-  background: linear-gradient(#66CCFF, #008800);
+  background: linear-gradient(#6cf, #080);
 }
 
 .content {
@@ -17,5 +17,5 @@ page {
 .button {
   /* margin: 10px; */
   margin-top: 20px;
-  width: 70%
+  width: 70%;
 }
