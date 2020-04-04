@@ -1,6 +1,18 @@
 //app.js
+
+const api = require('./api/api.js')
+
 var login_url = 'https://wetech.top:7443/petcage/open_id'
+
+function promisify(api) {
+  return (opt, ...arg) => {
+    return new Promise((resolve, reject) => {
+      api(Object.assign({}, opt, { success: resolve, fail: reject }), ...arg)
+    })
+  }
+}
 App({
+  // 全局数据中暴露用户信息和api
   globalData: {
     userInfo: {
       phone: "",
@@ -8,6 +20,7 @@ App({
       union_id: "",
       token: "",
     },
+    api
   },
   onLaunch: function() {
     //调用API从本地缓存中获取数据
@@ -76,20 +89,17 @@ App({
         // url: '/pages/login/login'
         // url: '/pages/map/map'
         // url: '/pages/userInfo/userInfo'
+        // url: '/pages/bluetooth_v2/bluetooth_v2'
         // url: '/pages/bluetooth_v3/bluetooth_v3'
+        url: '/pages/bluetooth_v4/bluetooth_v4'
         // url: '/pages/verify_phone_number/verify_phone_number'
         // url: '/pages/test/test'
         // url: '/pages/order_add/order_add'
         // url: '/pages/warn/index'
         // url: '/pages/feedback/feedback'
-        url: '/pages/register/register'
+        // url: '/pages/register/register'
       })
     }
-  },
-  onShow: function(options) {
-    let option = JSON.stringify(options);
-    console.log('app.js option-----' + option)
-    console.log('app.js>>options.scene------' + options.scene);
   },
   getUserInfo: function(cb) {
     var that = this
@@ -109,5 +119,18 @@ App({
         }
       })
     }
-  }
+  },
+  chooseImage: promisify(wx.chooseImage),
+  request: promisify(wx.request),
+  getUserInfo: promisify(wx.getUserInfo),
+  openBluetoothAdapter: promisify(wx.openBluetoothAdapter),
+  getBluetoothAdapterState: promisify(wx.getBluetoothAdapterState),
+  startBluetoothDevicesDiscovery: promisify(wx.startBluetoothDevicesDiscovery),
+  getBluetoothDevices: promisify(wx.getBluetoothDevices),
+  getConnectedBluetoothDevices: promisify(wx.getConnectedBluetoothDevices),
+  stopBluetoothDevicesDiscovery: promisify(wx.stopBluetoothDevicesDiscovery),
+  createBLEConnection: promisify(wx.createBLEConnection),
+  getBLEDeviceServices: promisify(wx.getBLEDeviceServices),
+  getBLEDeviceCharacteristics: promisify(wx.getBLEDeviceCharacteristics),
+  closeBLEConnection: promisify(wx.closeBLEConnection)
 })

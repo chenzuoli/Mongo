@@ -1,5 +1,5 @@
 // pages/feedback/feedback.js
-var add_feedback_url = 'https://localhost:7443/petcage/add_feedback';
+var add_feedback_url = 'https://wetech.top:7443/petcage/add_feedback';
 
 Page({
   data: {
@@ -17,10 +17,14 @@ Page({
     itemsValue: [],
     btnColor: "#f2f2f2",
     latitude: "",
-    longitude: ""
+    longitude: "",
+    order_id: ""
   },
-  onLoad: function() {
+  onLoad: function (options) {
     var that = this;
+    that.setData({
+      order_id: options.order_id
+    })
     wx.getLocation({
       type: 'location',
       success(res) {
@@ -33,13 +37,13 @@ Page({
           latitude: lati
         })
       },
-      fail: function() {
+      fail: function () {
         console.log("获取位置失败");
       }
     })
   },
   // 监听字数
-  bindTextAreaChange: function(e) {
+  bindTextAreaChange: function (e) {
     var that = this
     var value = e.detail.value,
       len = parseInt(value.length);
@@ -50,37 +54,37 @@ Page({
       noteNowLen: len
     })
   },
-  changeColor1: function() {
+  changeColor1: function () {
     var that = this;
     that.setData({
       flag: 1
     });
   },
-  changeColor2: function() {
+  changeColor2: function () {
     var that = this;
     that.setData({
       flag: 2
     });
   },
-  changeColor3: function() {
+  changeColor3: function () {
     var that = this;
     that.setData({
       flag: 3
     });
   },
-  changeColor4: function() {
+  changeColor4: function () {
     var that = this;
     that.setData({
       flag: 4
     });
   },
-  changeColor5: function() {
+  changeColor5: function () {
     var that = this;
     that.setData({
       flag: 5
     });
   },
-  clickPhoto: function() {
+  clickPhoto: function () {
     wx.chooseImage({
       success: (res) => {
         console.log(res);
@@ -96,7 +100,7 @@ Page({
       },
     })
   },
-  delPhoto: function(e) {
+  delPhoto: function (e) {
     console.log(e);
     let index = e.target.dataset.index;
     let _picUrls = this.data.picUrls;
@@ -110,7 +114,7 @@ Page({
       })
     }
   },
-  changeNum: function(e) {
+  changeNum: function (e) {
     this.setData({
       inputValue: {
         num: e.detail.value,
@@ -118,7 +122,7 @@ Page({
       }
     })
   },
-  changeDesc: function(e) {
+  changeDesc: function (e) {
     this.setData({
       inputValue: {
         num: this.data.inputValue.num,
@@ -127,13 +131,13 @@ Page({
     })
   },
   // 提交入库，清空当前值
-  bindSubmit: function() {
+  bindSubmit: function () {
     var that = this;
     let open_id = wx.getStorageSync("open_id")
     console.log("open_id: " + open_id)
     console.log(that.data)
     wx.request({
-      url: add_feedback_url + "?open_id=" + open_id + "&feedback_type=1&feedback_content=" + that.data.info + "&satisfy_grade=" + that.data.flag + "&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
+      url: add_feedback_url + "?order_id=" + that.data.order_id + "&open_id=" + open_id + "&feedback_type=1&feedback_content=" + that.data.info + "&satisfy_grade=" + that.data.flag + "&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
       method: 'post', //定义传到后台接受的是post方法还是get方法
       header: {
         'content-type': 'application/json' // 默认值
@@ -151,7 +155,7 @@ Page({
             icon: 'warn',
             duration: 1500,
             mask: false,
-            success: function() {
+            success: function () {
               that.setData({
                 info: '',
                 noteNowLen: 0,
@@ -168,7 +172,7 @@ Page({
       icon: 'success',
       duration: 1500,
       mask: false,
-      success: function() {
+      success: function () {
         that.setData({
           info: '',
           noteNowLen: 0,

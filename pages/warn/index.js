@@ -114,7 +114,7 @@ Page({
     console.log("open_id: " + open_id)
     if (that.data.checkboxValues.length > 0) {
       wx.request({
-        url: add_feedback_url + "?open_id=" + open_id + "&feedback_type=2&feedback_content=" + feedback_codes.join(',') + "&satisfy_grade=none&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
+        url: add_feedback_url + "?order_id=none&open_id=" + open_id + "&feedback_type=2&feedback_content=" + feedback_codes.join(',') + "&satisfy_grade=none&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
         data: {
           user_id: "test",
           feedback_type: "1",

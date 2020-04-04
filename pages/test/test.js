@@ -1,13 +1,20 @@
 // pages/test/test.js
-
+// const regeneratorRuntime = require('../../lib/regenerator-runtime/runtime')
+var app = getApp();
+const api = app.globalData.api
+var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
 var get_access_token_url = 'https://wetech.top:7443/petcage/access_token';
+
+//获取应用实例  
+var app = getApp();
 
 Page({
   /**
    * Page initial data
    */
   data: {
-
+    token: "",
+    service_id: ""
   },
   /**
    * Lifecycle function--Called when page load
@@ -39,6 +46,10 @@ Page({
         })
       }
     })
+    that.testAsync()
+
+    console.log("测试异步请求变同步")
+    this.init()
   },
 
   getQrcode() {
@@ -62,52 +73,42 @@ Page({
     })
   },
 
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function() {
-
+  testAsync: async function () {
+    let res = await app.chooseImage()
+    console.log(res)
+    res = await app.request({ 
+      url: get_access_token_url, 
+      method: 'get', data: { x: 0, y: 1 } 
+      })
+    console.log(res)
+  },
+  async init() {
+    await api.showLoading() // 显示loading
+    await this.getList(1)  // 请求数据
+    await this.getList(2)  // 请求数据
+    await this.getList(3)  // 请求数据
+    await this.getList(4)  // 请求数据
+    await api.hideLoading() // 等待请求数据成功后，隐藏loading
+  },
+  // 获取列表
+  getList(e) {
+    console.log(e)
+    return new Promise((resolve, reject) => {
+      api.getData(get_service_id, {
+        x: '',
+        y: ''
+      }).then((res) => {
+        this.setData({
+          service_id: res.data
+        })
+        console.log(res)
+        resolve()
+      })
+        .catch((err) => {
+          console.error(err)
+          reject(err)
+        })
+    })
   },
 
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page unload
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function() {
-
-  }
 })

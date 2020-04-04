@@ -1,7 +1,7 @@
 // pages/order_add/order_add.js
 
-var add_pet = 'https://localhost:7443/petcage/add_pet'
-var add_order = 'https://localhost:7443/petcage/add_order'
+var add_pet = 'https://wetech.top:7443/petcage/add_pet'
+var add_order = 'https://wetech.top:7443/petcage/add_order'
 
 //获取应用实例
 const app = getApp();
@@ -92,7 +92,7 @@ Page({
       return
     }
 
-    let phone = wx.getStorageSync("open_id")
+    let open_id = wx.getStorageSync("open_id")
     console.log("open_id: " + open_id)
 
     //添加宠物，请求后台
@@ -121,7 +121,7 @@ Page({
           })
         } else {
           wx.showModal({
-            title: '请填写宠物类型',
+            title: '请填写联系人和宠物类型',
             content: '',
             confirmText: '继续填写',
             cancelText: '返回',
@@ -167,6 +167,7 @@ Page({
           prevPage.setData({
             order_id: order_id
           })
+          wx.setStorageSync('order_id', order_id)
           wx.navigateBack({
             delta: 1
           })

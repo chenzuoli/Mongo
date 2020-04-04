@@ -49,7 +49,7 @@ page {
 }
 
 .save {
-  width: 100px;
+  width: 130px;
   height: 80rpx;
   line-height: 80rpx;
   margin-top: 30px;
