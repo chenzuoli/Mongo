@@ -64,10 +64,10 @@
 					"scene": 1047
 				},
 				{
-					"id": -1,
+					"id": 1,
 					"name": "pages/bluetooth_v4/bluetooth_v4",
 					"pathName": "pages/bluetooth_v4/bluetooth_v4",
-					"query": "scene=28:EC:9A:16:00:41@Lock28EC9A160041",
+					"query": "scene=116",
 					"scene": 1047
 				}
 			]

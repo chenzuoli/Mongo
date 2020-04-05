@@ -9,6 +9,7 @@ var get_device_bluetooth_command = 'https://wetech.top:7443/petcage/get_device_b
 var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
 var get_petcage_order_by_open_id = 'https://wetech.top:7443/petcage/get_petcage_order_by_open_id'
 var close_order = 'https://wetech.top:7443/petcage/close_order'
+var get_device_info = 'https://localhost:7443/petcage/get_device_info'
 
 Page({
   data: {
@@ -35,10 +36,10 @@ Page({
     order_id: "",
     is_add: "0"
   },
-  ab2str: function(buf) {
+  ab2str: function (buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));
   },
-  str2ab: function(str) {
+  str2ab: function (str) {
     var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
     var bufView = new Uint8Array(buf);
     for (var i = 0, strLen = str.length; i < strLen; i++) {
@@ -47,7 +48,7 @@ Page({
     return buf;
   },
   // 字符串转byte
-  stringToBytes: function(str) {
+  stringToBytes: function (str) {
     var array = new Uint8Array(str.length);
     for (var i = 0, l = str.length; i < l; i++) {
       array[i] = str.charCodeAt(i);
@@ -56,29 +57,23 @@ Page({
     return array.buffer;
   },
   // ArrayBuffer转string
-  ab2hex: function(buffer) {
+  ab2hex: function (buffer) {
     var hexArr = Array.prototype.map.call(
       new Uint8Array(buffer),
-      function(bit) {
+      function (bit) {
         return ('00' + bit.toString(16)).slice(-2)
       }
     )
     return hexArr.join('')
   },
 
-  onLoad: function(options) {
+  onLoad: function (options) {
     console.log(options)
     //获取场景id（设备id和设备名称）
     if (options.scene) {
       let scene = decodeURIComponent(options.scene);
-      //&是我们定义的参数链接方式
-      let deviceId = scene.split("@")[0];
-      let deviceName = scene.split('@')[1];
       console.log("场景值：" + scene)
-      this.setData({
-        sceneDeviceId: deviceId,
-        sceneDeviceName: deviceName
-      })
+      this.get_device_info(scene)
     } else {
       console.log("没有获取到scene场景值")
     }
@@ -93,7 +88,7 @@ Page({
     }
   },
   //开锁、关锁、结算  
-  send_receive: async function(e) {
+  send_receive: async function (e) {
     var that = this
     // 开关锁
     var command_type = e.currentTarget.dataset.command
@@ -126,7 +121,7 @@ Page({
     }
   },
   // 发送指令
-  send_command: async function(command_type) {
+  send_command: async function (command_type) {
     var that = this
     await api.showLoading() // 显示loading
     await that.get_service_id(1) // 请求数据
@@ -134,7 +129,7 @@ Page({
     await that.get_service_id(3) // 请求数据
     await that.get_service_id(4) // 请求数据
     await that.get_petcage_order_by_open_id(4.5)
-    if(that.data.is_add == '1') {
+    if (that.data.is_add == '1') {
       await api.hideLoading() // 等待请求数据成功后，隐藏loading
       return
     }
@@ -151,6 +146,31 @@ Page({
     await that.writeBLECharacteristicValue(15, command_type)
     await that.closeBLEConnection(16)
     // await api.hideLoading() // 等待请求数据成功后，隐藏loading
+  },
+  get_device_info: function (scene) {
+    var that = this
+    wx.request({
+      url: get_device_info + "?id=" + scene,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res)
+        if (res.data.data == null) {
+          console.log("根据场景id获取设备信息失败，无该设备")
+        } else {
+          that.setData({
+            sceneDeviceId: res.data.data.device_id,
+            sceneDeviceName: res.data.data.device_name
+          })
+        }
+      },
+      fail(err) {
+        console.log("根据场景id获取设备信息失败，请求失败")
+        console.log(err)
+      }
+    })
   },
   get_service_id(e) {
     console.log(e)
@@ -171,7 +191,7 @@ Page({
     })
   },
   // 根据open_id获取order
-  get_petcage_order_by_open_id: function(e) {
+  get_petcage_order_by_open_id: function (e) {
     var that = this
     console.log(e)
     //查看该用户是否已存在订单
@@ -212,7 +232,7 @@ Page({
     })
   },
   // 初始化蓝牙适配器  
-  openBluetoothAdapter: function(e) {
+  openBluetoothAdapter: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
@@ -222,7 +242,7 @@ Page({
             msg: "初始化蓝牙适配器成功！" + JSON.stringify(res),
           })
           //监听蓝牙适配器状态  
-          wx.onBluetoothAdapterStateChange(function(res) {
+          wx.onBluetoothAdapterStateChange(function (res) {
             that.setData({
               search: res.discovering ? "在搜索。" : "未搜索。",
               status: res.available ? "可用。" : "不可用。",
@@ -244,19 +264,19 @@ Page({
     })
   },
   // 本机蓝牙适配器状态  
-  getBluetoothAdapterState: function(e) {
+  getBluetoothAdapterState: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.getBluetoothAdapterState({
-        success: function(res) {
+        success: function (res) {
           that.setData({
             msg: "本机蓝牙适配器状态" + "/" + JSON.stringify(res.errMsg),
             search: res.discovering ? "在搜索。" : "未搜索。",
             status: res.available ? "可用。" : "不可用。",
           })
           //监听蓝牙适配器状态  
-          wx.onBluetoothAdapterStateChange(function(res) {
+          wx.onBluetoothAdapterStateChange(function (res) {
             that.setData({
               search: res.discovering ? "在搜索。" : "未搜索。",
               status: res.available ? "可用。" : "不可用。",
@@ -265,7 +285,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('本机蓝牙适配器状态：')
           console.log(err)
           reject(err)
@@ -275,17 +295,17 @@ Page({
     })
   },
   //搜索设备  
-  startBluetoothDevicesDiscovery: function(e) {
+  startBluetoothDevicesDiscovery: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.startBluetoothDevicesDiscovery({
-        success: function(res) {
+        success: function (res) {
           that.setData({
             msg: "搜索设备" + JSON.stringify(res),
           })
           //监听蓝牙适配器状态  
-          wx.onBluetoothAdapterStateChange(function(res) {
+          wx.onBluetoothAdapterStateChange(function (res) {
             that.setData({
               search: res.discovering ? "在搜索。" : "未搜索。",
               status: res.available ? "可用。" : "不可用。",
@@ -294,7 +314,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('搜索设备')
           console.log(err)
           reject(err)
@@ -304,15 +324,15 @@ Page({
     })
   },
   // 获取所有已发现的设备  
-  getConnectedBluetoothDevices: function(e) {
+  getConnectedBluetoothDevices: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.getBluetoothDevices({
-        success: function(res) {
+        success: function (res) {
           //是否有已连接设备  
           wx.getConnectedBluetoothDevices({
-            success: function(res) {
+            success: function (res) {
               console.log(res)
               console.log(JSON.stringify(res.devices));
               if (res.devices.length != 0) {
@@ -331,7 +351,7 @@ Page({
             }
           }
           //监听蓝牙适配器状态  
-          wx.onBluetoothAdapterStateChange(function(res) {
+          wx.onBluetoothAdapterStateChange(function (res) {
             that.setData({
               search: res.discovering ? "在搜索。" : "未搜索。",
               status: res.available ? "可用。" : "不可用。",
@@ -340,7 +360,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('获取设备')
           console.log(err)
           reject(err)
@@ -350,12 +370,12 @@ Page({
     })
   },
   //停止搜索周边设备  
-  stopBluetoothDevicesDiscovery: function(e) {
+  stopBluetoothDevicesDiscovery: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.stopBluetoothDevicesDiscovery({
-        success: function(res) {
+        success: function (res) {
           that.setData({
             msg: "停止搜索周边设备" + "/" + JSON.stringify(res.errMsg),
             search: res.discovering ? "在搜索。" : "未搜索。",
@@ -364,7 +384,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('停止搜索设备')
           console.log(err)
           reject(err)
@@ -374,13 +394,13 @@ Page({
     })
   },
   //连接设备  
-  connectTO: function(e) {
+  connectTO: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.createBLEConnection({
         deviceId: that.data.sceneDeviceId,
-        success: function(res) {
+        success: function (res) {
           console.log(res);
           that.setData({
             connectedDeviceId: that.data.sceneDeviceId,
@@ -393,12 +413,12 @@ Page({
           })
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log("连接失败");
           console.log(err)
           reject(err)
         },
-        complete: function() {
+        complete: function () {
           console.log("连接结束");
         }
       })
@@ -406,14 +426,14 @@ Page({
     })
   },
   // 获取连接设备的service服务  
-  getBLEDeviceServices: function(e) {
+  getBLEDeviceServices: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.getBLEDeviceServices({
         // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取  
         deviceId: that.data.connectedDeviceId,
-        success: function(res) {
+        success: function (res) {
           console.log('device services:', JSON.stringify(res.services));
           that.setData({
             services: res.services,
@@ -422,7 +442,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('获取连接设备的service服务失败')
           console.log(err)
           reject(err)
@@ -432,7 +452,7 @@ Page({
     })
   },
   //获取连接设备的所有特征值  for循环获取不到值  
-  getBLEDeviceCharacteristics: function(e) {
+  getBLEDeviceCharacteristics: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
@@ -441,7 +461,7 @@ Page({
         deviceId: that.data.connectedDeviceId,
         // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取  
         serviceId: that.data.service_id,
-        success: function(res) {
+        success: function (res) {
           for (var i = 0; i < res.characteristics.length; i++) {
             if (res.characteristics[i].properties.notify) {
               that.setData({
@@ -467,12 +487,12 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log("fail get characteristics.");
           console.log(err)
           reject(err)
         },
-        complete: function() {
+        complete: function () {
           console.log("complete get characteristics.");
         }
       })
@@ -480,7 +500,7 @@ Page({
     })
   },
   // 获取与蓝牙设备交互命令集
-  getDeviceBluetoothCommand: function(e) {
+  getDeviceBluetoothCommand: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
@@ -493,7 +513,7 @@ Page({
         header: {
           'content-type': 'application/json' // 默认值
         },
-        success: function(res) {
+        success: function (res) {
           console.log(res.data)
           if (res.data.data == null) {
             console.log("请求获取蓝牙设备命令集失败。")
@@ -505,7 +525,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('请求获取蓝牙设备命令集失败。')
           console.log(err)
           console.log("请求失败url：" + get_device_bluetooth_command + "?dvname=" + that.data.sceneDeviceName)
@@ -516,7 +536,7 @@ Page({
     })
   },
   //启用低功耗蓝牙设备特征值变化时的 notify 功能  
-  notifyBLECharacteristicValueChange: function(e) {
+  notifyBLECharacteristicValueChange: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
@@ -528,15 +548,15 @@ Page({
         serviceId: that.data.notifyServiceId,
         // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取  
         characteristicId: that.data.notifyCharacteristicsId,
-        success: function(res) {
+        success: function (res) {
           console.log('notifyBLECharacteristicValueChange success', res.errMsg)
-          wx.onBLECharacteristicValueChange(function(res) {
+          wx.onBLECharacteristicValueChange(function (res) {
             console.log('characteristic value comed:', that.ab2str(res.value))
           })
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log('失败');
           console.log(err)
           reject(err)
@@ -546,7 +566,7 @@ Page({
     })
   },
   //发送命令  
-  writeBLECharacteristicValue: function(e, command_type) {
+  writeBLECharacteristicValue: function (e, command_type) {
     var that = this
     console.log(e)
     let command_name = ''
@@ -572,10 +592,10 @@ Page({
         characteristicId: that.data.writeCharacteristicsId,
         // 这里的value是ArrayBuffer类型  
         value: buf,
-        success: function(res) {
+        success: function (res) {
           console.log('writeBLECharacteristicValue success', res.errMsg)
           // 这里的回调可以获取到 write 导致的特征值改变  
-          wx.onBLECharacteristicValueChange(function(res) {
+          wx.onBLECharacteristicValueChange(function (res) {
             console.log('characteristic value comed:', that.ab2str(res.value))
           })
 
@@ -587,7 +607,7 @@ Page({
           console.log(res)
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log("发送失败")
           console.log(err)
           wx.showToast({
@@ -602,12 +622,12 @@ Page({
     })
   },
   //接收消息  
-  readBLECharacteristicValue: function(e) {
+  readBLECharacteristicValue: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       // 必须在这里的回调才能获取
-      wx.onBLECharacteristicValueChange(function(characteristic) {
+      wx.onBLECharacteristicValueChange(function (characteristic) {
         console.log('characteristic value comed:', characteristic)
       })
       console.log(that.data.readServiceId);
@@ -620,13 +640,13 @@ Page({
         serviceId: that.data.readServiceId,
         // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取  
         characteristicId: that.data.readCharacteristicsId,
-        success: function(res) {
+        success: function (res) {
           console.log('readBLECharacteristicValue:', res.errMsg);
           console.log(res)
           console.log(that.ab2hex(res.value))
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log("读取失败")
           console.log(err)
           reject(err)
@@ -636,13 +656,13 @@ Page({
     })
   },
   //断开设备连接  
-  closeBLEConnection: function(e) {
+  closeBLEConnection: function (e) {
     var that = this
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.closeBLEConnection({
         deviceId: that.data.connectedDeviceId,
-        success: function(res) {
+        success: function (res) {
           that.setData({
             connectedDeviceId: "",
           })
@@ -659,13 +679,13 @@ Page({
     })
   },
   //监听input表单  
-  inputTextchange: async function(e) {
+  inputTextchange: async function (e) {
     that.setData({
       inputValue: e.detail.value
     })
   },
   //关闭订单
-  close_order: function(pay_amount) {
+  close_order: function (pay_amount) {
     var that = this
     console.log("结算中...")
     let order_id = that.data.order_id
@@ -699,7 +719,7 @@ Page({
               duration: 1000
             })
             // 结账失败，重试
-            console.log("失败url：" + close_order + "?amount=" + pay_amount + "&open_id=" + open_id + "&order_id=" + that.data.order_id, )
+            console.log("失败url：" + close_order + "?amount=" + pay_amount + "&open_id=" + open_id + "&order_id=" + that.data.order_id)
           }
           console.log(res)
           resolve(res)
