@@ -1,2 +1,17 @@
-<!--pages/test/test.wxml-->
-<text>pages/test/test.wxml</text>
+<!-- pages/test/test.wxml -->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">测试</view>
+</cu-custom>
+<view class='loadpic' bindtap='chooseImage'>选择图片</view>
+<view class='showPic'>
+  <view wx:for="{{imagesList}}" wx:for-item="image" wx:key="index" class="previewimg">
+    <image class='image' src="{{image}}" data-src="{{image}}" bindtap="previewImage"></image>
+  </view>
+</view>
+<view class="cu-form-group margin-top">
+  <view class="title">更换头像</view>
+  <view class="cu-avatar radius bg-gray">
+    <image style="width:25px;height:25px" bindtap='chooseImage' src="{{avatar}}" />
+  </view>
+</view>

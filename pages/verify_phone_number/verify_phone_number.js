@@ -17,7 +17,10 @@ Page({
     code: '',
     second: 60,
     rawData: "",
-    userInfo: ""
+    userInfo: "",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onLoad: function() {
 

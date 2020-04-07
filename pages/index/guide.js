@@ -1,3 +1,4 @@
+const app = getApp()
 Page({
   data: {
     imgs: [
@@ -6,6 +7,9 @@ Page({
       "http://img.kaiyanapp.com/64f96635ddc425e3be237b5f70374d87.jpeg?imageMogr2/quality/60",
     ],
     img: "http://img.kaiyanapp.com/7ff70fb62f596267ea863e1acb4fa484.jpeg",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
 
   start() {

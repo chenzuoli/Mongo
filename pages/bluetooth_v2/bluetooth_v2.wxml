@@ -1,5 +1,14 @@
 <!--pages/bluetooth/bluetooth.wxml-->
 <view class="content">
+  <view class="cu-custom" style="height:{{CustomBar}}px;">
+    <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <navigator class='action border-custom' open-type="navigateBack" delta="1" hover-class="none" style='width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)'>
+        <text class='cuIcon-back before lg'></text>
+        <text class='cuIcon-homefill before lg'></text>
+      </navigator>
+      <view class='content' style='top:{{StatusBar}}px;'>蓝牙开锁</view>
+    </view>
+  </view>
   <text class="status">适配器状态：{{ status }}</text>
   <text class="search">是否搜索：{{ search }}</text>
   <text class="msg">消息：{{ msg }} </text>

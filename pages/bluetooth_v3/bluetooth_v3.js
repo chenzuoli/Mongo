@@ -30,7 +30,10 @@ Page({
     command_list: "", // 蓝牙设备命令集
     inputValue: "",
     characteristics1: "", // 连接设备的状态值  
-    hidden: true
+    hidden: true,
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   ab2str: function (buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));

@@ -1,4 +1,5 @@
 // pages/redPacket/redPacket.js
+const app = getApp()
 Page({
 
   /**
@@ -6,6 +7,9 @@ Page({
    */
   data: {
     redAmount: "100.88",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
 
   /**

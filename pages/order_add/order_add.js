@@ -13,8 +13,11 @@ Page({
     pet_variety: '',
     pet_nick_name: '',
     pet_gender: "",
-    pet_age: "",
-    device_id: ""
+    pet_birthday: "",
+    device_id: "",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onLoad: function(options) {
     this.setData({
@@ -59,10 +62,10 @@ Page({
       pet_gender: e.detail.value
     })
   },
-  //年龄输入
-  bindAgeInput(e) {
+  //出生日期输入
+  bindBirthdayInput(e) {
     this.setData({
-      pet_age: e.detail.value
+      pet_birthday: e.detail.value
     })
   },
   //保存
@@ -72,7 +75,7 @@ Page({
     console.log('宠物品种: ' + that.data.pet_variety);
     console.log('宠物昵称: ' + that.data.pet_nick_name);
     console.log('宠物性别: ' + that.data.pet_gender);
-    console.log('宠物年龄: ' + that.data.pet_age);
+    console.log('宠物出生日期: ' + that.data.pet_birthday);
     if (!that.data.pet_type || !that.data.pet_contact) {
       wx.showModal({
         title: '请填写宠物类型和宠物联系人',
@@ -98,14 +101,14 @@ Page({
     //添加宠物，请求后台
     var order_id = that.guid()
     wx.request({
-      url: add_pet + "?order_id=" + order_id + "&contact=" + that.data.pet_contact + "&pet_type=" + that.data.pet_type + "&variety=" + that.data.pet_variety + "&nick_name=" + that.data.pet_nick_name + "&gender=" + that.data.pet_gender + "&age=" + that.data.pet_age,
+      url: add_pet + "?order_id=" + order_id + "&contact=" + that.data.pet_contact + "&pet_type=" + that.data.pet_type + "&variety=" + that.data.pet_variety + "&nick_name=" + that.data.pet_nick_name + "&gender=" + that.data.pet_gender + "&age=" + that.data.pet_birthday,
       data: {
         order_id: this.guid(),
         pet_type: this.data.pet_type,
         variety: this.data.pet_variety,
         nick_name: this.data.pet_nick_name,
         gender: this.data.pet_gender,
-        age: this.data.pet_age
+        age: this.data.pet_birthday
       },
       method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {

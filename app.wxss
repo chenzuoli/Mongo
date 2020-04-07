@@ -1,4 +1,6 @@
 /**app.wxss**/
+@import "colorui/icon.wxss";
+@import "colorui/main.wxss";
 
 .container {
   height: 100%;
@@ -9,3 +11,4 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 }
+

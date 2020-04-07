@@ -3,10 +3,11 @@ var zhenzisms = require('../../utils/zhenzisms.js');
 var get_code_url = 'https://wetech.top:7443/smsCode'
 var register_url = 'https://wetech.top:7443/register'
 var wx_login_url = "https://wetech.top:7443/petcage/wx_login"
-var get_service_private_content = 'https://localhost:7443/petcage/get_service_private_content'
+var get_service_private_content = 'https://wetech.top:7443/petcage/get_service_private_content'
 
 //获取应用实例
 const app = getApp();
+const api = app.globalData.api
 
 Page({
   data: {
@@ -21,10 +22,19 @@ Page({
     userInfo: "",
     service_content: "",
     private_content: "",
-    is_agree: "0"
+    is_agree: "0",
+    showModal: true, // 显示modal弹窗
+    single: false, // false 只显示一个按钮，如果想显示两个改为true即可
+    title: "服务条例与隐私协议",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
-  onLoad: function() {
-
+  onLoad: async function () {
+    await api.showLoading() // 显示loading
+    // 从数据库中获取服务条例与隐私协议内容
+    await this.get_service_private_content()
+    await api.hideLoading()
   },
   //姓名输入
   bindNameInput(e) {
@@ -69,7 +79,7 @@ Page({
       header: {
         'content-type': 'application/json'
       }, // 设置请求的 header
-      success: function(res) {
+      success: function (res) {
         // success
         wx.showToast({
           title: '发送成功',
@@ -82,7 +92,7 @@ Page({
           return;
         }
       },
-      fail: function() {
+      fail: function () {
         // fail
         wx.showToast({
           title: '发送失败',
@@ -90,12 +100,12 @@ Page({
           duration: 1000
         })
       },
-      complete: function() {
+      complete: function () {
         // complete
       }
     })
   },
-  timer: function() {
+  timer: function () {
     let promise = new Promise((resolve, reject) => {
       let setTimer = setInterval(
         () => {
@@ -125,10 +135,9 @@ Page({
     console.log('姓名: ' + this.data.name);
     console.log('手机号: ' + this.data.phone);
     console.log('验证码: ' + this.data.code);
-    // 从数据库中获取服务条例与隐私协议内容
-    await that.get_service_private_content()
+
     // 展示服务条例与隐私协议
-    await that.show_service_private_content()
+    // await that.show_service_private_content()
     if (that.data.is_agree == '0') {
       return
     }
@@ -164,14 +173,14 @@ Page({
     var that = this
     return new Promise((resolve, reject) => {
       wx.showModal({
-        title: '服务条例与隐私协议',
+        title: that.data.title,
         content: that.data.service_content + "\n" + that.data.private_content,
         showCancel: true, //是否显示取消按钮
         cancelText: "取消", //默认是“取消”
         cancelColor: 'skyblue', //取消文字的颜色
         confirmText: "同意", //默认是“确定”
         confirmColor: 'skyblue', //确定文字的颜色
-        success: function(res) {
+        success: function (res) {
           if (res.confirm) {
             that.setData({
               is_agree: "1"
@@ -179,7 +188,7 @@ Page({
           }
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           console.log("展示服务条例与隐私协议失败")
           console.log(err)
           reject(err)
@@ -200,7 +209,7 @@ Page({
         header: {
           'content-type': 'application/json'
         }, // 设置请求的 header
-        success: function(res) {
+        success: function (res) {
           // success
           wx.showToast({
             title: '注册成功',
@@ -213,7 +222,7 @@ Page({
           })
           resolve(res)
         },
-        fail: function(err) {
+        fail: function (err) {
           // fail
           wx.showToast({
             title: '注册失败',
@@ -227,7 +236,7 @@ Page({
       })
     })
   },
-  onGotUserInfo: async function(e) {
+  onGotUserInfo: async function (e) {
     var that = this;
     console.log(e.detail.errMsg)
     console.log(e.detail.userInfo)
@@ -236,17 +245,15 @@ Page({
       rawData: e.detail.rawData,
       userInfo: e.detail.userInfo
     })
-    // 从数据库中获取服务条例与隐私协议内容
-    await that.get_service_private_content()
     // 展示服务条例与隐私协议
-    await that.show_service_private_content()
+    // await that.show_service_private_content()
     if (that.data.is_agree == '0') {
       return
     }
     // 注册
     await that.login()
   },
-  login: function() {
+  login: function () {
     var that = this
     return new Promise((resolve, reject) => {
       wx.login({
@@ -293,11 +300,22 @@ Page({
         }
       })
     })
+  },
+  // 点击取消按钮的回调函数
+  modalCancel(e) {
+    // 这里面处理点击取消按钮业务逻辑
+    console.log('点击了取消，跳回登录页')
+    wx.navigateTo({
+      url: '../login/login'
+    })
+  },
+  // 点击确定按钮的回调函数
+  modalConfirm(e) {
+    var that = this
+    // 这里面处理点击确定按钮业务逻辑
+    console.log('点击了确定，继续填写注册信息。')
+    that.setData({
+      is_agree: "1"
+    })
   }
-  // login: function() {
-  //   console.log("navigate to login.")
-  //   wx.navigateTo({
-  //     url: '../login/login',
-  //   })
-  // },
 })

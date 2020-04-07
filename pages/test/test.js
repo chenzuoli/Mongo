@@ -14,7 +14,12 @@ Page({
    */
   data: {
     token: "",
-    service_id: ""
+    service_id: "",
+    imagesList: [],
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom,
+    avatar: ""
   },
   /**
    * Lifecycle function--Called when page load
@@ -22,38 +27,66 @@ Page({
   onLoad: function(options) {
     var that = this
 
-    wx.navigateTo({
-      url: '../map/map',
-    })
-    console.log("---------测试navigateTo之后的代码是否会运行--------")
+    // 更换图片
+    
 
-    let open_id = wx.getStorageSync("open_id")
-    console.log("open_id: " + open_id)
-    wx.login({
-      success: function(res) {
-        wx.request({
-          url: get_access_token_url,
-          method: 'get', //定义传到后台接受的是post方法还是get方法
-          header: {
-            'content-type': 'application/json' // 默认值
-          },
-          success: function(res) {
-            console.log("获取access token成功:" + res.data)
-            that.setData({
-              token: res.data
-            })
-            that.getQrcode()
-          },
-          fail: function(err) {
-            console.log("获取access token失败:" + err.data)
-          }
-        })
-      }
-    })
+    // wx.navigateTo({
+    //   url: '../map/map',
+    // })
+    // console.log("---------测试navigateTo之后的代码是否会运行--------")
+
+    // let open_id = wx.getStorageSync("open_id")
+    // console.log("open_id: " + open_id)
+    // wx.login({
+    //   success: function(res) {
+    //     wx.request({
+    //       url: get_access_token_url,
+    //       method: 'get', //定义传到后台接受的是post方法还是get方法
+    //       header: {
+    //         'content-type': 'application/json' // 默认值
+    //       },
+    //       success: function(res) {
+    //         console.log("获取access token成功:" + res.data)
+    //         that.setData({
+    //           token: res.data
+    //         })
+    //         that.getQrcode()
+    //       },
+    //       fail: function(err) {
+    //         console.log("获取access token失败:" + err.data)
+    //       }
+    //     })
+    //   }
+    // })
     // that.testAsync()
 
     // console.log("测试异步请求变同步")
     // that.init()
+  },
+  chooseImage: function () {
+    var that = this
+    wx.chooseImage({
+      count: 9, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success: function (res) {
+        console.log(res)
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        var tempFilePaths = res.tempFilePaths
+        that.setData({
+          // imagesList: tempFilePaths
+          avatar: tempFilePaths
+        })
+        console.log(tempFilePaths)
+      }
+    })
+  },
+  previewImage: function (e) {
+    var current = e.target.dataset.src;
+    wx.previewImage({
+      current: current, // 当前显示图片的http链接  
+      urls: this.data.imagesList // 需要预览的图片http链接列表  
+    })
   },
 
   getQrcode() {

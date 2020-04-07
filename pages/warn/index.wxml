@@ -1,11 +1,25 @@
-<!--pages/warn/index.wxml-->
+<!-- pages/warn/index.wxml -->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">故障报修</view>
+</cu-custom>
 <view class="container">
+  <!-- <view class="cu-custom" style="height:{{CustomBar}}px;">
+    <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <navigator class='action border-custom' open-type="navigateBack" delta="1" hover-class="none" style='width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)'>
+        <text class='cuIcon-back before lg'></text>
+        <text class='cuIcon-homefill before lg'></text>
+      </navigator>
+      <view class='content' style='top:{{StatusBar}}px;'>故障报修</view>
+    </view>
+  </view> -->
   <view class="choose">
     <view class="title1">请选择故障种类</view>
     <checkbox-group class="choose-grids" bindchange="checkboxChange">
       <block wx:for="{{itemsValue}}" wx:key="{{item}}">
         <view class="grids">
-          <checkbox value="{{item.value}}" checked="{{item.checked}}" />{{item.value}}
+          <checkbox value="{{item.value}}" checked="{{item.checked}}" />
+          {{item.value}}
         </view>
       </block>
     </checkbox-group>

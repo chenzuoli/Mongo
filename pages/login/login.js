@@ -1,6 +1,7 @@
 // pages/login/login.js
 var API_URL = 'https://www.wetech.top'
 var wx_login_url = "https://wetech.top:7443/petcage/wx_login"
+const app = getApp()
 
 Page({
   data: {
@@ -8,7 +9,10 @@ Page({
     password: "",
     message: "",
     rawData: "",
-    userInfo: ""
+    userInfo: "",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onGotUserInfo: function(e) {
     var that = this;

@@ -1,4 +1,5 @@
 // pages/myLab/myLab.js
+const app = getApp()
 Page({
 
   /**
@@ -23,6 +24,9 @@ Page({
       '小吃'
     ],
     curTabsTitIdx: 0,
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
 
   /**

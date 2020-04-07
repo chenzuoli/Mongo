@@ -3,6 +3,8 @@ var SESSION_KEY = '' //储存获取到session_key
 var UNION_Id = ''
 var get_open_id_url = 'https://wetech.top:7443/petcage/open_id'
 var get_phone_number = 'http://wetech.top:7443/petcage/index/users/decodePhone'
+const app = getApp()
+
 Page({
   data: {
     open_id: "",
@@ -10,7 +12,10 @@ Page({
     union_id: "",
     phone_number: "",
     nickName: "",
-    avatarUrl: ""
+    avatarUrl: "",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   getOpenIdTap: function() {
     var that = this;

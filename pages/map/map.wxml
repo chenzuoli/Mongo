@@ -1,3 +1,7 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{false}}">
+  <!-- <view slot="backText">返回</view> -->
+  <view slot="content">主页</view>
+</cu-custom>
 <view class="map_container">
   <map id="myMap" show-location longitude="{{longitude}}" latitude="{{latitude}}" controls="{{controls}}" markers="{{markers}}" include-points="{{markers}}" bindcontroltap="controltap"></map>
 </view>

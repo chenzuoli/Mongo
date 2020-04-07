@@ -2,6 +2,8 @@
 var repair_url = 'https://wetech.top:7443/petcage/getDamageType';
 var add_feedback_url = 'https://wetech.top:7443/petcage/add_feedback';
 var upload_file_url = 'https://wetech.top:7443/petcage/uploadFile';
+const app = getApp()
+
 Page({
   /**
    * 页面的初始数据
@@ -17,7 +19,10 @@ Page({
     picUrls: [],
     checkboxValues: [],
     itemsValue: [],
-    btnColor: "#f2f2f2"
+    btnColor: "#f2f2f2",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   checkboxChange: function(e) {
     var _value = e.detail.value;

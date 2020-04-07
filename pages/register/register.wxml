@@ -1,4 +1,8 @@
-<!--register.wxml-->
+<!-- register.wxml -->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">注册</view>
+</cu-custom>
 <view class="container">
   <view class='row'>
     <input placeholder='  请输入用户名' bindinput='bindNameInput' />
@@ -11,11 +15,25 @@
   </view>
   <view class='row'>
     <input placeholder='  请输验证码' bindinput='bindCodeInput' style='width:70%;' />
-    <button class='codeBtn' bindtap='getCode' hidden='{{hidden}}' disabled='{{btnDisabled}}'>{{btnValue}}</button>
+    <button class='codeBtn' bindtap='getCode' hidden='{{hidden}}' disabled='{{btnDisabled}}'>
+      {{btnValue}}
+    </button>
   </view>
   <view>
     <button class='save' bindtap='save'>注 册</button>
     <button class='link_login' bindtap='login'>已有账号？点击登录</button>
-    <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">微信账号注册</button>
+    <button class='link_wx' open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">
+      微信账号注册
+    </button>
   </view>
+  <!-- modal弹窗 -->
+  <modalView show="{{showModal}}" bindcancel="modalCancel" title="{{title}}" bindconfirm='modalConfirm' single='{{single}}'>
+    <view class='modal-content'>
+      <scroll-view scroll-y class='main-content'>
+        <view>{{ service_content }}</view>
+        <br />
+        <view>{{ private_content }}</view>
+      </scroll-view>
+    </view>
+  </modalView>
 </view>

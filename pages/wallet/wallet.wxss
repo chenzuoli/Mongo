@@ -9,10 +9,20 @@ page {
   background: linear-gradient(#6cf, #080);
 }
 
-.balance_box {
+.user_box {
   margin-top: -50px;
+  height: 100rpx;
+  padding: 15rpx 30rpx 10rpx;
+  margin-left: 200px;
+  /* border: 1px solid black */
+}
+
+.balance_box {
+  margin-top: -45px;
   height: 200rpx;
   padding: 15rpx 30rpx 10rpx;
+  margin-left: -80px;
+  /* border: 1px solid black */
 }
 
 .balance_box image {

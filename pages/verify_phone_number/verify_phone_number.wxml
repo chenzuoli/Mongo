@@ -1,4 +1,8 @@
 <!--pages/verify_phone_number/verify_phone_number.wxml-->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">验证手机号</view>
+</cu-custom>
 <view class="container">
   <view class='row'>
     <input placeholder='  请输入手机号' bindinput='bindPhoneInput' />

@@ -4,7 +4,7 @@ var position1, position2, position3, position4, position5;
 var W = 0;
 var H = 0;
 var device_locations_url = 'https://wetech.top:7443/petcage/getDeviceLocations';
-
+const app = getApp()
 // 位置信息
 var lati, longi;
 Page({
@@ -23,6 +23,9 @@ Page({
       title: ''
     }],
     controls: controls,
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onShareAppMessage: function() {
     return {

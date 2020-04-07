@@ -1,6 +1,27 @@
-<!--pages/wallet/wallet.wxml-->
-<!--余额-->
+<!-- pages/wallet/wallet.wxml -->
+<!-- 余额 -->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">个人中心</view>
+</cu-custom>
 <view class="container">
+  <!-- <view class="cu-custom" style="height:{{CustomBar}}px;">
+    <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <navigator class='action border-custom' open-type="navigateBack" delta="1" hover-class="none" style='width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)'>
+        <text class='cuIcon-back before lg'></text>
+        <text class='cuIcon-homefill before lg'></text>
+      </navigator>
+      <view class='content' style='top:{{StatusBar}}px;'>用户中心</view>
+    </view>
+  </view> -->
+  <view class="user_box">
+    <view class="content">
+      <view class="cfye">
+        主页
+        <text class='cuIcon-right before lg' bindtap="user_index"></text>
+      </view>
+    </view>
+  </view>
   <view class="balance_box">
     <image src="../../images/balance.svg"></image>
     <view class="content">
@@ -11,15 +32,16 @@
   </view>
   <view class="czje">充值金额</view>
   <view class="amountList" bindtap="selectAmount">
-    <button wx:for="{{amountList}}" data-id="{{index}}" class="{{curSelected ==index?'selected':''}}">￥{{item}}</button>
+    <button wx:for="{{amountList}}" data-id="{{index}}" class="{{curSelected ==index?'selected':''}}">
+      ￥{{item}}
+    </button>
   </view>
   <view class="intro">
-    <view class="intro_text">点击去充值，即表示已阅读并同意
+    <view class="intro_text">
+      点击去充值，即表示已阅读并同意
       <text class="czxy">充值协议</text>
     </view>
     <view class="intro_text">Mongo世界不会以任何形式要求您输入银行账户和密码</view>
   </view>
   <button class="btn_topay selected" bindtap="toPay">去充值</button>
-  <!-- <view class="yj">押金299元 <text class="rhtyj" bindtap="toMyLab">如何退押金？</text></view> -->
-
 </view>

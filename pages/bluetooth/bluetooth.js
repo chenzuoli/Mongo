@@ -31,6 +31,9 @@ Page({
     notifyCharacteristicsId: "", //通知特征值UUID  
     inputValue: "",
     characteristics1: "", // 连接设备的状态值  
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onLoad: function() {
     if (wx.openBluetoothAdapter) {

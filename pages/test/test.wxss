@@ -1,1 +1,23 @@
 /* pages/test/test.wxss */
+.loadpic{
+    margin: 20px auto;
+    width: 500rpx;
+    height: 80rpx;
+    background: #d34c17;
+    text-align: center;
+    color: white;
+    line-height: 80rpx;
+  }
+  .previewimg{
+    padding: 10rpx;
+    float: left;
+  }
+  .image{
+    display: block;
+    width: 200rpx;
+    height: 200rpx;
+  }
+  .showPic{
+    margin: 0 auto;
+    width: 90%;
+  }

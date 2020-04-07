@@ -1,4 +1,8 @@
-<!--pages/order_add/order_add.wxml-->
+<!-- pages/order_add/order_add.wxml -->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">添加宠物</view>
+</cu-custom>
 <view class="container">
   <view class='row'>
     <input placeholder='  请输入联系人手机号' bindinput='bindContactInput' />
@@ -16,7 +20,7 @@
     <input placeholder='  请输入宠物性别' bindinput='bindGenderInput' />
   </view>
   <view class='row'>
-    <input placeholder='  请输入宠物年龄' bindinput='bindAgeInput' />
+    <input placeholder='  请输入宠物出生日期' bindinput='bindBirthdayInput' />
   </view>
   <view>
     <button class='save' bindtap='save'>添 加 宠 物</button>

@@ -1,5 +1,6 @@
 // pages/feedback/feedback.js
 var add_feedback_url = 'https://wetech.top:7443/petcage/add_feedback';
+const app = getApp();
 
 Page({
   data: {
@@ -18,7 +19,10 @@ Page({
     btnColor: "#f2f2f2",
     latitude: "",
     longitude: "",
-    order_id: ""
+    order_id: "",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onLoad: function (options) {
     var that = this;

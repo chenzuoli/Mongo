@@ -1,5 +1,9 @@
 <!--pages/feedback/feedback.wxml-->
 <!--星星评价-->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">订单反馈</view>
+</cu-custom>
 <view class="container">
   <view class="comment1-description">
     <view class="star-pos" style="display:flex;flex-direction:row;">

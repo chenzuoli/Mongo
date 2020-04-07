@@ -34,7 +34,10 @@ Page({
     hidden: true,
     service_id: "",
     order_id: "",
-    is_add: "0"
+    is_add: "0",
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   ab2str: function (buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));

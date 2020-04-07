@@ -1,31 +1,32 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/map/map",
-    "pages/redPacket/redPacket",
-    "pages/wallet/wallet",
-    "pages/myLab/myLab",
-    "pages/userInfo/userInfo",
-    "pages/register/register",
-    "pages/logs/logs",
-    "pages/test/test",
-    "pages/bluetooth/bluetooth",
-    "pages/bluetooth-demo/bluetooth",
-    "pages/bluetooth_v2/bluetooth_v2",
-    "pages/bluetooth_v3/bluetooth_v3",
-    "pages/verify_phone_number/verify_phone_number",
-    "pages/order_add/order_add",
+    "pages/bluetooth_v4/bluetooth_v4",
     "pages/feedback/feedback",
+    "pages/logs/logs",
+    "pages/map/map",
+    "pages/order_add/order_add",
+    "pages/register/register",
+    "pages/test/test",
+    "pages/userInfo/userInfo",
+    "pages/verify_phone_number/verify_phone_number",
+    "pages/wallet/wallet",
     "pages/warn/index",
-    "pages/bluetooth_v4/bluetooth_v4"
+    "pages/user_index/index/index",
+    "pages/user_index/info/index",
+    "pages/pet_index/info/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#222",
     "navigationBarTitleText": "Mongo世界",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "custom"
   },
   "debug": true,
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  },
   "sitemapLocation": "sitemap.json",
   "permission": {
     "scope.userLocation": {

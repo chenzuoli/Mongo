@@ -28,6 +28,15 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
+    wx.getSystemInfo({
+      success: e => {
+        this.globalData.StatusBar = e.statusBarHeight;
+        let custom = wx.getMenuButtonBoundingClientRect();
+        this.globalData.Custom = custom;  
+        this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+      }
+    })
+
     // 登录
     wx.login({ // 登录
       // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -87,7 +96,7 @@ App({
     } else {
       wx.navigateTo({
         // url: '/pages/login/login'
-        // url: '/pages/map/map'
+        url: '/pages/map/map'
         // url: '/pages/userInfo/userInfo'
         // url: '/pages/bluetooth_v2/bluetooth_v2'
         // url: '/pages/bluetooth_v3/bluetooth_v3'
@@ -97,7 +106,9 @@ App({
         // url: '/pages/order_add/order_add'
         // url: '/pages/warn/index'
         // url: '/pages/feedback/feedback'
-        url: '/pages/register/register'
+        // url: '/pages/register/register'
+        // url: '/pages/wallet/wallet'
+        // url: '/pages/user_index/index/index'
       })
     }
   },

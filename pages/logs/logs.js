@@ -1,9 +1,13 @@
 //logs.js
 const util = require('../../utils/util.js')
+const app = getApp()
 
 Page({
   data: {
-    logs: []
+    logs: [],
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom
   },
   onLoad: function() {
     this.setData({
