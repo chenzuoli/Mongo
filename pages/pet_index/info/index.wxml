@@ -17,7 +17,7 @@
 								<view class="title">宠物类型、品种</view>
 								<picker name='type_variety' mode="multiSelector" bindchange="MultiChange" bindcolumnchange="MultiColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
 												<view class="picker">
-																{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+																{{multiArray[0][multiIndex[0]]}},{{multiArray[1][multiIndex[1]]}}
 												</view>
 								</picker>
 				</view>
@@ -28,7 +28,7 @@
 				<view class="cu-form-group">
 								<view class="title">宠物出生日期</view>
 								<picker name='birthday' mode="date" value="{{date}}" start="1980-09-01" end="{{now}}" bindchange="DateChange">
-												<view class="picker">{{now}}</view>
+												<view class="picker">{{date}}</view>
 								</picker>
 				</view>
 				<view class="cu-form-group">

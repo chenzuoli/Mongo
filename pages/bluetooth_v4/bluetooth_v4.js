@@ -9,7 +9,7 @@ var get_device_bluetooth_command = 'https://wetech.top:7443/petcage/get_device_b
 var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
 var get_petcage_order_by_open_id = 'https://wetech.top:7443/petcage/get_petcage_order_by_open_id'
 var close_order = 'https://wetech.top:7443/petcage/close_order'
-var get_device_info = 'https://localhost:7443/petcage/get_device_info'
+var get_device_info = 'https://wetech.top:7443/petcage/get_device_info'
 
 Page({
   data: {
@@ -128,10 +128,7 @@ Page({
     var that = this
     await api.showLoading() // 显示loading
     await that.get_service_id(1) // 请求数据
-    await that.get_service_id(2) // 请求数据
-    await that.get_service_id(3) // 请求数据
-    await that.get_service_id(4) // 请求数据
-    await that.get_petcage_order_by_open_id(4.5)
+    await that.get_petcage_order_by_open_id(2)
     if (that.data.is_add == '1') {
       await api.hideLoading() // 等待请求数据成功后，隐藏loading
       return

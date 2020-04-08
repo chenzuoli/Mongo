@@ -1,6 +1,9 @@
 var util = require('../../../utils/util')
 const app = getApp();
-var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
+var get_user_info = 'https://wetech.top:7443/petcage/get_user_by_open_id'
+var get_dim_pet = 'https://wetech.top:7443/petcage/get_dim_pet'
+var update_user_pet = 'https://wetech.top:7443/petcage/update_user_pet'
+var upload_file_url = 'https://wetech.top:7443/petcage/upload_file'
 
 Page({
   data: {
@@ -9,50 +12,10 @@ Page({
     index: null,
     picker: ['0-3', '4-8', '9-20', '20以上'],
     multiArray: [
-      ['狗', '猫', '鱼', '鸟'],
-      ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'],
+      ['狗', '猫', '其他动物', '鱼', '鸟'],
+      ['哈士奇', '边境牧羊犬', '金毛寻回犬', '拉布拉多', '泰迪']
     ],
-    objectMultiArray: [
-      [{
-          id: 0,
-          name: '狗'
-        },
-        {
-          id: 1,
-          name: '猫'
-        },
-        {
-          id: 1,
-          name: '鱼'
-        },
-        {
-          id: 1,
-          name: '鸟'
-        }
-      ],
-      [{
-          id: 0,
-          name: '扁性动物'
-        },
-        {
-          id: 1,
-          name: '线形动物'
-        },
-        {
-          id: 2,
-          name: '环节动物'
-        },
-        {
-          id: 3,
-          name: '软体动物'
-        },
-        {
-          id: 3,
-          name: '节肢动物'
-        }
-      ]
-    ],
-    multiIndex: [0, 0, 0],
+    multiIndex: [0, 0],
     time: '12:01',
     date: '2018-12-25',
     region: ['湖北省', '武汉市', '江夏区'],
@@ -63,7 +26,9 @@ Page({
     nick_name: '',
     contact: '',
     avatar: '',
-    now: ''
+    now: '',
+    pet_type: [],
+    pet_variety: []
   },
   onLoad: async function () {
     var that = this
@@ -76,6 +41,7 @@ Page({
     that.setData({
       now: formatTime
     })
+    await that.get_dim_pet()
   },
   get_user_info: function (open_id) {
     var that = this
@@ -105,6 +71,50 @@ Page({
       });
     })
   },
+  get_dim_pet: function () {
+    var that = this
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: get_dim_pet,
+        data: {},
+        header: { 'content-type': 'application/json' },
+        method: 'post',
+        dataType: 'json',
+        responseType: 'text',
+        success: (result) => {
+          console.log(result)
+          var pets = result.data.data
+          var pet_type = []
+          var pet_variety = []
+          for (var i = 0; i < pets.length; i++) {
+            if (pet_type.indexOf(pets[i].pet_type) == -1) {
+              console.log("pet variety: " + pet_variety)
+              if (i != 0) {
+                that.data.pet_variety.push(pet_variety)
+              }
+              pet_type.push(pets[i].pet_type)
+              pet_variety = []
+            }
+            pet_variety.push(pets[i].variety)
+          }
+          that.data.pet_variety.push(pet_variety)
+          that.data.pet_type = pet_type
+          console.log(that.data.pet_type)
+          console.log(that.data.pet_variety)
+          that.setData({
+            multiArray: [pet_type, that.data.pet_variety[0]]
+          })
+          resolve(result)
+        },
+        fail: (err) => {
+          console.log("获取宠物维表失败")
+          console.log(err)
+          reject(err)
+        },
+        complete: () => { }
+      });
+    })
+  },
   PickerChange(e) {
     console.log(e);
     this.setData({
@@ -112,67 +122,28 @@ Page({
     })
   },
   MultiChange(e) {
+    console.log("multichange: ")
+    console.log(e)
     this.setData({
       multiIndex: e.detail.value
     })
   },
   MultiColumnChange(e) {
+    var that = this
+    console.log("multicolumnchange: ")
+    console.log(e)
     let data = {
-      multiArray: this.data.multiArray,
-      multiIndex: this.data.multiIndex
+      multiIndex: this.data.multiIndex,
+      multiArray: this.data.multiArray
     };
     data.multiIndex[e.detail.column] = e.detail.value;
     switch (e.detail.column) {
       case 0:
-        switch (data.multiIndex[0]) {
-          case 0:
-            data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];
-            data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-            break;
-          case 1:
-            data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];
-            data.multiArray[2] = ['鲫鱼', '带鱼'];
-            break;
-        }
+        data.multiArray[1] = that.data.pet_variety[e.detail.value];
         data.multiIndex[1] = 0;
-        data.multiIndex[2] = 0;
         break;
       case 1:
-        switch (data.multiIndex[0]) {
-          case 0:
-            switch (data.multiIndex[1]) {
-              case 0:
-                data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-                break;
-              case 1:
-                data.multiArray[2] = ['蛔虫'];
-                break;
-              case 2:
-                data.multiArray[2] = ['蚂蚁', '蚂蟥'];
-                break;
-              case 3:
-                data.multiArray[2] = ['河蚌', '蜗牛', '蛞蝓'];
-                break;
-              case 4:
-                data.multiArray[2] = ['昆虫', '甲壳动物', '蛛形动物', '多足动物'];
-                break;
-            }
-            break;
-          case 1:
-            switch (data.multiIndex[1]) {
-              case 0:
-                data.multiArray[2] = ['鲫鱼', '带鱼'];
-                break;
-              case 1:
-                data.multiArray[2] = ['青蛙', '娃娃鱼'];
-                break;
-              case 2:
-                data.multiArray[2] = ['蜥蜴', '龟', '壁虎'];
-                break;
-            }
-            break;
-        }
-        data.multiIndex[2] = 0;
+        data.multiIndex[1] = e.detail.value;
         break;
     }
     this.setData(data);
@@ -187,7 +158,7 @@ Page({
       date: e.detail.value
     })
   },
-  RegionChange: function(e) {
+  RegionChange: function (e) {
     this.setData({
       region: e.detail.value
     })
@@ -243,25 +214,77 @@ Page({
       textareaBValue: e.detail.value
     })
   },
-  submit: function (e) {
+  submit: async function (e) {
+    var that = this
     console.log('form发生了submit事件，携带数据为：', e)
-    this.setData({
-      allValue: e.detail.value
-    })
-    wx.showToast({
-      title: '更新成功',
-      icon: 'success',
-      image: '',
-      duration: 1500,
-      mask: false,
-      success: (result)=>{
-        
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    // 上传图像到七牛云
+    await that.upload()
+
+    // 更新
+    await that.update(e)
     wx.navigateBack({
       delta: 1
     });
+  },
+  upload() {
+    var that = this
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        url: upload_file_url,
+        filePath: that.data.avatar,
+        name: 'avatarFile',
+        header: {
+          'content-type': 'multipart/form-data'
+        }, // 设置请求的 header
+        formData: { 'guid': "procomment" }, // HTTP 请求中其他额外的 form data
+        success: function (res) {
+          console.log("上传成功")
+          console.log(res)
+          resolve(res)
+        },
+        fail: function (err) {
+          console.log("上传失败")
+          console.log(err)
+          reject(err)
+        }
+      })
+    })
+  },
+  update(e) {
+    var that = this
+    let open_id = wx.getStorageSync("open_id");
+    console.log("open_id: " + open_id)
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: update_user_pet + "?contact=" + e.detail.value.contact +
+          "&pet_type=" + that.data.pet_type[e.detail.value.type_variety[0]] +
+          "&variety=" + that.data.multiArray[1][e.detail.value.type_variety[1]] +
+          "&nick_name=" + e.detail.value.nick_name +
+          "&gender=" + e.detail.value.gender +
+          "&birthday=" + e.detail.value.birthday +
+          "&avatar_url=" + that.data.avatar +
+          "&open_id=" + open_id,
+        data: {},
+        header: { 'content-type': 'application/json' },
+        method: 'post',
+        dataType: 'json',
+        responseType: 'text',
+        success: (result) => {
+          if (result.data > 0) {
+            console.log("更新用户宠物信息成功")
+          } else {
+            console.log("更新用户宠物信息失败")
+          }
+          console.log(result)
+          resolve(result)
+        },
+        fail: (err) => {
+          console.log(err)
+          console.log("更新用户宠物信息失败")
+          reject(err)
+        },
+        complete: () => { }
+      });
+    })
   }
 })

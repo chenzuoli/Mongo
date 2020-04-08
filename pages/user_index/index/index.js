@@ -1,8 +1,8 @@
 const app = getApp();
 
-var get_version_url = 'https://localhost:7443/petcage/get_app_version'
-var get_service_content = 'https://localhost:7443/petcage/get_service_content'
-var get_private_content = 'https://localhost:7443/petcage/get_private_content'
+var get_version_url = 'https://wetech.top:7443/petcage/get_app_version'
+var get_service_content = 'https://wetech.top:7443/petcage/get_service_content'
+var get_private_content = 'https://wetech.top:7443/petcage/get_private_content'
 
 Page({
     data: {
