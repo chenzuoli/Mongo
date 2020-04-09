@@ -3,8 +3,9 @@ const app = getApp();
 var get_user_info = 'https://wetech.top:7443/petcage/get_user_by_open_id'
 var get_pet_info = 'https://wetech.top:7443/petcage/get_pet_info'
 var get_dim_pet = 'https://wetech.top:7443/petcage/get_dim_pet'
-var update_user_pet = 'https://wetech.top:7443/petcage/update_user_pet'
+var add_user_pet = 'https://wetech.top:7443/petcage/add_user_pet'
 var upload_file_url = 'https://wetech.top:7443/petcage/upload_file'
+var add_order = 'https://wetech.top:7443/petcage/add_order'
 
 Page({
   data: {
@@ -28,15 +29,15 @@ Page({
     now: '',
     avatar: "",
     pet_type: [],
-    pet_variety: []
+    pet_variety: [],
+    device_id: ""
   },
   onLoad: async function (options) {
     var that = this
-    console.log("跳转获取到参数：")
-    var pet_id = options.pet_id
-    // 设置宠物信息
-    console.log(pet_id)
-    await that.get_pet_info(pet_id)
+
+    that.setData({
+      device_id: options.device_id
+    })
 
     let open_id = wx.getStorageSync("open_id");
     console.log("open_id: " + open_id)
@@ -232,7 +233,8 @@ Page({
       success: (res) => {
         if (that.data.imgList.length != 0) {
           that.setData({
-            imgList: that.data.imgList.concat(res.tempFilePaths)
+            imgList: that.data.imgList.concat(res.tempFilePaths),
+            avatar: res.tempFilePaths[0]
           })
         } else {
           that.setData({
@@ -276,6 +278,13 @@ Page({
       textareaBValue: e.detail.value
     })
   },
+  //用于生成uuid
+  s4: function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  },
+  guid: function () {
+    return (this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4());
+  },
   submit: async function (e) {
     var that = this
     console.log('form发生了submit事件，携带数据为：', e)
@@ -284,12 +293,14 @@ Page({
       await that.upload()
     }
 
-    // 更新
-    await that.update(e)
+    // 添加
+    await that.pet_add(e)
+    await that.order_add(e)
     wx.navigateBack({
       delta: 1
     });
   },
+  // 上传头像
   upload() {
     var that = this
     return new Promise((resolve, reject) => {
@@ -314,33 +325,47 @@ Page({
       })
     })
   },
-  update(e) {
+  // 添加宠物
+  pet_add(e) {
     var that = this
+    console.log('宠物类型: ' + that.data.pet_type[e.detail.value.type_variety[0]]);
+    console.log('宠物品种: ' + that.data.multiArray[1][e.detail.value.type_variety[1]]);
+    console.log('宠物昵称: ' + e.detail.value.nick_name);
+    console.log('宠物性别: ' + e.detail.value.gender);
+    console.log('宠物出生日期: ' + e.detail.value.birthday);
+    if (!that.data.pet_type[e.detail.value.type_variety[0]] || !e.detail.value.contact) {
+      wx.showModal({
+        title: '请填写宠物类型和宠物联系人',
+        content: '',
+        confirmText: '继续填写',
+        cancelText: '返回',
+        success: (res) => {
+          if (res.confirm) {
+            console.log(res);
+          } else {
+            wx.navigateBack({
+              delta: 1
+            })
+          }
+        }
+      })
+      return
+    }
+    let open_id = wx.getStorageSync("open_id");
+    console.log("open_id: " + open_id)
     return new Promise((resolve, reject) => {
-      if (e.detail.value.contact != '') {
-        that.data.pet.contact = e.detail.value.contact
-      }
-      that.data.pet.pet_type = that.data.pet_type[e.detail.value.type_variety[0]]
-      that.data.pet.variety = that.data.multiArray[1][e.detail.value.type_variety[1]]
-      if (e.detail.value.nick_name != '') {
-        that.data.pet.nick_name = e.detail.value.nick_name
-      }
-      that.data.pet.gender = e.detail.value.gender == "true" ? "1" : '0'
-      that.data.pet.birthday = e.detail.value.birthday
-      if (e.detail.value.description != '') {
-        that.data.pet.description = e.detail.value.description
-      }
+      var gender = e.detail.value.gender == "true" ? "1" : '0'
       wx.request({
-        url: update_user_pet +
-          "?contact=" + that.data.pet.contact +
-          "&pet_type=" + that.data.pet.pet_type +
-          "&variety=" + that.data.pet.variety +
-          "&nick_name=" + that.data.pet.nick_name +
-          "&gender=" + that.data.pet.gender +
-          "&birthday=" + that.data.pet.birthday +
-          "&avatar_url=" + that.data.pet.avatar_url +
-          "&description=" + that.data.pet.description +
-          "&id=" + that.data.pet.id,
+        url: add_user_pet +
+          "?open_id=" + open_id +
+          "&contact=" + e.detail.value.contact +
+          "&pet_type=" + that.data.pet_type[e.detail.value.type_variety[0]] +
+          "&variety=" + that.data.multiArray[1][e.detail.value.type_variety[1]] +
+          "&nick_name=" + e.detail.value.nick_name +
+          "&gender=" + gender +
+          "&birthday=" + e.detail.value.birthday +
+          "&avatar_url=" + that.data.avatar +
+          "&description=" + e.detail.value.description,
         data: {},
         header: { 'content-type': 'application/json' },
         method: 'post',
@@ -348,20 +373,59 @@ Page({
         responseType: 'text',
         success: (result) => {
           if (result.data.data > 0) {
-            console.log("更新用户宠物信息成功")
+            console.log("添加宠物信息成功")
           } else {
-            console.log("更新用户宠物信息失败")
+            console.log("添加宠物信息失败")
           }
           console.log(result)
           resolve(result)
         },
         fail: (err) => {
           console.log(err)
-          console.log("更新用户宠物信息失败")
+          console.log("添加宠物信息失败")
           reject(err)
         },
         complete: () => { }
       });
+    })
+  },
+  order_add(e) {
+    var that = this
+    let open_id = wx.getStorageSync("open_id")
+    console.log("open_id: " + open_id)
+
+    var order_id = that.guid()
+    // 添加订单
+    wx.request({
+      url: add_order + "?order_id=" + order_id + "&phone=" + e.detail.value.contact + "&open_id=" + open_id + "&device_id=" + that.data.device_id,
+      method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+      header: {
+        'content-type': 'application/json'
+      }, // 设置请求的 header
+      success(res) {
+        if (res.data > 0) {
+          console.log("创建订单成功")
+          // 把订单id带回上一页
+          var pages = getCurrentPages();
+          var currPage = pages[pages.length - 1]; //当前页面
+          var prevPage = pages[pages.length - 2]; //上一个页面
+          //直接调用上一个页面对象的setData()方法，把数据存到上一个页面中去
+          prevPage.setData({
+            order_id: order_id
+          })
+          wx.setStorageSync('order_id', order_id)
+          wx.navigateBack({
+            delta: 1
+          })
+        } else {
+          console.log("创建订单失败")
+          wx.showToast({
+            title: '服务器错误，请重试！',
+            icon: 'warn',
+            duration: 2000
+          })
+        }
+      }
     })
   }
 })

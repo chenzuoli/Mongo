@@ -1,0 +1,41 @@
+<!-- pages/pet_index/pet_list/pet_list.wxml -->
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">选择目标宠物</view>
+</cu-custom>
+<view class="cu-bar bg-white solid-bottom">
+    <view class='action'>
+        <text class='cuIcon-titles text-orange '></text>
+        我的宠物们
+    </view>
+    <view class='action'>
+        <switch class='sm' checked='{{isCard}}' bindchange='isCard'></switch>
+    </view>
+</view>
+<view wx:for="{{pets}}" wx:key="{{index}}" wx:for-index="index" wx:for-item="pet">
+    <view class="cu-card case {{isCard?'no-card':''}}">
+        <view class="cu-item shadow">
+            <view class="image">
+                <image bindtap='desc_pet' data-id="{{pet}}" src="{{pet.avatar_url}}" mode="widthFix"></image>
+                <view class="cu-tag bg-blue">{{pet.pet_type}}</view>
+                <view class="cu-bar bg-shadeBottom">
+                    <text class="text-cut">{{pet.description}}</text>
+                </view>
+            </view>
+            <view class="cu-list menu-avatar">
+                <view class="cu-item">
+                    <view class="cu-avatar round lg" style="background-image:url({{pet.avatar_url}});"></view>
+                    <view class="content flex-sub">
+                        <view class="text-grey">{{pet.nick_name}}</view>
+                        <view class="text-gray text-sm flex justify-between">
+                            {{pet.birthday}}出生
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="cu-form-group">
+    <button class="btnAdd" bindtap='add_pet'>新增宠物</button>
+</view>

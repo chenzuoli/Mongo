@@ -40,7 +40,7 @@
 												<view class="picker">{{region[0]}}，{{region[1]}}，{{region[2]}}</view>
 								</picker>
 				</view>
-				<view style="margin:20px;margin-left:150px">
-								<button class="cu-btn bg-green shadow" form-type="submit">提交</button>
+				<view class="cu-form-group">
+								<button class="btnSubmit" form-type="submit">更 改</button>
 				</view>
 </form>

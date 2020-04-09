@@ -96,11 +96,11 @@ App({
     } else {
       wx.navigateTo({
         // url: '/pages/login/login'
-        url: '/pages/map/map'
+        // url: '/pages/map/map'
         // url: '/pages/userInfo/userInfo'
         // url: '/pages/bluetooth_v2/bluetooth_v2'
         // url: '/pages/bluetooth_v3/bluetooth_v3'
-        // url: '/pages/bluetooth_v4/bluetooth_v4'
+        url: '/pages/bluetooth_v4/bluetooth_v4'
         // url: '/pages/verify_phone_number/verify_phone_number'
         // url: '/pages/test/test'
         // url: '/pages/order_add/order_add'

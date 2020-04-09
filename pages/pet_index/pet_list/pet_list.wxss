@@ -1,0 +1,9 @@
+/* pages/pet_index/pet_list/pet_list.wxss */
+
+.btnAdd {
+    margin:40px;
+    margin-left:100px;
+    margin-right:100px;
+    width: 130px;
+    font-size: 30rpx;
+  }

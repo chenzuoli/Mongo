@@ -14,7 +14,10 @@
     "pages/warn/index",
     "pages/user_index/index/index",
     "pages/user_index/info/index",
-    "pages/pet_index/info/index"
+    "pages/pet_index/info/index",
+    "pages/pet_index/pet_list/pet_list",
+    "pages/protocol/protocol",
+    "pages/pet_index/pet_add/pet_add"
   ],
   "window": {
     "backgroundTextStyle": "light",

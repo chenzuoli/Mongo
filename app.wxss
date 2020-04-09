@@ -1,6 +1,7 @@
 /**app.wxss**/
 @import "colorui/icon.wxss";
 @import "colorui/main.wxss";
+@import "aminate/aminate.wxss";
 
 .container {
   height: 100%;

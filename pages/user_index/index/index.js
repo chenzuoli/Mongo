@@ -172,27 +172,24 @@ Page({
     },
     update_pet_info: function () {
         wx.navigateTo({
-            url: '/pages/pet_index/info/index',
+            url: '/pages/pet_index/pet_list/pet_list',
             success: (result)=>{
-                console.log("跳转修改宠物信息页面成功")
+                console.log("跳转宠物信息列表页面成功")
             },
             fail: (err)=>{
-                console.log("跳转修改宠物信息页面失败")
+                console.log("跳转宠物信息列表页面失败")
                 console.log(err)
             },
             complete: ()=>{}
         });
     },
     service_protocol: async function () {
-        var that = this
-        await that.get_service_content()
-
         wx.navigateTo({
-            url: '../../protocol/protocol?content=' + that.data.service_content,
+            url: '../../protocol/protocol?content=service',
             success: (result) => {
                 console.log("跳转查看服务条例成功")
             },
-            fail: () => {
+            fail: (err) => {
                 console.log("跳转查看服务协议失败")
                 console.log(err)
             },
@@ -200,10 +197,8 @@ Page({
         });
     },
     private_protocol: async function () {
-        var that = this
-        await that.get_private_content()
         wx.navigateTo({
-            url: '../../protocol/protocol?content=' + that.data.private_content,
+            url: '../../protocol/protocol?content=private',
             success: (result) => {
                 console.log("跳转查看隐私协议成功")
             },
@@ -213,58 +208,5 @@ Page({
             },
             complete: () => { }
         });
-    },
-    get_service_content: function() {
-        var that = this
-        return new Promise((resolve, reject) => {
-            wx.request({
-                url: get_service_content,
-                data: {},
-                header: { 'content-type': 'application/json' },
-                method: 'post',
-                dataType: 'json',
-                responseType: 'text',
-                success: (result) => {
-                    console.log("获取服务条例成功")
-                    that.setData({
-                        service_content: result.data.data
-                    })
-                    resolve(result)
-                },
-                fail: (err) => {
-                    console.log("获取服务条例失败")
-                    console.log(err)
-                    reject(err)
-                },
-                complete: () => { }
-            });
-        })
-    },
-    get_private_content: function() {
-        var that = this
-        return new Promise((resolve, reject) => {
-            wx.request({
-                url: get_private_content,
-                data: {},
-                header: { 'content-type': 'application/json' },
-                method: 'post',
-                dataType: 'json',
-                responseType: 'text',
-                success: (result) => {
-                    console.log("获取隐私协议成功")
-                    that.setData({
-                        private_content: result.data.data
-                    })
-                    resolve(result)
-                },
-                fail: (err) => {
-                    console.log("获取隐私协议失败")
-                    console.log(err)
-                    reject(err)
-                },
-                complete: () => { }
-            });
-        })
     }
-
 })

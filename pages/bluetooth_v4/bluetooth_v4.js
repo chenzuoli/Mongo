@@ -78,7 +78,13 @@ Page({
       console.log("场景值：" + scene)
       this.get_device_info(scene)
     } else {
-      console.log("没有获取到scene场景值")
+      console.log("没有获取到scene场景值，尝试从内存中获取")
+      let device_id = wx.getStorageSync("device_id");
+      let device_name = wx.getStorageSync("device_name");
+      this.setData({
+        sceneDeviceId: device_id,
+        sceneDeviceName: device_name
+      })
     }
     if (wx.openBluetoothAdapter) {
       wx.openBluetoothAdapter()
@@ -133,18 +139,18 @@ Page({
       await api.hideLoading() // 等待请求数据成功后，隐藏loading
       return
     }
-    await that.openBluetoothAdapter(5)
-    await that.getBluetoothAdapterState(6)
-    await that.startBluetoothDevicesDiscovery(7)
-    await that.getConnectedBluetoothDevices(8)
-    await that.stopBluetoothDevicesDiscovery(9)
-    await that.connectTO(10)
-    await that.getBLEDeviceServices(11)
-    await that.getBLEDeviceCharacteristics(12)
-    await that.getDeviceBluetoothCommand(13)
-    await that.notifyBLECharacteristicValueChange(14)
-    await that.writeBLECharacteristicValue(15, command_type)
-    await that.closeBLEConnection(16)
+    await that.openBluetoothAdapter(3)
+    await that.getBluetoothAdapterState(4)
+    await that.startBluetoothDevicesDiscovery(5)
+    await that.getConnectedBluetoothDevices(6)
+    await that.stopBluetoothDevicesDiscovery(7)
+    await that.connectTO(8)
+    await that.getBLEDeviceServices(9)
+    await that.getBLEDeviceCharacteristics(10)
+    await that.getDeviceBluetoothCommand(11)
+    await that.notifyBLECharacteristicValueChange(12)
+    await that.writeBLECharacteristicValue(13, command_type)
+    await that.closeBLEConnection(14)
     // await api.hideLoading() // 等待请求数据成功后，隐藏loading
   },
   get_device_info: function (scene) {
@@ -164,6 +170,8 @@ Page({
             sceneDeviceId: res.data.data.device_id,
             sceneDeviceName: res.data.data.device_name
           })
+          wx.setStorageSync("device_id", res.data.data.device_id);
+          wx.setStorageSync("device_name", res.data.data.device_name);
         }
       },
       fail(err) {
@@ -214,7 +222,7 @@ Page({
             is_add: '1'
           })
           wx.navigateTo({
-            url: '../order_add/order_add?device_id=' + that.data.sceneDeviceId,
+            url: '../pet_index/pet_list/pet_list?device_id=' + that.data.sceneDeviceId,
           })
           resolve(res)
         }
