@@ -315,6 +315,10 @@ Page({
         success: function (res) {
           console.log("上传成功")
           console.log(res)
+          let result = JSON.parse(res.data)
+          that.setData({
+            avatar: result.data
+          })
           resolve(res)
         },
         fail: function (err) {

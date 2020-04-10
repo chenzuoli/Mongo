@@ -27,19 +27,19 @@ Page({
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom
   },
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
     return {
       title: '我的Mongo世界',
       path: '../map/map',
-      success: function(res) {
+      success: function (res) {
         console.log("转发成功") // 转发成功
       },
-      fail: function(res) {
+      fail: function (res) {
         // 转发失败
       }
     }
   },
-  onReady: function(e) {
+  onReady: function (e) {
     var that = this;
     wx.getLocation({
       type: 'location',
@@ -53,7 +53,7 @@ Page({
           latitude: lati
         })
       },
-      fail: function() {
+      fail: function () {
         console.log("获取位置失败");
       }
     })
@@ -63,7 +63,7 @@ Page({
     that.moveToLocation();
     // 获取屏幕宽高
     wx.getSystemInfo({
-      success: function(res) {
+      success: function (res) {
         W = res.windowWidth;
         H = res.windowHeight;
         // 根据屏幕宽高动态设置control 位置
@@ -103,35 +103,35 @@ Page({
           height: 50
         }
         controls = [{
-            id: 1,
-            iconPath: '../../images/location.png',
-            position: position1,
-            clickable: true
-          },
-          {
-            id: 2,
-            iconPath: '../../images/scantoopen.png',
-            position: position2,
-            clickable: true
-          },
-          {
-            id: 3,
-            iconPath: '../../images/warn.png',
-            position: position3,
-            clickable: true
-          },
-          {
-            id: 4,
-            iconPath: '../../images/avatar.png',
-            position: position4,
-            clickable: true
-          },
-          {
-            id: 5,
-            iconPath: '../../images/icon_center.png',
-            position: position5,
-            clickable: true
-          }
+          id: 1,
+          iconPath: '../../images/location.png',
+          position: position1,
+          clickable: true
+        },
+        {
+          id: 2,
+          iconPath: '../../images/scantoopen.png',
+          position: position2,
+          clickable: true
+        },
+        {
+          id: 3,
+          iconPath: '../../images/warn.png',
+          position: position3,
+          clickable: true
+        },
+        {
+          id: 4,
+          iconPath: '../../images/avatar.png',
+          position: position4,
+          clickable: true
+        },
+        {
+          id: 5,
+          iconPath: '../../images/icon_center.png',
+          position: position5,
+          clickable: true
+        }
         ]
         that.setData({
           controls: controls
@@ -140,50 +140,59 @@ Page({
     })
   },
   // 获取当前地图中心的经纬度，返回的是 gcj02 坐标系，可以用于 wx.openLocation
-  getCenterLocation: function() {
+  getCenterLocation: function () {
     var that = this;
     that.mapCtx.getCenterLocation({
-      success: function(res) {
+      success: function (res) {
         //获取中心位置坐标后向后台请求改坐标100米内的单车坐标
         //  向controls数组push数据
       }
     })
   },
   // 将地图中心移动到当前定位点，需要配合map组件的show-location使用
-  moveToLocation: function() {
+  moveToLocation: function () {
     this.mapCtx.moveToLocation()
   },
-  getLocation: function() {
+  getLocation: function () {
     wx.getLocation({
       type: 'gcj02',
-      success: function(res) {
+      success: function (res) {
         console.log(res.longitude)
         console.log(res.latitude)
       },
-      fail: function(res) {
+      fail: function (res) {
         console.log("获取位置失败")
       },
-      complete: function(res) {},
+      complete: function (res) { },
     })
   },
-  scanCode: function() {
-    var that = this;
+  scanCode: function () {
     wx.openBluetoothAdapter({
-      success: function(res) {
-        console.log("蓝牙开启成功！" + res)
+      success: function (res_blue) {
+        console.log("蓝牙开启成功！" + res_blue)
         wx.scanCode({
-          success: function(res) {
+          success: function (res_scan) {
+            console.log("扫码结果：")
+            console.log(res_scan)
             wx.showToast({
               title: '扫码成功',
               icon: 'success',
               duration: 1000
             })
-            console.log("扫码结果：" + res.scanResult)
-            that.setData({
-              scanResult: res.scanResult
-            })
+            wx.navigateTo({
+              url: "/" + res_scan.path,
+              success: (result) => {
+                console.log("扫码成功，并跳转成功")
+                console.log(result)
+              },
+              fail: (err) => {
+                console.log("扫码成功，但跳转失败")
+                console.log(err)
+              },
+              complete: () => { }
+            });
           },
-          fail: function(res) {
+          fail: function (res) {
             wx.showToast({
               title: '扫码失败',
               icon: 'warn',
@@ -192,7 +201,7 @@ Page({
           }
         })
       },
-      fail: function(err) {
+      fail: function (err) {
         console.log("蓝牙开启失败！")
         console.log(err)
         if (err.errCode == 10001) {
@@ -226,29 +235,29 @@ Page({
       this.toWallet();
     }
   },
-  toRedPacket: function() {
+  toRedPacket: function () {
     console.log("跳转")
     wx.navigateTo({
       url: '/pages/redPacket/redPacket'
     })
   },
-  toWallet: function() {
+  toWallet: function () {
     console.log("跳转")
     wx.navigateTo({
       url: '/pages/wallet/wallet'
     })
   },
-  warn: function() {
+  warn: function () {
     console.log("跳转")
     wx.navigateTo({
       url: '../warn/index'
     })
   },
-  onLoad: function(options) {
+  onLoad: function (options) {
     var that = this;
     wx.getLocation({
       type: "wgs84",
-      success: function(res) {
+      success: function (res) {
         // var latitude = res.latitude;
         // var longitude = res.longitude;
         // console.log(res.latitude);

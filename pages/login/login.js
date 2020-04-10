@@ -66,7 +66,6 @@ Page({
     })
   },
   onReady: function() {
-    const _this = this;
     wx.getLocation({
       type: 'location',
       success(res) {

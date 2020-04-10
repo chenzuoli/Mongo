@@ -1,6 +1,8 @@
 // pages/pet_index/pet_list/pet_list.js
 const app = getApp();
 var get_user_pets_url = 'https://wetech.top:7443/petcage/get_user_pets'
+var add_order = 'https://wetech.top:7443/petcage/add_order'
+
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
@@ -41,7 +43,7 @@ Page({
       isCard: e.detail.value
     })
   },
-  async desc_pet(e) {
+  async pet_desc(e) {
     var that = this
 
     console.log("点击宠物图片事件，携带参数：")
@@ -53,7 +55,8 @@ Page({
       navigate_url = '../../bluetooth_v4/bluetooth_v4?pet_id=' + pet_id
       await that.order_add(e)
     }
-    await that.to(navigate_url)
+    console.log("navigate to page: " + navigate_url)
+    that.to(navigate_url)
   },
   add_pet() {
     var that = this
@@ -97,9 +100,9 @@ Page({
               order_id: order_id
             })
             wx.setStorageSync('order_id', order_id)
-            wx.navigateBack({
-              delta: 1
-            })
+            // wx.navigateBack({
+            //   delta: 1
+            // })
           } else {
             console.log("创建订单失败")
             wx.showToast({
@@ -119,21 +122,24 @@ Page({
     })
   },
   to(navigate_url) {
-    return new Promise((resolve, reject) => {
-      wx.navigateTo({
-        url: navigate_url,
-        success: (result) => {
-          console.log("跳转宠物详细页面成功")
-          console.log(result)
-          resolve(result)
-        },
-        fail: (err) => {
-          console.log("跳转宠物详情页面失败")
-          console.log(err)
-          reject(err)
-        },
-        complete: () => { }
-      });
-    })
-  }
+    wx.navigateTo({
+      url: navigate_url,
+      success: (result) => {
+        console.log("跳转宠物详细页面成功")
+        console.log(result)
+      },
+      fail: (err) => {
+        console.log("跳转宠物详情页面失败")
+        console.log(err)
+      },
+      complete: () => { }
+    });
+  },
+  //用于生成uuid
+  s4: function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  },
+  guid: function () {
+    return (this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4());
+  },
 })

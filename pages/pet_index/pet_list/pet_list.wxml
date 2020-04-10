@@ -16,7 +16,7 @@
     <view class="cu-card case {{isCard?'no-card':''}}">
         <view class="cu-item shadow">
             <view class="image">
-                <image bindtap='desc_pet' data-id="{{pet}}" src="{{pet.avatar_url}}" mode="widthFix"></image>
+                <image bindtap='pet_desc' data-id="{{pet}}" src="{{pet.avatar_url}}" mode="widthFix"></image>
                 <view class="cu-tag bg-blue">{{pet.pet_type}}</view>
                 <view class="cu-bar bg-shadeBottom">
                     <text class="text-cut">{{pet.description}}</text>
