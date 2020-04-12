@@ -10,6 +10,7 @@ var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
 var get_petcage_order_by_open_id = 'https://wetech.top:7443/petcage/get_petcage_order_by_open_id'
 var close_order = 'https://wetech.top:7443/petcage/close_order'
 var get_device_info = 'https://wetech.top:7443/petcage/get_device_info'
+var get_device_power_volume = 'https://wetech.top:7443/petcage/get_device_power_volume'
 
 Page({
   data: {
@@ -41,6 +42,14 @@ Page({
   },
   ab2str: function (buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));
+  },
+  buf2string: function (buffer) {
+    var arr = Array.prototype.map.call(new Uint8Array(buffer), x => x)
+    var str = ''
+    for (var i = 0; i < arr.length; i++) {
+      str += String.fromCharCode(arr[i])
+    }
+    return str
   },
   str2ab: function (str) {
     var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
@@ -150,7 +159,9 @@ Page({
     await that.getDeviceBluetoothCommand(11)
     await that.notifyBLECharacteristicValueChange(12)
     await that.writeBLECharacteristicValue(13, command_type)
-    await that.closeBLEConnection(14)
+    await that.writeBLECharacteristicValue(14, 'kwh')
+    // await that.writeBLECharacteristicValue(15, 'disconnect')
+    await that.closeBLEConnection(16)
     // await api.hideLoading() // 等待请求数据成功后，隐藏loading
   },
   get_device_info: function (scene) {
@@ -559,7 +570,7 @@ Page({
         success: function (res) {
           console.log('notifyBLECharacteristicValueChange success', res.errMsg)
           wx.onBLECharacteristicValueChange(function (res) {
-            console.log('characteristic value comed:', that.ab2str(res.value))
+            console.log('characteristic value comed:', that.buf2string(res.value))
           })
           console.log(res)
           resolve(res)
@@ -604,7 +615,10 @@ Page({
           console.log('writeBLECharacteristicValue success', res.errMsg)
           // 这里的回调可以获取到 write 导致的特征值改变  
           wx.onBLECharacteristicValueChange(function (res) {
-            console.log('characteristic value comed:', that.ab2str(res.value))
+            console.log(res)
+            let encryptedStr = that.buf2string(res.value)
+            console.log('characteristic value comed:', encryptedStr)
+            that.get_device_power_volume(encryptedStr)
           })
 
           wx.showToast({
@@ -740,5 +754,29 @@ Page({
       })
       console.log(that.data)
     })
+  },
+  get_device_power_volume(encryptedStr) {
+    var that = this
+    wx.request({
+      url: get_device_power_volume,
+      data: {
+        dvname: that.data.sceneDeviceName,
+        encryptedStr: encryptedStr
+      },
+      header: { 'content-type': 'application/json' },
+      method: 'get',
+      dataType: 'json',
+      responseType: 'text',
+      success: (result) => {
+        console.log("请求url：" + get_device_power_volume + "?dvname=" + that.data.sceneDeviceName + "&encryptedStr=" + encryptedStr)
+        console.log("解密字符串成功：" + result)
+        console.log(result)
+      },
+      fail: (err) => {
+        console.log("解密字符串失败：")
+        console.log(err)
+      },
+      complete: () => { }
+    });
   }
 })
