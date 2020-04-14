@@ -84,7 +84,7 @@ Page({
   get_pet_info: function (pet_id) {
     var that = this
     return new Promise((resolve, reject) => {
-      var reqTask = wx.request({
+      wx.request({
         url: get_pet_info + "?id=" + pet_id,
         data: {},
         header: { 'content-type': 'application/json' },
@@ -304,6 +304,11 @@ Page({
         success: function (res) {
           console.log("上传成功")
           console.log(res)
+          let result = JSON.parse(res.data)
+          that.setData({
+            avatar: result.data
+          })
+          that.data.pet.avatar_url = result.data
           resolve(res)
         },
         fail: function (err) {

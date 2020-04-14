@@ -30,7 +30,8 @@ Page({
     avatar: "",
     pet_type: [],
     pet_variety: [],
-    device_id: ""
+    device_id: "",
+    pet_id: ""
   },
   onLoad: async function (options) {
     var that = this
@@ -376,8 +377,12 @@ Page({
         dataType: 'json',
         responseType: 'text',
         success: (result) => {
-          if (result.data.data > 0) {
+          if (result.data.status == '200') {
             console.log("添加宠物信息成功")
+            console.log("pet_id: " + result.data.data)
+            that.setData({
+              pet_id: result.data.data
+            })
           } else {
             console.log("添加宠物信息失败")
           }
@@ -401,7 +406,12 @@ Page({
     var order_id = that.guid()
     // 添加订单
     wx.request({
-      url: add_order + "?order_id=" + order_id + "&phone=" + e.detail.value.contact + "&open_id=" + open_id + "&device_id=" + that.data.device_id,
+      url: add_order + 
+        "?order_id=" + order_id + 
+        "&phone=" + e.detail.value.contact + 
+        "&open_id=" + open_id + 
+        "&device_id=" + that.data.device_id +
+        "&pet_id=" + that.data.pet_id,
       method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
         'content-type': 'application/json'

@@ -83,7 +83,12 @@ Page({
     // 添加订单
     return new Promise((resolve, reject) => {
       wx.request({
-        url: add_order + "?order_id=" + order_id + "&phone=" + e.currentTarget.dataset.id.contact + "&open_id=" + open_id + "&device_id=" + that.data.device_id,
+        url: add_order + 
+          "?order_id=" + order_id + 
+          "&phone=" + e.currentTarget.dataset.id.contact + 
+          "&open_id=" + open_id + 
+          "&device_id=" + that.data.device_id +
+          "&pet_id=" + e.currentTarget.dataset.id.id,
         method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
         header: {
           'content-type': 'application/json'
