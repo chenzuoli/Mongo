@@ -2,8 +2,8 @@
 // const regeneratorRuntime = require('../../lib/regenerator-runtime/runtime')
 var app = getApp();
 const api = app.globalData.api
-var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
-var get_access_token_url = 'https://wetech.top:7443/petcage/access_token';
+var get_service_id = 'https://localhost:7443/petcage/get_service_id'
+var get_access_token_url = 'https://localhost:7443/petcage/access_token';
 var get_qrcode_url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit'
 //获取应用实例  
 var app = getApp();

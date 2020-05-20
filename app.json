@@ -1,15 +1,13 @@
 {
   "pages": [
-    "pages/login/login",
-    "pages/bluetooth_v4/bluetooth_v4",
     "pages/feedback/feedback",
-    "pages/logs/logs",
+    "pages/bluetooth_v4/bluetooth_v4",
     "pages/map/map",
+    "pages/login/login",
+    "pages/logs/logs",
     "pages/order_add/order_add",
     "pages/register/register",
-    "pages/test/test",
     "pages/userInfo/userInfo",
-    "pages/verify_phone_number/verify_phone_number",
     "pages/wallet/wallet",
     "pages/warn/index",
     "pages/user_index/index/index",
@@ -22,7 +20,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#222",
-    "navigationBarTitleText": "Mongo世界",
+    "navigationBarTitleText": "皮皮笼",
     "navigationBarTextStyle": "white",
     "navigationStyle": "custom"
   },

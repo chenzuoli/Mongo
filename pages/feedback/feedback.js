@@ -1,22 +1,18 @@
 // pages/feedback/feedback.js
-var add_feedback_url = 'https://wetech.top:7443/petcage/add_feedback';
+var add_feedback_url = 'https://localhost:7443/petcage/add_feedback';
+var upload_file_url = 'https://localhost:7443/petcage/upload_file';
 const app = getApp();
 
 Page({
   data: {
     flag: 0,
-    noteMaxLen: 300, // 最多放多少字
     info: "",
-    noteNowLen: 0, //备注当前字数
     inputValue: {
       num: 0,
       desc: ""
     },
     actionText: "拍摄/相册",
     picUrls: [],
-    checkboxValues: [],
-    itemsValue: [],
-    btnColor: "#f2f2f2",
     latitude: "",
     longitude: "",
     order_id: "",
@@ -105,7 +101,7 @@ Page({
   changeNum: function (e) {
     this.setData({
       inputValue: {
-        num: e.detail.value,
+        num: wx.getStorageSync("device_id"),
         desc: this.data.inputValue.desc
       }
     })
@@ -121,10 +117,11 @@ Page({
   // 提交入库，清空当前值
   bindSubmit: async function () {
     var that = this;
+    console.log(that.data)
     console.log("获取用户位置")
     await that.getLocation()
-    console.log("上传图片返回七牛云图片http地址")
-    await that.uploadFile()
+    // console.log("上传图片返回七牛云图片http地址")
+    // await that.uploadFile()
     console.log("添加订单反馈")
     await that.addFeedback()
   },
@@ -188,13 +185,26 @@ Page({
       console.log("open_id: " + open_id)
       console.log(that.data)
       wx.request({
-        url: add_feedback_url + "?order_id=" + that.data.order_id + "&open_id=" + open_id + "&feedback_type=1&feedback_content=" + that.data.info + "&satisfy_grade=" + that.data.flag + "&pictures=" + that.data.picUrls.join(',') + "&latitude=" + that.data.latitude + "&longitude=" + that.data.longitude + "&petcage_id=" + that.data.inputValue.num + "&description=" + that.data.inputValue.desc,
+        url: add_feedback_url,
+        data: {
+          order_id: that.data.order_id,
+          open_id: open_id,
+          feedback_type: "1",
+          feedback_content: that.data.info,
+          satisfy_grade: that.data.flag,
+          pictures: that.data.picUrls.join(","),
+          latitude: that.data.latitude,
+          longitude: that.data.longitude,
+          petcage_id: that.data.inputValue.num,
+          description: that.data.inputValue.desc
+        },
         method: 'post', //定义传到后台接受的是post方法还是get方法
         header: {
-          'content-type': 'application/json' // 默认值
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": wx.getStorageSync("token")
         },
         success(res) {
-          if (res.data > 0) {
+          if (res.data.status == "200") {
             console.log("添加订单反馈信息成功")
             wx.navigateTo({
               url: '../map/map',
@@ -209,7 +219,6 @@ Page({
               success: function () {
                 that.setData({
                   info: '',
-                  noteNowLen: 0,
                   flag: 0
                 })
               }
@@ -232,7 +241,6 @@ Page({
         success: function () {
           that.setData({
             info: '',
-            noteNowLen: 0,
             flag: 0
           })
         }

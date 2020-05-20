@@ -1,36 +1,70 @@
 <!-- pages/warn/index.wxml -->
 <cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
   <view slot="backText">返回</view>
-  <view slot="content">故障报修</view>
+  <view slot="content">宠笼报修</view>
 </cu-custom>
-<view class="container">
-  <view class="choose">
-    <view class="title1">请选择故障种类</view>
-    <checkbox-group class="choose-grids" bindchange="checkboxChange">
-      <block wx:for="{{itemsValue}}" wx:key="{{item}}">
-        <view class="grids">
-          <checkbox value="{{item.value}}" checked="{{item.checked}}" />
-          {{item.value}}
+<scroll-view scroll-y="{{modalName==null}}" class="page {{modalName!=null?'show':''}}">
+
+  <view class="cu-form-group">
+    <image class="pipilong" src="../../images/pipilong.jpg"></image>
+  </view>
+  <view class="margin-top">
+    <form bindsubmit="submit">
+      <view class="cu-form-group margin-top">
+        <view class="title">请输入宠笼编码</view>
+        <input bindinput="changeNum" placeholder="" name='petcage_id'></input>
+      </view>
+
+      <view class="cu-form-group margin-top">
+        <view class="title">故障类型</view>
+      </view>
+      <checkbox-group bindchange="checkboxChange">
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">私锁私用</view>
+          <checkbox name="damage_type" class="round" value="1"></checkbox>
         </view>
-      </block>
-    </checkbox-group>
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">锁损坏</view>
+          <checkbox name="damage_type" class="round" value="2"></checkbox>
+        </view>
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">笼牌损坏</view>
+          <checkbox name="damage_type" class="round" value="3"></checkbox>
+        </view>
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">托盘损坏</view>
+          <checkbox name="damage_type" class="round" value="6"></checkbox>
+        </view>
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">笼子损坏</view>
+          <checkbox name="damage_type" class="round" value="4"></checkbox>
+        </view>
+        <view class="cu-form-group">
+          <view style="margin-left:10px;" class="title">其他故障</view>
+          <checkbox name="damage_type" class="round" value="5"></checkbox>
+        </view>
+      </checkbox-group>
+      <view class="cu-form-group margin-top">
+        <view class="title">拍摄宠笼周围环境，便于维修师傅找笼</view>
+      </view>
+      <view class="cu-form-group">
+        <view class="action">
+          <view class="action-photo">
+            <block wx:for="{{picUrls}}">
+              <image src="{{item}}">
+                <icon type="cancel" size="18" color="red" bindtap="delPhoto" data-index="{{index}}" />
+              </image>
+            </block>
+            <text class="add" bindtap="clickPhoto">{{actionText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="cu-form-group margin-top">
+        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="changeDesc" placeholder="请输入具体描述"></textarea>
+      </view>
+      <view class="cu-form-group margin-top">
+        <button class="btnSubmit" form-type="submit">提 交</button>
+      </view>
+    </form>
   </view>
-  <view class="action">
-    <view class="title2">拍摄宠笼周围环境，便于维修师傅找笼</view>
-    <view class="action-photo">
-      <block wx:for="{{picUrls}}">
-        <image src="{{item}}">
-          <icon type="cancel" size="18" color="red" bindtap="delPhoto" data-index="{{index}}" />
-        </image>
-      </block>
-      <text class="add" bindtap="clickPhoto">{{actionText}}</text>
-    </view>
-    <view class="action-input">
-      <input name="number" placeholder-class="placeholder-input" placeholder="笼牌号" bindinput="changeNum" />
-      <input name="desc" placeholder-class="placeholder-input" placeholder="备注" bindinput="changeDesc" />
-    </view>
-    <view class="action-submit">
-      <button name="submit" style="background-color:{{btnColor}}" bindtap="submit">提 交</button>
-    </view>
-  </view>
-</view>
+</scroll-view>

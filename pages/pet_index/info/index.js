@@ -1,10 +1,10 @@
 var util = require('../../../utils/util')
 const app = getApp();
-var get_user_info = 'https://wetech.top:7443/petcage/get_user_by_open_id'
-var get_pet_info = 'https://wetech.top:7443/petcage/get_pet_info'
-var get_dim_pet = 'https://wetech.top:7443/petcage/get_dim_pet'
-var update_user_pet = 'https://wetech.top:7443/petcage/update_user_pet'
-var upload_file_url = 'https://wetech.top:7443/petcage/upload_file'
+var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
+var get_pet_info = 'https://localhost:7443/petcage/get_pet_info'
+var get_dim_pet = 'https://localhost:7443/petcage/get_dim_pet'
+var update_user_pet = 'https://localhost:7443/petcage/update_user_pet'
+var upload_file_url = 'https://localhost:7443/petcage/upload_file'
 
 Page({
   data: {

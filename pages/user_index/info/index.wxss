@@ -13,3 +13,10 @@
   width: 130px;
   font-size: 30rpx;
 }
+
+.pipilong {
+  width: 180px;
+  justify-content: center;
+  margin-left: 70px;
+  margin-right: 70px;
+}

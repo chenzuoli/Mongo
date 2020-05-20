@@ -1,5 +1,5 @@
 const app = getApp();
-var get_user_info = 'https://wetech.top:7443/petcage/get_user_by_open_id'
+var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
@@ -74,11 +74,17 @@ Page({
   },
   get_user_info: function (open_id) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
-      var reqTask = wx.request({
-        url: get_user_info + "?open_id=" + open_id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+      wx.request({
+        url: get_user_info,
+        data: {
+          open_id: open_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+      },
         method: 'post',
         dataType: 'json',
         responseType: 'text',

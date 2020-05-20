@@ -5,10 +5,15 @@
 page {
   height: 100%;
   width: 100%;
-  background: linear-gradient(#6cf, #080);
-  /* background: linear-gradient(#39b54a, #8dc63f); */
   display: flex;
   flex-direction: column;
+}
+
+.pipilong {
+  width: 180px;
+  justify-content: center;
+  margin-left: 70px;
+  margin-right: 70px;
 }
 
 .button-hover {
@@ -77,11 +82,26 @@ button::after {
 }
 
 .link_wx {
-  margin-left: 105px;
-  margin-right: 105px;
-  margin-top: 150px;
-  color: #b8f3b6;
-  border: 1px solid #ccc;
-  background-color: inherit;
+  margin: 20px;
+  margin-right: 95px;
+  margin-left: 95px;
   font-size: 30rpx;
 }
+
+.btnSubmit {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 60px;
+  width: 100px;
+  font-size: 30rpx;
+}
+
+.register {
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 60px;
+  width: 100px;
+  font-size: 30rpx;
+}
+

@@ -1,9 +1,5 @@
 /* pages/bluetooth/bluetooth.wxss */
 
-page {
-  background: linear-gradient(#6cf, #080);
-}
-
 .content {
   margin: 0 10px;
 }
@@ -18,4 +14,19 @@ page {
   /* margin: 10px; */
   margin-top: 20px;
   width: 70%;
+}
+
+.pipilong {
+  width: 180px;
+  justify-content: center;
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
+.btnSubmit {
+  margin: 20px;
+  margin-left: 75px;
+  margin-right: 100px;
+  width: 130px;
+  font-size: 30rpx;
 }

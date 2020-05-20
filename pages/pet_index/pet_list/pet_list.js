@@ -1,7 +1,7 @@
 // pages/pet_index/pet_list/pet_list.js
 const app = getApp();
-var get_user_pets_url = 'https://wetech.top:7443/petcage/get_user_pets'
-var add_order = 'https://wetech.top:7443/petcage/add_order'
+var get_user_pets_url = 'https://localhost:7443/petcage/get_user_pets'
+var add_order = 'https://localhost:7443/petcage/add_order'
 
 Page({
   data: {
@@ -12,6 +12,7 @@ Page({
   },
   onLoad(options) {
     var that = this
+    let token = wx.getStorageSync("token");
 
     that.setData({
       device_id: options.device_id
@@ -22,9 +23,14 @@ Page({
     let open_id = wx.getStorageSync("open_id");
     console.log("open_id: " + open_id)
     wx.request({
-      url: get_user_pets_url + "?open_id=" + open_id,
-      data: {},
-      header: { 'content-type': 'application/json' },
+      url: get_user_pets_url,
+      data: {
+        open_id: open_id
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
       method: 'post',
       dataType: 'json',
       responseType: 'text',
@@ -74,25 +80,26 @@ Page({
   },
   order_add(e) {
     var that = this
-    console.log("选择已有宠物，添加订单：")
-    console.log(e)
     let open_id = wx.getStorageSync("open_id")
-    console.log("open_id: " + open_id)
+    let token = wx.getStorageSync("token");
 
     var order_id = that.guid()
     // 添加订单
     return new Promise((resolve, reject) => {
       wx.request({
-        url: add_order + 
-          "?order_id=" + order_id + 
-          "&phone=" + e.currentTarget.dataset.id.contact + 
-          "&open_id=" + open_id + 
-          "&device_id=" + that.data.device_id +
-          "&pet_id=" + e.currentTarget.dataset.id.id,
+        url: add_order,
         method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
         header: {
-          'content-type': 'application/json'
-        }, // 设置请求的 header
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
+        data: {
+          order_id: order_id,
+          phone: e.currentTarget.dataset.id.contact,
+          open_id: open_id,
+          device_id: that.data.device_id,
+          pet_id: e.currentTarget.dataset.id.id
+        },
         success(res) {
           if (res.data > 0) {
             console.log("创建订单成功")

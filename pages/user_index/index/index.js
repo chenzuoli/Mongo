@@ -1,8 +1,8 @@
 const app = getApp();
 
-var get_version_url = 'https://wetech.top:7443/petcage/get_app_version'
-var get_service_content = 'https://wetech.top:7443/petcage/get_service_content'
-var get_private_content = 'https://wetech.top:7443/petcage/get_private_content'
+var get_version_url = 'https://localhost:7443/petcage/get_app_version'
+var get_service_content = 'https://localhost:7443/petcage/get_service_content'
+var get_private_content = 'https://localhost:7443/petcage/get_private_content'
 
 Page({
     data: {
@@ -63,21 +63,49 @@ Page({
         skin: false,
         version: "1.0.0",
         service_content: "",
-        private_content: ""
+        private_content: "",
+        token: ""
     },
     onLoad() {
         var that = this
-        var reqTask = wx.request({
+        let token = wx.getStorageSync("token");
+        console.log(token)
+        if (token == '') {
+            wx.showModal({
+                title: '请先登录',
+                content: '',
+                confirmText: '去登录',
+                cancelText: '返回',
+                success: (res) => {
+                    if (res.confirm) {
+                        wx.navigateTo({
+                            url: '../../login/login'
+                        });
+                    } else {
+                        wx.navigateBack({
+                            delta: 1
+                        })
+                    }
+                }
+            })
+
+        }
+        wx.request({
             url: get_version_url,
             data: {},
-            header: { 'content-type': 'application/json' },
+            header: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "token": token
+            },
             method: 'post',
             dataType: 'json',
             responseType: 'text',
             success: (result) => {
-                that.setData({
-                    version: result.data.data
-                })
+                if (result.data.status == "200") {
+                    that.setData({
+                        version: result.data.data
+                    })
+                }
             },
             fail: (err) => {
                 console.log("请求获取app版本号失败")
@@ -160,27 +188,27 @@ Page({
     update_user_info: function () {
         wx.navigateTo({
             url: '../info/index',
-            success: (result)=>{
+            success: (result) => {
                 console.log("跳转修改用户信息页面成功")
             },
-            fail: (err)=>{
+            fail: (err) => {
                 console.log("跳转修改用户信息页面失败")
                 console.log(err)
             },
-            complete: ()=>{}
+            complete: () => { }
         });
     },
     update_pet_info: function () {
         wx.navigateTo({
             url: '/pages/pet_index/pet_list/pet_list',
-            success: (result)=>{
+            success: (result) => {
                 console.log("跳转宠物信息列表页面成功")
             },
-            fail: (err)=>{
+            fail: (err) => {
                 console.log("跳转宠物信息列表页面失败")
                 console.log(err)
             },
-            complete: ()=>{}
+            complete: () => { }
         });
     },
     service_protocol: async function () {

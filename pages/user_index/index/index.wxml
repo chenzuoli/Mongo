@@ -1,8 +1,11 @@
 <cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
     <view slot="backText">返回</view>
-    <view slot="content">设置</view>
+    <view slot="content">用户中心</view>
 </cu-custom>
 <scroll-view scroll-y="{{modalName==null}}" class="page {{modalName!=null?'show':''}}">
+    <view class="cu-form-group">
+        <image class="pipilong" src="../../../images/pipilong.jpg"></image>
+    </view>
     <view class="margin-top">
         <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
             <view class="cu-item {{menuArrow?'arrow':''}}">

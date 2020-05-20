@@ -2,7 +2,7 @@
 
 const api = require('./api/api.js')
 
-var login_url = 'https://wetech.top:7443/petcage/open_id'
+var login_url = 'https://localhost:7443/petcage/open_id'
 
 function promisify(api) {
   return (opt, ...arg) => {
@@ -43,10 +43,10 @@ App({
       success: res => {
         console.log("js_code: " + res.code)
         wx.request({
-          url: login_url + "?js_code=" + res.code,
+          url: login_url,
           method: 'POST',
           header: {
-            'content-type': 'application/json' // 默认值
+            "Content-Type": "application/x-www-form-urlencoded"
           },
           data: {
             js_code: res.code
@@ -87,31 +87,6 @@ App({
         }
       }
     })
-
-    var isFirst = wx.getStorageSync('isFirst')
-    if (isFirst) {
-      wx.navigateTo({
-        url: '/pages/map/map',
-      })
-    } else {
-      wx.navigateTo({
-        // url: '/pages/login/login'
-        // url: '/pages/map/map'
-        // url: '/pages/userInfo/userInfo'
-        // url: '/pages/bluetooth_v2/bluetooth_v2'
-        // url: '/pages/bluetooth_v3/bluetooth_v3'
-        url: '/pages/bluetooth_v4/bluetooth_v4'
-        // url: '/pages/log/log'
-        // url: '/pages/verify_phone_number/verify_phone_number'
-        // url: '/pages/test/test'
-        // url: '/pages/order_add/order_add'
-        // url: '/pages/warn/index'
-        // url: '/pages/feedback/feedback'
-        // url: '/pages/register/register'
-        // url: '/pages/wallet/wallet'
-        // url: '/pages/user_index/index/index'
-      })
-    }
   },
   getUserInfo: function (cb) {
     var that = this

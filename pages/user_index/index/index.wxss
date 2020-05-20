@@ -3,6 +3,13 @@
   width: 100vw;
 }
 
+.pipilong {
+  width: 180px;
+  justify-content: center;
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
 .page.show {
   overflow: hidden;
 }

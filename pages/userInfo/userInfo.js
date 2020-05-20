@@ -1,8 +1,8 @@
 var OPEN_ID = '' //储存获取到open_id 
 var SESSION_KEY = '' //储存获取到session_key
 var UNION_Id = ''
-var get_open_id_url = 'https://wetech.top:7443/petcage/open_id'
-var get_phone_number = 'http://wetech.top:7443/petcage/index/users/decodePhone'
+var get_open_id_url = 'https://localhost:7443/petcage/open_id'
+var get_phone_number = 'http://localhost:7443/petcage/index/users/decodePhone'
 const app = getApp()
 
 Page({

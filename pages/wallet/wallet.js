@@ -1,5 +1,5 @@
 // pages/wallet/wallet.js
-var get_user_wallet_url = 'https://wetech.top:7443/petcage/get_user_wallet'
+var get_user_wallet_url = 'https://localhost:7443/petcage/get_user_wallet'
 const app = getApp()
 
 Page({

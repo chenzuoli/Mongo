@@ -3,7 +3,7 @@ var controls;
 var position1, position2, position3, position4, position5;
 var W = 0;
 var H = 0;
-var device_locations_url = 'https://wetech.top:7443/petcage/getDeviceLocations';
+var device_locations_url = 'https://localhost:7443/petcage/get_device_location';
 const app = getApp()
 // 位置信息
 var lati, longi;
@@ -25,11 +25,12 @@ Page({
     controls: controls,
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom
+    Custom: app.globalData.Custom,
+    token: ""
   },
   onShareAppMessage: function () {
     return {
-      title: '我的Mongo世界',
+      title: '皮皮笼',
       path: '../map/map',
       success: function (res) {
         console.log("转发成功") // 转发成功
@@ -39,24 +40,18 @@ Page({
       }
     }
   },
+  onLoad: async function (options) {
+    var that = this;
+    var token = wx.getStorageSync("token");
+    that.setData({
+      token: token
+    })
+    await that.getLocation()
+    await that.getDeviceLocation()
+  },
   onReady: function (e) {
     var that = this;
-    wx.getLocation({
-      type: 'location',
-      success(res) {
-        console.log(res)
-        lati = res.latitude
-        longi = res.longitude
-        console.log('用户经纬度：' + lati + ',' + longi)
-        that.setData({
-          longitude: longi,
-          latitude: lati
-        })
-      },
-      fail: function () {
-        console.log("获取位置失败");
-      }
-    })
+
     // 使用 wx.createMapContext 获取 map 上下文
     that.mapCtx = wx.createMapContext('myMap');
     // 初始化移动到目前定位地
@@ -69,38 +64,38 @@ Page({
         // 根据屏幕宽高动态设置control 位置
         // 定位当前位置
         position1 = {
-          left: W * .05,
-          top: H - 85,
-          width: 60,
-          height: 60
+          left: W * .95 - 30,
+          top: H - 250,
+          width: 30,
+          height: 30
         }
         // 扫码开锁
         position2 = {
-          left: W * .5 - 75,
+          left: W * .5 - 125,
           top: H - 85,
-          width: 150,
-          height: 55
+          width: 250,
+          height: 40
         }
-        // 我的红包
+        // 报修
         position3 = {
-          left: W * .95 - 60,
-          top: H - 160,
-          width: 60,
-          height: 60
+          left: W * .95 - 30,
+          top: H - 200,
+          width: 30,
+          height: 30
         }
-        // 我的钱包
+        // 我的
         position4 = {
-          left: W * .95 - 60,
-          top: H - 85,
-          width: 60,
-          height: 60
+          left: W * .95 - 30,
+          top: H - 150,
+          width: 30,
+          height: 30
         }
         // 窗口中心
         position5 = {
           left: W * .5 - 25,
           top: H * .5 - 25,
-          width: 50,
-          height: 50
+          width: 40,
+          height: 40
         }
         controls = [{
           id: 1,
@@ -110,19 +105,19 @@ Page({
         },
         {
           id: 2,
-          iconPath: '../../images/scantoopen.png',
+          iconPath: '../../images/scan.jpeg',
           position: position2,
           clickable: true
         },
         {
           id: 3,
-          iconPath: '../../images/warn.png',
+          iconPath: '../../images/repair.png',
           position: position3,
           clickable: true
         },
         {
           id: 4,
-          iconPath: '../../images/avatar.png',
+          iconPath: '../../images/user.png',
           position: position4,
           clickable: true
         },
@@ -153,19 +148,7 @@ Page({
   moveToLocation: function () {
     this.mapCtx.moveToLocation()
   },
-  getLocation: function () {
-    wx.getLocation({
-      type: 'gcj02',
-      success: function (res) {
-        console.log(res.longitude)
-        console.log(res.latitude)
-      },
-      fail: function (res) {
-        console.log("获取位置失败")
-      },
-      complete: function (res) { },
-    })
-  },
+
   scanCode: function () {
     wx.openBluetoothAdapter({
       success: function (res_blue) {
@@ -235,16 +218,10 @@ Page({
       this.toWallet();
     }
   },
-  toRedPacket: function () {
-    console.log("跳转")
-    wx.navigateTo({
-      url: '/pages/redPacket/redPacket'
-    })
-  },
   toWallet: function () {
     console.log("跳转")
     wx.navigateTo({
-      url: '/pages/wallet/wallet'
+      url: '../user_index/index/index'
     })
   },
   warn: function () {
@@ -253,68 +230,83 @@ Page({
       url: '../warn/index'
     })
   },
-  onLoad: function (options) {
-    var that = this;
-    wx.getLocation({
-      type: "wgs84",
-      success: function (res) {
-        // var latitude = res.latitude;
-        // var longitude = res.longitude;
-        // console.log(res.latitude);
-        that.setData({
-          latitude: res.latitude,
-          longitude: res.longitude,
-          markers: [{
+  getLocation: function () {
+    var that = this
+    return new Promise((resolve, reject) => {
+      wx.getLocation({
+        type: "wgs84",
+        success: function (res) {
+          that.setData({
             latitude: res.latitude,
-            longitude: res.longitude
-          }]
-        })
-      }
-    })
-    wx.request({
-      url: device_locations_url,
-      method: 'post', //定义传到后台接受的是post方法还是get方法
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        //传入的参数
-        longitude: longi,
-        latitude: lati,
-      },
-      success: (res) => {
-        // console.log(res)
-        let boxMsg = res.data
-        console.log(boxMsg)
-        //这里是关键 ， 循环出来有多少接口数据，往data里的数组里追加
-        for (var i = 0; i < boxMsg.length; i++) {
-          let id = boxMsg[i].id
-          let device_id = boxMsg[i].device_id
-          let boxlatitude = boxMsg[i].latitude
-          let boxlongitude = boxMsg[i].longitude
-          var info = {
-            id: 0,
-            iconPath: "../../images/022-house.png",
-            latitude: '',
-            longitude: '',
-            width: 25,
-            height: 25,
-            title: "",
-          };
-          info.id = id
-          info.latitude = boxlatitude
-          info.longitude = boxlongitude
-          info.title = device_id
-          markers.push(info);
-          this.setData({
-            latitude: boxMsg[i].latitude,
-            longitude: boxMsg[i].longitude
+            longitude: res.longitude,
+            markers: [{
+              latitude: res.latitude,
+              longitude: res.longitude
+            }]
           })
+          resolve(res)
+        },
+        fail: function (err) {
+          reject(err)
         }
-        this.setData({
-          markers: markers
-        })
-      }
+      })
     })
+
+  },
+  getDeviceLocation: function () {
+    var that = this
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: device_locations_url,
+        method: 'post', //定义传到后台接受的是post方法还是get方法
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": that.data.token
+        },
+        data: {
+          //传入的参数
+          longitude: longi,
+          latitude: lati,
+        },
+        success: (res) => {
+          // console.log(res)
+          let boxMsg = res.data
+          console.log(boxMsg)
+          //这里是关键 ， 循环出来有多少接口数据，往data里的数组里追加
+          for (var i = 0; i < boxMsg.length; i++) {
+            let id = boxMsg[i].id
+            let device_id = boxMsg[i].device_id
+            let boxlatitude = boxMsg[i].latitude
+            let boxlongitude = boxMsg[i].longitude
+            var info = {
+              id: 0,
+              iconPath: "../../images/022-house.png",
+              latitude: '',
+              longitude: '',
+              width: 25,
+              height: 25,
+              title: "",
+            };
+            info.id = id
+            info.latitude = boxlatitude
+            info.longitude = boxlongitude
+            info.title = device_id
+            markers.push(info);
+            this.setData({
+              latitude: boxMsg[i].latitude,
+              longitude: boxMsg[i].longitude
+            })
+          }
+          this.setData({
+            markers: markers
+          })
+          resolve(res)
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+
   }
 })

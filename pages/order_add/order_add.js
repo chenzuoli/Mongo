@@ -1,7 +1,7 @@
 // pages/order_add/order_add.js
 
-var add_pet = 'https://wetech.top:7443/petcage/add_pet'
-var add_order = 'https://wetech.top:7443/petcage/add_order'
+var add_pet = 'https://localhost:7443/petcage/add_pet'
+var add_order = 'https://localhost:7443/petcage/add_order'
 
 //获取应用实例
 const app = getApp();

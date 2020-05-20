@@ -5,12 +5,12 @@ var app = getApp();
 var prom = require("../../utils/prom.js")
 const api = app.globalData.api
 
-var get_device_bluetooth_command = 'https://wetech.top:7443/petcage/get_device_bluetooth_command'
-var get_service_id = 'https://wetech.top:7443/petcage/get_service_id'
-var get_petcage_order_by_open_id = 'https://wetech.top:7443/petcage/get_petcage_order_by_open_id'
-var close_order = 'https://wetech.top:7443/petcage/close_order'
-var get_device_info = 'https://wetech.top:7443/petcage/get_device_info'
-var get_device_power_volume = 'https://wetech.top:7443/petcage/get_device_power_volume'
+var get_device_bluetooth_command = 'https://localhost:7443/petcage/get_device_bluetooth_command'
+var get_service_id = 'https://localhost:7443/petcage/get_service_id'
+var get_petcage_order_by_open_id = 'https://localhost:7443/petcage/get_petcage_order_by_open_id'
+var close_order = 'https://localhost:7443/petcage/close_order'
+var get_device_info = 'https://localhost:7443/petcage/get_device_info'
+var get_device_power_volume = 'https://localhost:7443/petcage/get_device_power_volume'
 
 Page({
   data: {

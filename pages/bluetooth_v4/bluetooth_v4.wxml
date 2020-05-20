@@ -3,13 +3,22 @@
   <view slot="backText">返回</view>
   <view slot="content">蓝牙开锁</view>
 </cu-custom>
-<view class="content">
-  <text class="status">设备名称：{{ sceneDeviceName }}</text>
-  <button type="primary" class="button" bindtap="send_receive" data-command='open'>开锁</button>
-  <button type="primary" class="button" bindtap="send_receive" data-command='close' hidden='{{hidden}}'>
-    关锁
-  </button>
-  <button type="primary" class="button" bindtap="send_receive" data-command='settle' hidden='{{hidden}}'>
-    结账
-  </button>
-</view>
+<scroll-view scroll-y="{{modalName==null}}" class="page {{modalName!=null?'show':''}}">
+  <view class="cu-form-group">
+    <image class="pipilong" src="../../images/pipilong.jpg"></image>
+  </view>
+  <view class="cu-form-group margin-top">
+    <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+      <view class="content margin-top">
+        <text class="status">设备名称：{{ sceneDeviceName }}</text>
+        <button class="btnSubmit" bindtap="send_receive" data-command='open'>开锁</button>
+        <button class="btnSubmit" bindtap="send_receive" data-command='close' hidden='{{hidden}}'>
+          关锁
+        </button>
+        <button class="btnSubmit" bindtap="send_receive" data-command='settle' hidden='{{hidden}}'>
+          结账
+        </button>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,11 +1,11 @@
 var util = require('../../../utils/util')
 const app = getApp();
-var get_user_info = 'https://wetech.top:7443/petcage/get_user_by_open_id'
-var get_pet_info = 'https://wetech.top:7443/petcage/get_pet_info'
-var get_dim_pet = 'https://wetech.top:7443/petcage/get_dim_pet'
-var add_user_pet = 'https://wetech.top:7443/petcage/add_user_pet'
-var upload_file_url = 'https://wetech.top:7443/petcage/upload_file'
-var add_order = 'https://wetech.top:7443/petcage/add_order'
+var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
+var get_pet_info = 'https://localhost:7443/petcage/get_pet_info'
+var get_dim_pet = 'https://localhost:7443/petcage/get_dim_pet'
+var add_user_pet = 'https://localhost:7443/petcage/add_user_pet'
+var upload_file_url = 'https://localhost:7443/petcage/upload_file'
+var add_order = 'https://localhost:7443/petcage/add_order'
 
 Page({
   data: {
@@ -57,16 +57,21 @@ Page({
   },
   get_user_info: function (open_id) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
-      var reqTask = wx.request({
-        url: get_user_info + "?open_id=" + open_id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+      wx.request({
+        url: get_user_info,
+        data: {
+          open_id: open_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
         success: (result) => {
-          console.log(result)
           that.setData({
             nick_name: result.data.data.nick_name,
             phone: result.data.data.phone,
@@ -75,8 +80,6 @@ Page({
           resolve(result)
         },
         fail: (err) => {
-          console.log("请求获取用户信息失败。")
-          console.log(err)
           reject(err)
         },
         complete: () => { }
@@ -85,26 +88,28 @@ Page({
   },
   get_pet_info: function (pet_id) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
-      var reqTask = wx.request({
-        url: get_pet_info + "?id=" + pet_id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+      wx.request({
+        url: get_pet_info,
+        data: {
+          id: pet_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
         success: (result) => {
-          console.log(result)
           that.setData({
             pet: result.data.data,
             avatar: result.data.data.avatar_url
           })
-          console.log(that.data)
           resolve(result)
         },
         fail: (err) => {
-          console.log("请求获取用户信息失败。")
-          console.log(err)
           reject(err)
         },
         complete: () => { }
@@ -113,22 +118,24 @@ Page({
   },
   get_dim_pet: function () {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.request({
         url: get_dim_pet,
         data: {},
-        header: { 'content-type': 'application/json' },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
         success: (result) => {
-          console.log(result)
           var pets = result.data.data
           var pet_type = []
           var pet_variety = []
           for (var i = 0; i < pets.length; i++) {
             if (pet_type.indexOf(pets[i].pet_type) == -1) {
-              console.log("pet variety: " + pet_variety)
               if (i != 0) {
                 that.data.pet_variety.push(pet_variety)
               }
@@ -139,16 +146,12 @@ Page({
           }
           that.data.pet_variety.push(pet_variety)
           that.data.pet_type = pet_type
-          console.log(that.data.pet_type)
-          console.log(that.data.pet_variety)
           that.setData({
             multiArray: [pet_type, that.data.pet_variety[0]]
           })
           resolve(result)
         },
         fail: (err) => {
-          console.log("获取宠物维表失败")
-          console.log(err)
           reject(err)
         },
         complete: () => { }
@@ -173,12 +176,8 @@ Page({
     }
     that.data.pet.type_index = type_index
     that.data.pet.variety_index = variety_index
-    console.log("此宠物属于：" + that.data.multiArray[0][type_index])
-    console.log("此宠物是：" + that.data.multiArray[1][variety_index])
-    console.log(that.data.pet)
   },
   PickerChange(e) {
-    console.log(e);
     this.setData({
       index: e.detail.value
     })
@@ -357,22 +356,26 @@ Page({
       return
     }
     let open_id = wx.getStorageSync("open_id");
-    console.log("open_id: " + open_id)
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       var gender = e.detail.value.gender == "true" ? "1" : '0'
       wx.request({
-        url: add_user_pet +
-          "?open_id=" + open_id +
-          "&contact=" + e.detail.value.contact +
-          "&pet_type=" + that.data.pet_type[e.detail.value.type_variety[0]] +
-          "&variety=" + that.data.multiArray[1][e.detail.value.type_variety[1]] +
-          "&nick_name=" + e.detail.value.nick_name +
-          "&gender=" + gender +
-          "&birthday=" + e.detail.value.birthday +
-          "&avatar_url=" + that.data.avatar +
-          "&description=" + e.detail.value.description,
-        data: {},
-        header: { 'content-type': 'application/json' },
+        url: add_user_pet,
+        data: {
+          open_id: open_id,
+          contact: e.detail.value.contact,
+          pet_type: that.data.pet_type[e.detail.value.type_variety[0]],
+          variety: that.data.multiArray[1][e.detail.value.type_variety[1]],
+          nick_name: e.detail.value.nick_name,
+          gender: gender,
+          birthday: e.detail.value.birthday,
+          avatar_url: that.data.avatar,
+          description: e.detail.value.description
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
@@ -390,8 +393,6 @@ Page({
           resolve(result)
         },
         fail: (err) => {
-          console.log(err)
-          console.log("添加宠物信息失败")
           reject(err)
         },
         complete: () => { }
@@ -401,24 +402,26 @@ Page({
   order_add(e) {
     var that = this
     let open_id = wx.getStorageSync("open_id")
-    console.log("open_id: " + open_id)
+    let token = wx.getStorageSync("token");
 
     var order_id = that.guid()
     // 添加订单
     wx.request({
-      url: add_order + 
-        "?order_id=" + order_id + 
-        "&phone=" + e.detail.value.contact + 
-        "&open_id=" + open_id + 
-        "&device_id=" + that.data.device_id +
-        "&pet_id=" + that.data.pet_id,
+      url: add_order,
       method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
+      data: {
+        order_id: order_id,
+        phone: e.detail.value.contact,
+        open_id: open_id,
+        device_id: that.data.device_id,
+        pet_id: that.data.pet_id
+      },
       success(res) {
         if (res.data > 0) {
-          console.log("创建订单成功")
           // 把订单id带回上一页
           var pages = getCurrentPages();
           var currPage = pages[pages.length - 1]; //当前页面
@@ -432,7 +435,6 @@ Page({
             delta: 1
           })
         } else {
-          console.log("创建订单失败")
           wx.showToast({
             title: '服务器错误，请重试！',
             icon: 'warn',

@@ -1,9 +1,9 @@
 //index.js
 var zhenzisms = require('../../utils/zhenzisms.js');
-var get_code_url = 'https://wetech.top:7443/smsCode'
-var register_url = 'https://wetech.top:7443/register'
-var wx_login_url = "https://wetech.top:7443/petcage/wx_login"
-var get_service_private_content = 'https://wetech.top:7443/petcage/get_service_private_content'
+var get_code_url = 'https://localhost:7443/petcage/smsCode'
+var register_url = 'https://localhost:7443/petcage/register'
+var wx_login_url = "https://localhost:7443/petcage/wx_login"
+var get_service_private_content = 'https://localhost:7443/petcage/get_service_private_content'
 
 //获取应用实例
 const app = getApp();
@@ -183,7 +183,6 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   },
   //手机号输入
   bindPhoneInput(e) {
-    console.log(e.detail.value);
     var val = e.detail.value;
     this.setData({
       phone: val
@@ -199,6 +198,13 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
       })
     }
   },
+  //密码
+  bindPwdInput(e) {
+    var val = e.detail.value;
+    this.setData({
+      pwd: val
+    })
+  },
   //验证码输入
   bindCodeInput(e) {
     this.setData({
@@ -207,7 +213,6 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   },
   //获取短信验证码
   getCode(e) {
-    console.log('获取验证码');
     var that = this;
     wx.request({
       url: this.get_code_url,
@@ -225,7 +230,6 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
           icon: 'success',
           duration: 1000
         })
-        console.log('服务器返回: ' + res.data);
         if (res.data == 0) {
           that.timer();
           return;
@@ -269,11 +273,10 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
     })
   },
   //保存
-  async save(e) {
+  save(e) {
     var that = this
-    console.log('姓名: ' + this.data.name);
     console.log('手机号: ' + this.data.phone);
-    console.log('验证码: ' + this.data.code);
+    console.log('密码: ' + this.data.pwd);
 
     // 展示服务条例与隐私协议
     // await that.show_service_private_content()
@@ -281,7 +284,7 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
       return
     }
     //注册，请求后台
-    await that.register()
+    that.register()
   },
   get_service_private_content() {
     var that = this
@@ -337,49 +340,53 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   },
   register() {
     var that = this
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: '',
-        data: {
-          phone: this.data.phone,
-          sms_code: this.data.code
-        },
-        method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-        header: {
-          'content-type': 'application/json'
-        }, // 设置请求的 header
-        success: function (res) {
+    wx.request({
+      url: register_url,
+      data: {
+        phone: that.data.phone,
+        pwd: that.data.pwd
+      },
+      method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }, // 设置请求的 header
+      success: function (res) {
+        console.log(res)
+        if (res.data.status == '200') {
+          wx.setStorageSync("token", res.data.data);
+          wx.setStorageSync("phone", that.data.phone);
           // success
           wx.showToast({
             title: '注册成功',
             icon: 'success',
             duration: 1000
           })
-          console.log('服务器返回' + res.data);
+          console.log('服务器返回:' + res.data);
           wx.navigateTo({
-            url: '../login/login',
+            url: '../map/map',
           })
-          resolve(res)
-        },
-        fail: function (err) {
-          // fail
+        } else {
           wx.showToast({
-            title: '注册失败',
+            title: res.data.message,
             icon: 'warn',
             duration: 1000
           })
-          console.log("注册失败")
-          console.log(err)
-          reject(err)
-        },
-      })
+        }
+      },
+      fail: function (err) {
+        // fail
+        wx.showToast({
+          title: '注册失败',
+          icon: 'warn',
+          duration: 1000
+        })
+        console.log("注册失败")
+        console.log(err)
+      },
     })
   },
-  onGotUserInfo: async function (e) {
+  onGotUserInfo: function (e) {
     var that = this;
-    console.log(e.detail.errMsg)
-    console.log(e.detail.userInfo)
-    console.log(e.detail.rawData)
     that.setData({
       rawData: e.detail.rawData,
       userInfo: e.detail.userInfo
@@ -390,60 +397,59 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
       return
     }
     // 注册
-    await that.login()
+    that.wx_login()
+  },
+  wx_login: function () {
+    var that = this
+    wx.login({
+      success(res) {
+        wx.request({
+          url: wx_login_url,
+          data: {
+            js_code: res.code,
+            rawData: that.data.rawData
+          },
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          method: 'get', //定义传到后台接受的是post方法还是get方法
+          success(res) {
+            wx.showToast({
+              title: '登录成功',
+              icon: "success",
+              duration: 1000
+            })
+            wx.setStorageSync("token", res.data.data.token)
+            wx.navigateTo({
+              url: '../map/map',
+            })
+          },
+          fail(err) {
+            wx.showToast({
+              title: '登录失败',
+              icon: "warn",
+              duration: 1000
+            })
+          }
+        })
+      },
+      fail(err) {
+        wx.showToast({
+          title: '登录失败',
+          icon: "warn",
+          duration: 1000
+        })
+      }
+    })
   },
   login: function () {
-    var that = this
-    return new Promise((resolve, reject) => {
-      wx.login({
-        success(res) {
-          console.log(that.data.rawData)
-          console.log(that.data.userInfo)
-          wx.request({
-            url: wx_login_url,
-            data: {
-              js_code: res.code,
-              rawData: that.data.rawData
-            },
-            success(res) {
-              console.log("注册成功")
-              wx.showToast({
-                title: '注册成功',
-                icon: "success",
-                duration: 1000
-              })
-              wx.navigateTo({
-                url: '../login/login',
-              })
-            },
-            fail(err) {
-              console.log("注册失败")
-              wx.showToast({
-                title: '注册失败',
-                icon: "warn",
-                duration: 1000
-              })
-            }
-          })
-          resolve(res)
-        },
-        fail(err) {
-          console.log("注册失败")
-          console.log(err)
-          wx.showToast({
-            title: '注册失败',
-            icon: "warn",
-            duration: 1000
-          })
-          reject(err)
-        }
-      })
+    wx.navigateTo({
+      url: '../login/login'
     })
   },
   // 点击取消按钮的回调函数
   modalCancel(e) {
     // 这里面处理点击取消按钮业务逻辑
-    console.log('点击了取消，跳回登录页')
     wx.navigateTo({
       url: '../login/login'
     })
@@ -452,7 +458,6 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   modalConfirm(e) {
     var that = this
     // 这里面处理点击确定按钮业务逻辑
-    console.log('点击了确定，继续填写注册信息。')
     that.setData({
       is_agree: "1"
     })

@@ -164,11 +164,15 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
 
     get_service_content: function() {
         var that = this
+        let token = wx.getStorageSync("token");
         return new Promise((resolve, reject) => {
             wx.request({
                 url: get_service_content,
                 data: {},
-                header: { 'content-type': 'application/json' },
+                header: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "token": token
+                },
                 method: 'post',
                 dataType: 'json',
                 responseType: 'text',
@@ -190,11 +194,15 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
     },
     get_private_content: function() {
         var that = this
+        let token = wx.getStorageSync("token");
         return new Promise((resolve, reject) => {
             wx.request({
                 url: get_private_content,
                 data: {},
-                header: { 'content-type': 'application/json' },
+                header: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "token": token
+                },
                 method: 'post',
                 dataType: 'json',
                 responseType: 'text',
