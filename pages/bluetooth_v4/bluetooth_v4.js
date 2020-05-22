@@ -2,7 +2,6 @@
 
 //获取应用实例  
 var app = getApp();
-var prom = require("../../utils/prom.js")
 const api = app.globalData.api
 
 var get_device_bluetooth_command = 'https://localhost:7443/petcage/get_device_bluetooth_command'
@@ -11,6 +10,7 @@ var get_petcage_order_by_open_id = 'https://localhost:7443/petcage/get_petcage_o
 var close_order = 'https://localhost:7443/petcage/close_order'
 var get_device_info = 'https://localhost:7443/petcage/get_device_info'
 var get_device_power_volume = 'https://localhost:7443/petcage/get_device_power_volume'
+var get_petcage_status_url = "https://localhost:7443/petcage/get_petcage_status"
 
 Page({
   data: {
@@ -36,6 +36,7 @@ Page({
     service_id: "",
     order_id: "",
     is_add: "0",
+    is_used: false,
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom
@@ -121,6 +122,9 @@ Page({
       console.log("关锁中...")
       await that.send_command('close')
       console.log("关锁完成...")
+      // 修改订单状态
+      await that.close_order("1")
+      console.log("结算完成...")
     } else if (command_type == 'settle') {
       console.log("结算中...")
       await that.send_command('close')
@@ -143,6 +147,23 @@ Page({
     var that = this
     await api.showLoading() // 显示loading
     await that.get_service_id(1) // 请求数据
+    await that.check() // 检查笼子是否已经使用中
+    if (is_used) {
+      await api.hideLoading()
+      wx.showToast({
+        title: '宠笼正在使用中',
+        icon: 'none',
+        image: '',
+        duration: 3000,
+        mask: false,
+        success: (result) => {
+
+        },
+        fail: () => { },
+        complete: () => { }
+      });
+      return
+    }
     await that.get_petcage_order_by_open_id(2)
     if (that.data.is_add == '1') {
       await api.hideLoading() // 等待请求数据成功后，隐藏loading
@@ -167,10 +188,14 @@ Page({
   get_device_info: function (scene) {
     var that = this
     wx.request({
-      url: get_device_info + "?id=" + scene,
+      url: get_device_info,
+      data: {
+        id: scene
+      },
       method: 'POST',
       header: {
-        'content-type': 'application/json' // 默认值
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": wx.getStorageSync("token")
       },
       success(res) {
         console.log(res)
@@ -189,6 +214,33 @@ Page({
         console.log("根据场景id获取设备信息失败，请求失败")
         console.log(err)
       }
+    })
+  },
+  check: function () {
+    var that = this
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: get_petcage_status_url,
+        data: {
+          device_id: that.data.sceneDeviceId
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": wx.getStorageSync("token")
+        },
+        method: 'post',
+        dataType: 'json',
+        responseType: 'text',
+        success: (result) => {
+          if (result.data.status != "200") {
+            that.setData({
+              is_used: true
+            })
+          }
+        },
+        fail: () => { },
+        complete: () => { }
+      });
     })
   },
   get_service_id(e) {
@@ -217,7 +269,7 @@ Page({
     let open_id = wx.getStorageSync("open_id")
     console.log("open_id: " + open_id)
     return new Promise((resolve, reject) => {
-      api.postData(get_petcage_order_by_open_id + "?open_id=" + open_id, {
+      api.postData(get_petcage_order_by_open_id, {
         open_id: open_id
       }).then((res) => {
         console.log(res.data)
@@ -524,13 +576,14 @@ Page({
     console.log(e)
     return new Promise((resolve, reject) => {
       wx.request({
-        url: get_device_bluetooth_command + "?dvname=" + that.data.sceneDeviceName,
+        url: get_device_bluetooth_command,
         data: {
           dvname: that.data.sceneDeviceName
         },
         method: 'post', //定义传到后台接受的是post方法还是get方法
         header: {
-          'content-type': 'application/json' // 默认值
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": wx.getStorageSync("token")
         },
         success: function (res) {
           console.log(res.data)
@@ -718,10 +771,16 @@ Page({
       let open_id = wx.getStorageSync("open_id")
       console.log("open_id: " + open_id)
       wx.request({
-        url: close_order + "?amount=" + pay_amount + "&open_id=" + open_id + "&order_id=" + that.data.order_id,
+        url: close_order,
+        data: {
+          amount: pay_amount,
+          open_id: open_id,
+          order_id: that.data.order_id
+        },
         method: 'post', //定义传到后台接受的是post方法还是get方法
         header: {
-          'content-type': 'application/json' // 默认值
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": wx.getStorageSync("token")
         },
         success(res) {
           if (res.data > 0) {
@@ -763,7 +822,10 @@ Page({
         dvname: that.data.sceneDeviceName,
         encryptedStr: encryptedStr
       },
-      header: { 'content-type': 'application/json' },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": wx.getStorageSync("token")
+      },
       method: 'get',
       dataType: 'json',
       responseType: 'text',

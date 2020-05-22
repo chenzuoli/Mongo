@@ -4,6 +4,10 @@ const getData = (url, param) => {
     wx.request({
       url: url,
       method: 'GET',
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": wx.getStorageSync("token")
+      },
       data: param,
       success(res) {
         console.log(res)
@@ -24,6 +28,10 @@ const postData = (url, param) => {
       url: url,
       method: 'POST',
       data: param,
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": wx.getStorageSync("token")
+      },
       success(res) {
         console.log(res)
         resolve(res.data)

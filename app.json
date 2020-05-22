@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/map/map",
     "pages/feedback/feedback",
     "pages/bluetooth_v4/bluetooth_v4",
-    "pages/map/map",
     "pages/login/login",
     "pages/logs/logs",
     "pages/order_add/order_add",
