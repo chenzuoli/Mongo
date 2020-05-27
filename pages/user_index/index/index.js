@@ -1,8 +1,8 @@
 const app = getApp();
 
-var get_version_url = 'https://localhost:7443/petcage/get_app_version'
-var get_service_content = 'https://localhost:7443/petcage/get_service_content'
-var get_private_content = 'https://localhost:7443/petcage/get_private_content'
+var get_version_url = 'https://pipilong.pet:7443/petcage/get_app_version'
+var get_service_content = 'https://pipilong.pet:7443/petcage/get_service_content'
+var get_private_content = 'https://pipilong.pet:7443/petcage/get_private_content'
 
 Page({
     data: {
@@ -88,7 +88,6 @@ Page({
                     }
                 }
             })
-
         }
         wx.request({
             url: get_version_url,
@@ -101,9 +100,28 @@ Page({
             dataType: 'json',
             responseType: 'text',
             success: (result) => {
+                console.log(result.data)
                 if (result.data.status == "200") {
                     that.setData({
                         version: result.data.data
+                    })
+                } else {
+                    wx.showModal({
+                        title: '请先登录',
+                        content: '',
+                        confirmText: '去登录',
+                        cancelText: '返回',
+                        success: (res) => {
+                            if (res.confirm) {
+                                wx.navigateTo({
+                                    url: '../../login/login'
+                                });
+                            } else {
+                                wx.navigateBack({
+                                    delta: 1
+                                })
+                            }
+                        }
                     })
                 }
             },

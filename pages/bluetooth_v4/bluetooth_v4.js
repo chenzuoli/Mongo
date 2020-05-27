@@ -4,13 +4,13 @@
 var app = getApp();
 const api = app.globalData.api
 
-var get_device_bluetooth_command = 'https://localhost:7443/petcage/get_device_bluetooth_command'
-var get_service_id = 'https://localhost:7443/petcage/get_service_id'
-var get_petcage_order_by_open_id = 'https://localhost:7443/petcage/get_petcage_order_by_open_id'
-var close_order = 'https://localhost:7443/petcage/close_order'
-var get_device_info = 'https://localhost:7443/petcage/get_device_info'
-var get_device_power_volume = 'https://localhost:7443/petcage/get_device_power_volume'
-var get_petcage_status_url = "https://localhost:7443/petcage/get_petcage_status"
+var get_device_bluetooth_command = 'https://pipilong.pet:7443/petcage/get_device_bluetooth_command'
+var get_service_id = 'https://pipilong.pet:7443/petcage/get_service_id'
+var get_petcage_order_by_open_id = 'https://pipilong.pet:7443/petcage/get_petcage_order_by_open_id'
+var close_order = 'https://pipilong.pet:7443/petcage/close_order'
+var get_device_info = 'https://pipilong.pet:7443/petcage/get_device_info'
+var get_device_power_volume = 'https://pipilong.pet:7443/petcage/get_device_power_volume'
+var get_petcage_status_url = "https://pipilong.pet:7443/petcage/get_petcage_status"
 
 Page({
   data: {

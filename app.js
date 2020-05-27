@@ -2,7 +2,7 @@
 
 const api = require('./api/api.js')
 
-var login_url = 'https://localhost:7443/petcage/open_id'
+var login_url = 'https://pipilong.pet:7443/petcage/open_id'
 
 function promisify(api) {
   return (opt, ...arg) => {

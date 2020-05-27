@@ -1,6 +1,6 @@
 // pages/login/login.js
-var wx_login_url = "https://localhost:7443/petcage/wx_login"
-var login_url = 'https://localhost:7443/petcage/login'
+var wx_login_url = "https://pipilong.pet:7443/petcage/wx_login"
+var login_url = 'https://pipilong.pet:7443/petcage/login'
 const app = getApp()
 
 Page({

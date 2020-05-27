@@ -1,5 +1,5 @@
 const app = getApp();
-var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
+var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,

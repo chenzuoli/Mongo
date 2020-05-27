@@ -1,7 +1,7 @@
 // pages/pet_index/pet_list/pet_list.js
 const app = getApp();
-var get_user_pets_url = 'https://localhost:7443/petcage/get_user_pets'
-var add_order = 'https://localhost:7443/petcage/add_order'
+var get_user_pets_url = 'https://pipilong.pet:7443/petcage/get_user_pets'
+var add_order = 'https://pipilong.pet:7443/petcage/add_order'
 
 Page({
   data: {

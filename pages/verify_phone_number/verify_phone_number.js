@@ -1,8 +1,8 @@
 // pages/verify_phone_number/verify_phone_number.js
 var zhenzisms = require('../../utils/zhenzisms.js');
-var get_code_url = 'https://localhost:7443/petcage/smsCode'
-var register_url = 'https://localhost:7443/petcage/register'
-var wx_login_url = "https://localhost:7443/petcage/wx_login"
+var get_code_url = 'https://pipilong.pet:7443/petcage/smsCode'
+var register_url = 'https://pipilong.pet:7443/petcage/register'
+var wx_login_url = "https://pipilong.pet:7443/petcage/wx_login"
 
 //获取应用实例
 const app = getApp();
@@ -53,6 +53,7 @@ Page({
   getCode(e) {
     console.log('获取验证码');
     var that = this;
+    let token = wx.getStorageSync("token");
     wx.request({
       url: this.get_code_url,
       data: {
@@ -60,8 +61,9 @@ Page({
       },
       method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
       success: function(res) {
         // success
         wx.showToast({
@@ -116,6 +118,7 @@ Page({
   save(e) {
     console.log('手机号: ' + this.data.phone);
     console.log('验证码: ' + this.data.code);
+    let token = wx.getStorageSync("token");
     //注册，请求后台
     wx.request({
       url: '',
@@ -125,8 +128,9 @@ Page({
       },
       method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
       success: function(res) {
         // success
         wx.showToast({

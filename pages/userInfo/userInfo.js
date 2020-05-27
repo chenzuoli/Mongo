@@ -1,8 +1,8 @@
 var OPEN_ID = '' //储存获取到open_id 
 var SESSION_KEY = '' //储存获取到session_key
 var UNION_Id = ''
-var get_open_id_url = 'https://localhost:7443/petcage/open_id'
-var get_phone_number = 'http://localhost:7443/petcage/index/users/decodePhone'
+var get_open_id_url = 'https://pipilong.pet:7443/petcage/open_id'
+var get_phone_number = 'http://pipilong.pet:7443/petcage/index/users/decodePhone'
 const app = getApp()
 
 Page({
@@ -19,17 +19,19 @@ Page({
   },
   getOpenIdTap: function() {
     var that = this;
+    let token = wx.getStorageSync("token");
     wx.login({
       success: function(res) {
         console.log(res)
         wx.request({
-          url: get_open_id_url + '?js_code=' + res.code,
+          url: get_open_id_url,
           data: {
             js_code: res.code
           },
           method: 'POST',
           header: {
-            'content-type': 'application/json'
+            "Content-Type": "application/x-www-form-urlencoded",
+            "token": token
           },
           success: function(res) {
             if (res.statusCode == 200) {

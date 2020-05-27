@@ -1,5 +1,5 @@
 // pages/wallet/wallet.js
-var get_user_wallet_url = 'https://localhost:7443/petcage/get_user_wallet'
+var get_user_wallet_url = 'https://pipilong.pet:7443/petcage/get_user_wallet'
 const app = getApp()
 
 Page({
@@ -48,6 +48,7 @@ Page({
   onLoad: function (options) {
     var that = this
     let open_id = wx.getStorageSync("open_id")
+    let token = wx.getStorageSync("token");
     console.log("open_id: " + open_id)
     wx.request({
       url: get_user_wallet_url + "?open_id=" + open_id,
@@ -56,7 +57,8 @@ Page({
       },
       method: 'post', //定义传到后台接受的是post方法还是get方法
       header: {
-        'content-type': 'application/json' // 默认值
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
       },
       success: function (res) {
         console.log("获取用户钱包成功：")

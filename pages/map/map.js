@@ -3,7 +3,7 @@ var controls;
 var position1, position2, position3, position4, position5;
 var W = 0;
 var H = 0;
-var device_locations_url = 'https://localhost:7443/petcage/get_device_location';
+var device_locations_url = 'https://pipilong.pet:7443/petcage/get_device_location';
 const app = getApp()
 // 位置信息
 var lati, longi;

@@ -1,7 +1,7 @@
 // pages/order_add/order_add.js
 
-var add_pet = 'https://localhost:7443/petcage/add_pet'
-var add_order = 'https://localhost:7443/petcage/add_order'
+var add_pet = 'https://pipilong.pet:7443/petcage/add_pet'
+var add_order = 'https://pipilong.pet:7443/petcage/add_order'
 
 //获取应用实例
 const app = getApp();
@@ -97,23 +97,26 @@ Page({
 
     let open_id = wx.getStorageSync("open_id")
     console.log("open_id: " + open_id)
+    let token = wx.getStorageSync("token");
 
     //添加宠物，请求后台
     var order_id = that.guid()
     wx.request({
-      url: add_pet + "?order_id=" + order_id + "&contact=" + that.data.pet_contact + "&pet_type=" + that.data.pet_type + "&variety=" + that.data.pet_variety + "&nick_name=" + that.data.pet_nick_name + "&gender=" + that.data.pet_gender + "&age=" + that.data.pet_birthday,
+      url: add_pet,
       data: {
-        order_id: this.guid(),
-        pet_type: this.data.pet_type,
-        variety: this.data.pet_variety,
-        nick_name: this.data.pet_nick_name,
-        gender: this.data.pet_gender,
-        age: this.data.pet_birthday
+        order_id: that.guid(),
+        contact: that.data.pet_contact,
+        pet_type: that.data.pet_type,
+        variety: that.data.pet_variety,
+        nick_name: that.data.pet_nick_name,
+        gender: that.data.pet_gender,
+        age: that.data.pet_birthday
       },
       method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
       success: function(res) {
         if (res.data > 0) {
           // success
@@ -154,11 +157,18 @@ Page({
 
     // 添加订单
     wx.request({
-      url: add_order + "?order_id=" + order_id + "&phone=" + that.data.pet_contact + "&open_id=" + open_id + "&device_id=" + that.data.device_id,
+      url: add_order,
       method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
+      data: {
+        order_id: order_id,
+        phone: that.data.pet_contact,
+        open_id: open_id,
+        device_id: that.data.device_id
+      },
       success(res) {
         if (res.data > 0) {
           console.log("创建订单成功")

@@ -1,11 +1,11 @@
 var util = require('../../../utils/util')
 const app = getApp();
-var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
-var get_pet_info = 'https://localhost:7443/petcage/get_pet_info'
-var get_dim_pet = 'https://localhost:7443/petcage/get_dim_pet'
-var add_user_pet = 'https://localhost:7443/petcage/add_user_pet'
-var upload_file_url = 'https://localhost:7443/petcage/upload_file'
-var add_order = 'https://localhost:7443/petcage/add_order'
+var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
+var get_pet_info = 'https://pipilong.pet:7443/petcage/get_pet_info'
+var get_dim_pet = 'https://pipilong.pet:7443/petcage/get_dim_pet'
+var add_user_pet = 'https://pipilong.pet:7443/petcage/add_user_pet'
+var upload_file_url = 'https://pipilong.pet:7443/petcage/upload_file'
+var add_order = 'https://pipilong.pet:7443/petcage/add_order'
 
 Page({
   data: {
@@ -289,9 +289,9 @@ Page({
     var that = this
     console.log('form发生了submit事件，携带数据为：', e)
     // 上传图像到七牛云
-    if (that.data.avatar != null) {
-      await that.upload()
-    }
+    // if (that.data.avatar != null) {
+      // await that.upload()
+    // }
 
     // 添加
     await that.pet_add(e)
@@ -337,7 +337,7 @@ Page({
     console.log('宠物昵称: ' + e.detail.value.nick_name);
     console.log('宠物性别: ' + e.detail.value.gender);
     console.log('宠物出生日期: ' + e.detail.value.birthday);
-    if (!that.data.pet_type[e.detail.value.type_variety[0]] || !e.detail.value.contact) {
+    if (that.data.pet_type[e.detail.value.type_variety[0]] && e.detail.value.contact) {
       wx.showModal({
         title: '请填写宠物类型和宠物联系人',
         content: '',

@@ -1,9 +1,9 @@
 //index.js
 var zhenzisms = require('../../utils/zhenzisms.js');
-var get_code_url = 'https://localhost:7443/petcage/smsCode'
-var register_url = 'https://localhost:7443/petcage/register'
-var wx_login_url = "https://localhost:7443/petcage/wx_login"
-var get_service_private_content = 'https://localhost:7443/petcage/get_service_private_content'
+var get_code_url = 'https://pipilong.pet:7443/petcage/smsCode'
+var register_url = 'https://pipilong.pet:7443/petcage/register'
+var wx_login_url = "https://pipilong.pet:7443/petcage/wx_login"
+var get_service_private_content = 'https://pipilong.pet:7443/petcage/get_service_private_content'
 
 //获取应用实例
 const app = getApp();
@@ -214,15 +214,17 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   //获取短信验证码
   getCode(e) {
     var that = this;
+    let token = wx.getStorageSync("token");
     wx.request({
-      url: this.get_code_url,
+      url: that.get_code_url,
       data: {
         phone: that.phone
       },
       method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       header: {
-        'content-type': 'application/json'
-      }, // 设置请求的 header
+        "Content-Type": "application/x-www-form-urlencoded",
+        "token": token
+      },
       success: function (res) {
         // success
         wx.showToast({
@@ -288,13 +290,15 @@ c.	【对自己行为负责】您充分了解并同意，您必须为自己注�
   },
   get_service_private_content() {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.request({
         url: get_service_private_content,
         method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
         header: {
-          'content-type': 'application/json'
-        }, // 设置请求的 header
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         success(res) {
           console.log("获取服务条例与隐私协议成功")
           that.setData({

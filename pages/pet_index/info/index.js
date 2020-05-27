@@ -1,10 +1,10 @@
 var util = require('../../../utils/util')
 const app = getApp();
-var get_user_info = 'https://localhost:7443/petcage/get_user_by_open_id'
-var get_pet_info = 'https://localhost:7443/petcage/get_pet_info'
-var get_dim_pet = 'https://localhost:7443/petcage/get_dim_pet'
-var update_user_pet = 'https://localhost:7443/petcage/update_user_pet'
-var upload_file_url = 'https://localhost:7443/petcage/upload_file'
+var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
+var get_pet_info = 'https://pipilong.pet:7443/petcage/get_pet_info'
+var get_dim_pet = 'https://pipilong.pet:7443/petcage/get_dim_pet'
+var update_user_pet = 'https://pipilong.pet:7443/petcage/update_user_pet'
+var upload_file_url = 'https://pipilong.pet:7443/petcage/upload_file'
 
 Page({
   data: {
@@ -55,11 +55,17 @@ Page({
   },
   get_user_info: function (open_id) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       var reqTask = wx.request({
-        url: get_user_info + "?open_id=" + open_id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+        url: get_user_info,
+        data: {
+          open_id: open_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
@@ -83,11 +89,17 @@ Page({
   },
   get_pet_info: function (pet_id) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.request({
-        url: get_pet_info + "?id=" + pet_id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+        url: get_pet_info,
+        data: {
+          id: pet_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
@@ -111,11 +123,15 @@ Page({
   },
   get_dim_pet: function () {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.request({
         url: get_dim_pet,
         data: {},
-        header: { 'content-type': 'application/json' },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
@@ -280,9 +296,9 @@ Page({
     var that = this
     console.log('form发生了submit事件，携带数据为：', e)
     // 上传图像到七牛云
-    if (that.data.avatar != null) {
-      await that.upload()
-    }
+    // if (that.data.avatar != null) {
+    //   await that.upload()
+    // }
 
     // 更新
     await that.update(e)
@@ -321,6 +337,7 @@ Page({
   },
   update(e) {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       if (e.detail.value.contact != '') {
         that.data.pet.contact = e.detail.value.contact
@@ -336,18 +353,22 @@ Page({
         that.data.pet.description = e.detail.value.description
       }
       wx.request({
-        url: update_user_pet +
-          "?contact=" + that.data.pet.contact +
-          "&pet_type=" + that.data.pet.pet_type +
-          "&variety=" + that.data.pet.variety +
-          "&nick_name=" + that.data.pet.nick_name +
-          "&gender=" + that.data.pet.gender +
-          "&birthday=" + that.data.pet.birthday +
-          "&avatar_url=" + that.data.pet.avatar_url +
-          "&description=" + that.data.pet.description +
-          "&id=" + that.data.pet.id,
-        data: {},
-        header: { 'content-type': 'application/json' },
+        url: update_user_pet,
+        data: {
+          contact: that.data.pet.contact,
+          pet_type: that.data.pet.pet_type,
+          variety: that.data.pet.variety,
+          nick_name: that.data.pet.nick_name,
+          gender: that.data.pet.gender,
+          birthday: that.data.pet.birthday,
+          avatar_url: that.data.pet.avatar_url,
+          description: that.data.pet.description,
+          id: that.data.pet.id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
