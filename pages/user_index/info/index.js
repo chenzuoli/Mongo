@@ -1,5 +1,6 @@
 const app = getApp();
 var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
+var update_user_info = "https://localhost:7443/petcage/update_user_info"
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
@@ -63,7 +64,9 @@ Page({
     nick_name: '',
     phone: '',
     avatar: '',
-    gender: false
+    gender: false,
+    province: "",
+    city: ""
   },
   onLoad: async function () {
     var that = this
@@ -84,7 +87,7 @@ Page({
         header: {
           "Content-Type": "application/x-www-form-urlencoded",
           "token": token
-      },
+        },
         method: 'post',
         dataType: 'json',
         responseType: 'text',
@@ -248,24 +251,78 @@ Page({
     })
   },
   submit: function (e) {
+    var that = this
     console.log('form发生了submit事件，携带数据为：', e)
-    this.setData({
-      allValue: e.detail.value
+    that.setData({
+      phone: e.detail.value.phone,
+      nick_name: e.detail.value.nick_name,
+      gender: e.detail.value.gender,
+      province: e.detail.value.region[0],
+      city: e.detail.value.region[1]
     })
-    wx.showToast({
-      title: '更新成功',
-      icon: 'success',
-      image: '',
-      duration: 1500,
-      mask: false,
-      success: (result)=>{
+    that.updateUser()
+  },
+  updateUser: function () {
+    var that = this
+    let token = wx.getStorageSync("token");
+    let open_id = wx.getStorageSync("open_id");
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: update_user_info,
+        data: {
+          open_id: open_id,
+          avatar_url: that.data.imgList[0],
+          phone: that.data.phone,
+          nick_name: that.data.nick_name,
+          gender: that.data.gender,
+          province: that.data.province,
+          city: that.data.city
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
+        method: 'post',
+        dataType: 'json',
+        responseType: 'text',
+        success: (result) => {
+          if(result.data.status == "200") {
+            wx.showToast({
+              title: '更新成功',
+              icon: 'success',
+              image: '',
+              duration: 1500,
+              mask: false,
+              success: (result) => {
         
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
-    wx.navigateBack({
-      delta: 1
-    });
+              },
+              fail: () => { },
+              complete: () => { }
+            });
+            wx.navigateBack({
+              delta: 1
+            });
+          } else {
+            wx.showToast({
+              title: result.data.message,
+              icon: 'warn',
+              image: '',
+              duration: 1500,
+              mask: false,
+              success: (result) => {
+        
+              },
+              fail: () => { },
+              complete: () => { }
+            });
+          }
+          resolve(result)
+        },
+        fail: (err) => {
+          reject(err)
+        },
+        complete: () => { }
+      });
+    })
   }
 })

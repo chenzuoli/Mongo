@@ -11,13 +11,13 @@
             <view class="cu-item {{menuArrow?'arrow':''}}">
                 <view class="content">
                     <text class="cuIcon-people text-grey"></text>
-                    <text class="text-grey" bindtap="update_user_info">修改个人信息</text>
+                    <text class="text-grey" bindtap="update_user_info">个人信息</text>
                 </view>
             </view>
             <view class="cu-item {{menuArrow?'arrow':''}}">
                 <view class="content">
                     <text class="cuIcon-emoji text-grey"></text>
-                    <text class="text-grey" bindtap='update_pet_info'>修改宠物信息</text>
+                    <text class="text-grey" bindtap='update_pet_info'>宠物信息</text>
                 </view>
             </view>
             <view class="cu-item {{menuArrow?'arrow':''}}">

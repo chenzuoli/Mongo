@@ -1,6 +1,6 @@
 <cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
 				<view slot="backText">返回</view>
-				<view slot="content">更改宠物信息</view>
+				<view slot="content">宠物信息</view>
 </cu-custom>
 <scroll-view scroll-y="{{modalName==null}}" class="page {{modalName!=null?'show':''}}">
 				<view class="cu-form-group">
