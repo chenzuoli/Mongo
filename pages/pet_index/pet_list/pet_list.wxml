@@ -9,7 +9,10 @@
     </view>
     <view class="margin-top">
         <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
-            <view class="cu-bar bg-white solid-bottom">
+            <view class="cu-form-group margin-top">
+                <view class="title" bindtap="login">{{login_status}}</view>
+            </view>
+            <view class="cu-form-group cu-bar bg-white solid-bottom">
                 <view class='action'>
                     <text class='cuIcon-titles text-orange '></text>
                     我的宠物们

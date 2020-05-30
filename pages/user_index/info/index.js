@@ -1,6 +1,6 @@
 const app = getApp();
 var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
-var update_user_info = "https://localhost:7443/petcage/update_user_info"
+var update_user_info = "https://pipilong.pet:7443/petcage/update_user_info"
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
@@ -288,7 +288,7 @@ Page({
         dataType: 'json',
         responseType: 'text',
         success: (result) => {
-          if(result.data.status == "200") {
+          if (result.data.status == "200") {
             wx.showToast({
               title: '更新成功',
               icon: 'success',
@@ -296,7 +296,7 @@ Page({
               duration: 1500,
               mask: false,
               success: (result) => {
-        
+
               },
               fail: () => { },
               complete: () => { }
@@ -312,7 +312,7 @@ Page({
               duration: 1500,
               mask: false,
               success: (result) => {
-        
+
               },
               fail: () => { },
               complete: () => { }
@@ -327,14 +327,14 @@ Page({
       });
     })
   },
-  login: function() {
+  login: function () {
     wx.navigateTo({
       url: '../../login/login',
-      success: (result)=>{
-        
+      success: (result) => {
+
       },
-      fail: ()=>{},
-      complete: ()=>{}
+      fail: () => { },
+      complete: () => { }
     });
   }
 })

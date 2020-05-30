@@ -2,13 +2,15 @@
 const app = getApp();
 var get_user_pets_url = 'https://pipilong.pet:7443/petcage/get_user_pets'
 var add_order = 'https://pipilong.pet:7443/petcage/add_order'
+var get_user_info = 'https://pipilong.pet:7443/petcage/get_user_by_open_id'
 
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     pets: [],
-    device_id: ""
+    device_id: "",
+    login_status: "点击登录"
   },
   onLoad(options) {
     var that = this
@@ -43,6 +45,7 @@ Page({
       fail: () => { },
       complete: () => { }
     });
+    that.get_user_info()
   },
   isCard(e) {
     this.setData({
@@ -153,5 +156,48 @@ Page({
   },
   guid: function () {
     return (this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4());
+  },
+  login: function () {
+    wx.navigateTo({
+      url: '../../login/login',
+      success: (result) => {
+
+      },
+      fail: () => { },
+      complete: () => { }
+    });
+  },
+  get_user_info: function () {
+    var that = this
+    let token = wx.getStorageSync("token");
+    let open_id = wx.getStorageSync("open_id");
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: get_user_info,
+        data: {
+          open_id: open_id
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "token": token
+        },
+        method: 'post',
+        dataType: 'json',
+        responseType: 'text',
+        success: (result) => {
+          console.log(result)
+          that.setData({
+            login_status: "你好 " + result.data.data.nick_name
+          })
+          resolve(result)
+        },
+        fail: (err) => {
+          console.log("请求获取用户信息失败。")
+          console.log(err)
+          reject(err)
+        },
+        complete: () => { }
+      });
+    })
   },
 })
