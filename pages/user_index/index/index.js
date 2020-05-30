@@ -67,70 +67,70 @@ Page({
         token: ""
     },
     onLoad() {
-        var that = this
-        let token = wx.getStorageSync("token");
-        console.log(token)
-        if (token == '') {
-            wx.showModal({
-                title: '请先登录',
-                content: '',
-                confirmText: '去登录',
-                cancelText: '返回',
-                success: (res) => {
-                    if (res.confirm) {
-                        wx.navigateTo({
-                            url: '../../login/login'
-                        });
-                    } else {
-                        wx.navigateBack({
-                            delta: 1
-                        })
-                    }
-                }
-            })
-        }
-        wx.request({
-            url: get_version_url,
-            data: {},
-            header: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "token": token
-            },
-            method: 'post',
-            dataType: 'json',
-            responseType: 'text',
-            success: (result) => {
-                console.log(result.data)
-                if (result.data.status == "200") {
-                    that.setData({
-                        version: result.data.data
-                    })
-                } else {
-                    wx.showModal({
-                        title: '请先登录',
-                        content: '',
-                        confirmText: '去登录',
-                        cancelText: '返回',
-                        success: (res) => {
-                            if (res.confirm) {
-                                wx.navigateTo({
-                                    url: '../../login/login'
-                                });
-                            } else {
-                                wx.navigateBack({
-                                    delta: 1
-                                })
-                            }
-                        }
-                    })
-                }
-            },
-            fail: (err) => {
-                console.log("请求获取app版本号失败")
-                console.log(err)
-            },
-            complete: () => { }
-        });
+        // var that = this
+        // let token = wx.getStorageSync("token");
+        // console.log(token)
+        // if (token == '') {
+        //     wx.showModal({
+        //         title: '请先登录',
+        //         content: '',
+        //         confirmText: '去登录',
+        //         cancelText: '返回',
+        //         success: (res) => {
+        //             if (res.confirm) {
+        //                 wx.navigateTo({
+        //                     url: '../../login/login'
+        //                 });
+        //             } else {
+        //                 wx.navigateBack({
+        //                     delta: 1
+        //                 })
+        //             }
+        //         }
+        //     })
+        // }
+        // wx.request({
+        //     url: get_version_url,
+        //     data: {},
+        //     header: {
+        //         "Content-Type": "application/x-www-form-urlencoded",
+        //         "token": token
+        //     },
+        //     method: 'post',
+        //     dataType: 'json',
+        //     responseType: 'text',
+        //     success: (result) => {
+        //         console.log(result.data)
+        //         if (result.data.status == "200") {
+        //             that.setData({
+        //                 version: result.data.data
+        //             })
+        //         } else {
+        //             wx.showModal({
+        //                 title: '请先登录',
+        //                 content: '',
+        //                 confirmText: '去登录',
+        //                 cancelText: '返回',
+        //                 success: (res) => {
+        //                     if (res.confirm) {
+        //                         wx.navigateTo({
+        //                             url: '../../login/login'
+        //                         });
+        //                     } else {
+        //                         wx.navigateBack({
+        //                             delta: 1
+        //                         })
+        //                     }
+        //                 }
+        //             })
+        //         }
+        //     },
+        //     fail: (err) => {
+        //         console.log("请求获取app版本号失败")
+        //         console.log(err)
+        //     },
+        //     complete: () => { }
+        // });
     },
     showModal(e) {
         this.setData({

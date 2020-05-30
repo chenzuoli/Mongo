@@ -66,7 +66,8 @@ Page({
     avatar: '',
     gender: false,
     province: "",
-    city: ""
+    city: "",
+    login_status: "点击登录"
   },
   onLoad: async function () {
     var that = this
@@ -97,7 +98,8 @@ Page({
             nick_name: result.data.data.nick_name,
             phone: result.data.data.phone,
             avatar: result.data.data.avatar_url,
-            gender: result.data.data.gender == '1'
+            gender: result.data.data.gender == '1',
+            login_status: "你好 " + result.data.data.nick_name
           })
           resolve(result)
         },
@@ -324,5 +326,15 @@ Page({
         complete: () => { }
       });
     })
+  },
+  login: function() {
+    wx.navigateTo({
+      url: '../../login/login',
+      success: (result)=>{
+        
+      },
+      fail: ()=>{},
+      complete: ()=>{}
+    });
   }
 })
