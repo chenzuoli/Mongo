@@ -10,7 +10,7 @@ Page({
     CustomBar: app.globalData.CustomBar,
     pets: [],
     device_id: "",
-    login_status: "点击登录"
+    login_status: "未登录用户，点击登录"
   },
   onLoad(options) {
     var that = this
@@ -69,6 +69,34 @@ Page({
   },
   add_pet() {
     var that = this
+    let token = wx.getStorageSync("token");
+    if (token == "") {
+      wx.showModal({
+        title: '你还未登录',
+        content: '登录后才能添加',
+        showCancel: true,
+        cancelText: '放弃添加',
+        cancelColor: '#000000',
+        confirmText: '立即登录',
+        confirmColor: '#3CC51F',
+        success: (result) => {
+          if (result.confirm) {
+            wx.navigateTo({
+              url: '../../login/login',
+              success: (result) => {
+
+              },
+              fail: () => { },
+              complete: () => { }
+            });
+          }
+          resolve(result)
+        },
+        fail: (err) => { reject(err) },
+        complete: () => { }
+      });
+      return
+    }
     wx.navigateTo({
       url: '../pet_add/pet_add?device_id=' + that.data.device_id,
       success: (result) => {

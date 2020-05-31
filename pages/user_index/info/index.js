@@ -67,7 +67,7 @@ Page({
     gender: false,
     province: "",
     city: "",
-    login_status: "点击登录"
+    login_status: "未登录用户，点击登录"
   },
   onLoad: async function () {
     var that = this
