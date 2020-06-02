@@ -296,9 +296,9 @@ Page({
     var that = this
     console.log('form发生了submit事件，携带数据为：', e)
     // 上传图像到七牛云
-    // if (that.data.avatar != null) {
-    //   await that.upload()
-    // }
+    if (that.data.avatar != null) {
+      await that.upload()
+    }
 
     // 更新
     await that.update(e)
@@ -308,13 +308,15 @@ Page({
   },
   upload() {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: upload_file_url,
         filePath: that.data.pet.avatar_url,
         name: 'avatarFile',
         header: {
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          'token': token
         }, // 设置请求的 header
         formData: { 'guid': "procomment" }, // HTTP 请求中其他额外的 form data
         success: function (res) {

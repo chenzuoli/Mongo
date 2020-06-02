@@ -289,13 +289,16 @@ Page({
     var that = this
     console.log('form发生了submit事件，携带数据为：', e)
     // 上传图像到七牛云
-    // if (that.data.avatar != null) {
-      // await that.upload()
-    // }
+    if (that.data.avatar != null) {
+      await that.upload()
+    }
 
     // 添加
     await that.pet_add(e)
-    await that.order_add(e)
+    console.log(that.data)
+    if (that.data.device_id != '' && that.data.device_id != null && that.data.device_id != 'undefined') {
+      await that.order_add(e)
+    }
     wx.navigateBack({
       delta: 1
     });
@@ -303,22 +306,26 @@ Page({
   // 上传头像
   upload() {
     var that = this
+    let token = wx.getStorageSync("token");
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: upload_file_url,
         filePath: that.data.pet.avatar_url,
         name: 'avatarFile',
         header: {
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          'token': token
         }, // 设置请求的 header
         formData: { 'guid': "procomment" }, // HTTP 请求中其他额外的 form data
         success: function (res) {
-          console.log("上传成功")
-          console.log(res)
           let result = JSON.parse(res.data)
-          that.setData({
-            avatar: result.data
-          })
+          if (result.status == '200') {
+            console.log("上传成功")
+            console.log(res)
+            that.setData({
+              avatar: result.data
+            })
+          }
           resolve(res)
         },
         fail: function (err) {
@@ -337,7 +344,8 @@ Page({
     console.log('宠物昵称: ' + e.detail.value.nick_name);
     console.log('宠物性别: ' + e.detail.value.gender);
     console.log('宠物出生日期: ' + e.detail.value.birthday);
-    if (that.data.pet_type[e.detail.value.type_variety[0]] && e.detail.value.contact) {
+    console.log('联系人：' + e.detail.value.contact)
+    if (that.data.pet_type[e.detail.value.type_variety[0]] == '' && e.detail.value.contact == '') {
       wx.showModal({
         title: '请填写宠物类型和宠物联系人',
         content: '',
@@ -390,9 +398,21 @@ Page({
             console.log("添加宠物信息失败")
           }
           console.log(result)
+          wx.showToast({
+            title: '添加成功',
+            icon: 'success',
+            image: '',
+            duration: 1500
+          });
           resolve(result)
         },
         fail: (err) => {
+          wx.showToast({
+            title: '添加失败',
+            icon: 'warn',
+            image: '',
+            duration: 1500
+          });
           reject(err)
         },
         complete: () => { }
@@ -421,7 +441,8 @@ Page({
         pet_id: that.data.pet_id
       },
       success(res) {
-        if (res.data > 0) {
+        console.log(res.data)
+        if (res.data.data > 0) {
           // 把订单id带回上一页
           var pages = getCurrentPages();
           var currPage = pages[pages.length - 1]; //当前页面
@@ -431,9 +452,6 @@ Page({
             order_id: order_id
           })
           wx.setStorageSync('order_id', order_id)
-          wx.navigateBack({
-            delta: 1
-          })
         } else {
           wx.showToast({
             title: '服务器错误，请重试！',
